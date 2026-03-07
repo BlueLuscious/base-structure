@@ -13,7 +13,8 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
         },
         {
             "name": "Django: Create Superuser",
@@ -24,7 +25,8 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
         },
         {
             "name": "Django: Show Migrations",
@@ -35,7 +37,8 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
         },
         {
             "name": "Django: Make Migrations",
@@ -46,7 +49,8 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
         },
         {
             "name": "Django: Migrate",
@@ -57,7 +61,8 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
         },
         {
             "name": "Django: Shell",
@@ -68,7 +73,8 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
         },
     ]
 }
