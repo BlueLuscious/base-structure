@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Django: Run Server",
+            "name": "Django(core): Run Server",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -13,10 +13,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\core\\manage.py"
         },
         {
-            "name": "Django: Create Superuser",
+            "name": "Django(core): Create Superuser",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -24,10 +24,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\core\\manage.py"
         },
         {
-            "name": "Django: Show Migrations",
+            "name": "Django(core): Show Migrations",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -35,10 +35,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\core\\manage.py"
         },
         {
-            "name": "Django: Make Migrations",
+            "name": "Django(core): Make Migrations",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -46,10 +46,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\core\\manage.py"
         },
         {
-            "name": "Django: Migrate",
+            "name": "Django(core): Migrate",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -57,10 +57,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\core\\manage.py"
         },
         {
-            "name": "Django: Shell",
+            "name": "Django(core): Shell",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -68,7 +68,7 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "program": "${workspaceFolder}\\core\\manage.py"
         },
     ]
 }
