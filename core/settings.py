@@ -86,12 +86,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DB_SCHEMA = os.environ.get("DB_SCHEMA", "gea")
+
 DATABASES = {
     "default": dj_database_url.parse(
         os.environ.get("DATABASE_URL", "postgres://luscious:blue@localhost:5432/gea_trader_db"),
         conn_max_age=600,
     )
 }
+
+DATABASES["default"].setdefault("OPTIONS", {})
+DATABASES["default"]["OPTIONS"]["options"] = f"-c search_path={DB_SCHEMA},public"
 
 
 # Password validation
