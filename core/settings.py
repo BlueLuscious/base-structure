@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import dj_database_url, os
 from pathlib import Path
+from django_components import ComponentsSettings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_components',
 ]
 
 MIDDLEWARE = [
@@ -69,9 +71,19 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'],
+        # 'APP_DIRS': True,
         'OPTIONS': {
+            'loaders': [(
+                'django.template.loaders.cached.Loader', [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                    'django_components.template_loader.Loader',
+                ]
+            )],
+            'builtins': [
+                'django_components.templatetags.component_tags',
+            ],
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -147,7 +159,20 @@ LOCALE_PATHS = [
 
 STATIC_URL = 'static/'
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_components.finders.ComponentsFileSystemFinder',
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django Components
+COMPONENTS = ComponentsSettings(
+    app_dirs=[
+        'components',
+    ],
+)
