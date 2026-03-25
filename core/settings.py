@@ -181,6 +181,7 @@ AUTH_USER_MODEL = 'accounts.UserModel'
 
 # Django Components
 COMPONENTS = ComponentsSettings(
+    dirs=[],
     app_dirs=[
         'components',
     ],
