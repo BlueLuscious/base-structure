@@ -3,6 +3,8 @@
 import dj_database_url, os
 from pathlib import Path
 from django_components import ComponentsSettings
+from core.adminsites.admin_namespace import AdminNamespace
+from core.adminsites.unfold import AdminSiteUnfoldSettings
 from core.config.storage import build_media_storage_config, build_static_storage_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -168,6 +170,7 @@ STATICFILES_FINDERS = [
     'django_components.finders.ComponentsFileSystemFinder',
 ]
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -175,9 +178,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.UserModel'
 
+
 # Django Components
 COMPONENTS = ComponentsSettings(
     app_dirs=[
         'components',
     ],
 )
+
+
+# Unfold Settings
+MASTER_ADMIN_UNFOLD = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.MASTER).build()
+OWNER_ADMIN_UNFOLD = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.OWNER).build()

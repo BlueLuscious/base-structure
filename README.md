@@ -74,6 +74,10 @@ Follow these steps to get a development copy running locally:
   - `.env.example`
 - Storage configuration documentation lives at:
   - `docs/core/config/storage/storage.md`
+- Admin site infrastructure documentation lives at:
+  - `docs/core/adminsites/adminsites.md`
+- Accounts app documentation lives at:
+  - `docs/accounts/accounts.md`
 - Ready-to-copy environment examples live under:
   - `docs/env-examples/`
 

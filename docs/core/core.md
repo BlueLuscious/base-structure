@@ -12,6 +12,7 @@ Current contents:
 - `urls.py`
 - `asgi.py`
 - `wsgi.py`
+- `adminsites/`
 - `config/`
 - `testing/`
 - `tests/`
@@ -23,6 +24,7 @@ The `core/` package is responsible for:
 - defining global Django settings
 - wiring project-level URLs
 - exposing ASGI and WSGI entrypoints
+- hosting shared custom admin site infrastructure
 - hosting reusable project-wide configuration code
 - hosting reusable testing infrastructure and project-level tests
 
@@ -34,6 +36,7 @@ Examples:
 
 - environment-driven settings resolution
 - storage configuration shared by the whole project
+- shared admin site classes and site-level Unfold integration
 - reusable test utilities
 - project-level integration tests
 
@@ -59,6 +62,14 @@ Contains project-level configuration modules that are too large or too specific 
 See:
 
 - `docs/core/config/config.md`
+
+### `core/adminsites/`
+
+Contains the custom admin site infrastructure shared by the project.
+
+See:
+
+- `docs/core/adminsites/adminsites.md`
 
 ### `core/testing/`
 
