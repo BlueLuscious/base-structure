@@ -20,5 +20,5 @@ class UserModel(AbstractUser):
     )
     objects: UserModelManager = UserModelManager()
 
-    tenants_memberships: "TenantMembershipModelManager"
+    tenant_memberships: "TenantMembershipModelManager"
     tenants: "TenantModelManager"
