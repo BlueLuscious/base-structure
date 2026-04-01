@@ -38,6 +38,7 @@ Current behavior:
 
 - preserves Django auth compatibility
 - exposes a typed custom manager
+- keeps tenant membership separate through the tenancy layer
 
 Related files:
 
@@ -59,6 +60,17 @@ Current pieces:
 - `UserModelManager`
 
 At the moment the queryset layer is intentionally small, but the structure is already in place for reusable account filters and query helpers.
+
+## Relationship With `tenancy/`
+
+`accounts/` keeps authentication identity.
+
+`tenancy/` adds business scope on top through:
+
+- `UserModel.tenants`
+- `TenantMembershipModel`
+
+This keeps user identity and tenant membership related, but not collapsed into one model.
 
 ## Admin
 

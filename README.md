@@ -78,6 +78,8 @@ Follow these steps to get a development copy running locally:
   - `docs/core/adminsites/adminsites.md`
 - Accounts app documentation lives at:
   - `docs/accounts/accounts.md`
+- Tenancy app documentation lives at:
+  - `docs/tenancy/tenancy.md`
 - Ready-to-copy environment examples live under:
   - `docs/env-examples/`
 

@@ -72,8 +72,8 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual(AdminSiteUnfoldCallbacks.scripts(request), owner_admin_site.get_scripts(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.styles(request), owner_admin_site.get_styles(request))
 
-    def test_master_admin_sidebar_navigation_includes_users_and_groups(self) -> None:
-        """ Verify the master admin sidebar includes account management links. """
+    def test_master_admin_sidebar_navigation_includes_users_groups_and_tenancy(self) -> None:
+        """ Verify the master admin sidebar includes account and tenancy management links. """
         request = self.request_factory.get("/admin/")
         request.user = type(
             "SuperUser",
@@ -96,3 +96,5 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
 
         self.assertIn("/admin/accounts/usermodel/", item_links)
         self.assertIn("/admin/auth/group/", item_links)
+        self.assertIn("/admin/tenancy/tenantmodel/", item_links)
+        self.assertIn("/admin/tenancy/tenantmembershipmodel/", item_links)
