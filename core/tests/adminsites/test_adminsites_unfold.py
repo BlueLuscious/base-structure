@@ -68,9 +68,17 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
             AdminSiteUnfoldCallbacks.show_all_applications(request),
             owner_admin_site.get_show_all_applications(request),
         )
+        callback_navigation = AdminSiteUnfoldCallbacks.sidebar_navigation(request)
+        site_navigation = owner_admin_site.get_sidebar_navigation(request)
+
+        self.assertEqual([group["title"] for group in callback_navigation], [group["title"] for group in site_navigation])
         self.assertEqual(
-            AdminSiteUnfoldCallbacks.sidebar_navigation(request),
-            owner_admin_site.get_sidebar_navigation(request),
+            [item["title"] for group in callback_navigation for item in group["items"]],
+            [item["title"] for group in site_navigation for item in group["items"]],
+        )
+        self.assertEqual(
+            [item["link"] for group in callback_navigation for item in group["items"]],
+            [item["link"] for group in site_navigation for item in group["items"]],
         )
         self.assertEqual(AdminSiteUnfoldCallbacks.scripts(request), owner_admin_site.get_scripts(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.styles(request), owner_admin_site.get_styles(request))

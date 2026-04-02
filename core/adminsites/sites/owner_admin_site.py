@@ -2,8 +2,10 @@
 
 from typing import Any
 from django.http import HttpRequest
+from django.urls import reverse
 from core.adminsites.services import OwnerTenantDropdownBuilder
 from core.adminsites.sites.base_admin_site import BaseAdminSite
+from tenancy.services.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
 
 class OwnerAdminSite(BaseAdminSite):
@@ -69,3 +71,38 @@ class OwnerAdminSite(BaseAdminSite):
             list[dict[str, Any]]: Dropdown items for active tenant memberships.
         """
         return OwnerTenantDropdownBuilder.build(request)
+
+    def get_sidebar_navigation(self, request: HttpRequest) -> list[dict[str, Any]]:
+        """ Return owner sidebar navigation for account administration.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, Any]]: Sidebar navigation groups for the owner site.
+        """
+        return [
+            {
+                "title": "Accounts",
+                "items": [
+                    {
+                        "title": "Users",
+                        "icon": "group",
+                        "link": reverse("owner_admin:accounts_usermodel_changelist"),
+                        "permission": lambda req: (
+                            TenantAccountsAccessPolicy.can_manage_accounts(req)
+                            and req.user.has_perm("accounts.view_usermodel")
+                        ),
+                    },
+                    {
+                        "title": "Groups",
+                        "icon": "admin_panel_settings",
+                        "link": reverse("owner_admin:auth_group_changelist"),
+                        "permission": lambda req: (
+                            TenantAccountsAccessPolicy.can_manage_accounts(req)
+                            and req.user.has_perm("auth.view_group")
+                        ),
+                    },
+                ]
+            },
+        ]

@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
-from tenancy.services import ActiveTenantSwitcher
+from tenancy.services.active_tenant_switcher import ActiveTenantSwitcher
 
 
 class SwitchActiveTenantView(LoginRequiredMixin, View):
