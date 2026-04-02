@@ -1,6 +1,6 @@
 """ Helpers for tenant-aware media object paths. """
 
-from core.tenancy import ActiveTenantContext
+from tenancy.runtime import ActiveTenantContext
 
 
 class TenantMediaPathBuilder:

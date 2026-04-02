@@ -23,8 +23,15 @@ The app should remain focused on tenant identity and membership scope.
 Current contents:
 
 - `apps.py`
+- `constants.py`
+- `urls.py`
 - `choices/`
 - `models/`
+- `services/`
+- `session/`
+- `runtime/`
+- `middleware/`
+- `views/`
 - `admin/`
 - `migrations/`
 - `tests/`
@@ -37,6 +44,7 @@ The `tenancy/` app is responsible for:
 - defining how users belong to tenants
 - exposing reusable tenant query helpers
 - exposing shared request-time tenant resolution helpers
+- owning the active-tenant request flow end to end
 - registering tenant infrastructure in the master admin site
 
 ## Models
@@ -97,6 +105,10 @@ The base structure now resolves an active tenant during the request cycle.
 Current behavior:
 
 - resolution happens through `ActiveTenantMiddleware`
+- middleware lives in `tenancy/middleware/`
+- resolution rules live in `tenancy/services/`
+- session persistence lives in `tenancy/session/`
+- runtime request context lives in `tenancy/runtime/`
 - the active tenant is stored in session
 - if the session does not define one, the request falls back to the user's primary active membership
 - if no primary membership exists, the first active membership is used
@@ -114,7 +126,7 @@ The base structure now supports explicit tenant switching.
 
 Current behavior:
 
-- the project exposes `switch-active-tenant`
+- the app exposes `switch-active-tenant` through `tenancy/urls.py`
 - it stores the selected tenant in session
 - it validates that the authenticated user still has one active membership for the requested tenant
 - it redirects back to a safe `next` URL when provided
@@ -153,6 +165,8 @@ Current test areas:
 
 - `tenancy/tests/models/`
 - `tenancy/tests/querysets/`
+- `tenancy/tests/middleware/`
+- `tenancy/tests/views/`
 
 ## What Should Live Here
 
@@ -162,6 +176,7 @@ Good candidates:
 - tenant membership rules
 - tenant query helpers
 - future tenant-scoped infrastructure that belongs to the multitenancy layer itself
+- request-time tenancy infrastructure tightly coupled to tenant membership and active-tenant behavior
 
 ## What Should Not Live Here
 

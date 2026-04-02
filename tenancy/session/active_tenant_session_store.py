@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 from django.http import HttpRequest
-from core.tenancy.constants import ACTIVE_TENANT_SESSION_KEY
+from tenancy.constants import ACTIVE_TENANT_SESSION_KEY
 
 if TYPE_CHECKING:
     from tenancy.models import TenantModel

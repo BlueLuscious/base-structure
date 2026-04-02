@@ -4,7 +4,7 @@ from django.apps import AppConfig
 
 
 class TenancyConfig(AppConfig):
-    """ Django app configuration for tenant-related persistence. """
+    """ Django app configuration for tenant models and active-tenant flows. """
 
     default_auto_field = "django.db.models.BigAutoField"
     name = "tenancy"

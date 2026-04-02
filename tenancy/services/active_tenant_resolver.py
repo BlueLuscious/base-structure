@@ -2,8 +2,8 @@
 
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest
-from core.tenancy.session import ActiveTenantSessionStore
 from tenancy.models import TenantMembershipModel, TenantModel
+from tenancy.session import ActiveTenantSessionStore
 
 
 class ActiveTenantResolver:

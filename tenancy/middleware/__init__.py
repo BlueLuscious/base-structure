@@ -1,4 +1,4 @@
-""" Middleware exports for active tenant resolution. """
+""" Middleware exports for tenancy flows. """
 
 from .active_tenant_middleware import ActiveTenantMiddleware
 

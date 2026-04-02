@@ -1,8 +1,8 @@
 """ Tests for explicit active-tenant switching. """
 
 from django.urls import reverse
-from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
+from core.testing.base import LoggedTestCase
 from tenancy.models import TenantMembershipModel, TenantModel
 
 

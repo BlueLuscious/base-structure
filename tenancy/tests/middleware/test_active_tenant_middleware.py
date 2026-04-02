@@ -2,10 +2,10 @@
 
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpRequest, HttpResponse
-from core.testing.base import LoggedTestCase
-from core.tenancy import ActiveTenantContext
-from core.tenancy.middleware.active_tenant_middleware import ActiveTenantMiddleware
 from accounts.models import UserModel
+from core.testing.base import LoggedTestCase
+from tenancy.runtime import ActiveTenantContext
+from tenancy.middleware.active_tenant_middleware import ActiveTenantMiddleware
 from tenancy.models import TenantMembershipModel, TenantModel
 
 

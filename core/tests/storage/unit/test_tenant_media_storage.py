@@ -8,7 +8,7 @@ from django.core.files.base import ContentFile
 from core.config.storage import MediaStorageAdapterResolver
 from core.config.storage.media_storage.backends.tenant_file_system_storage import TenantFileSystemStorage
 from core.config.storage.media_storage.paths.tenant_media_path_builder import TenantMediaPathBuilder
-from core.tenancy import ActiveTenantContext
+from tenancy.runtime import ActiveTenantContext
 from core.testing.base import LoggedSimpleTestCase
 from tenancy.models import TenantModel
 

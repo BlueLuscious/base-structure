@@ -3,8 +3,8 @@
 from uuid import UUID
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
-from core.tenancy.session import ActiveTenantSessionStore
 from tenancy.models import TenantMembershipModel
+from tenancy.session import ActiveTenantSessionStore
 
 
 class ActiveTenantSwitcher:

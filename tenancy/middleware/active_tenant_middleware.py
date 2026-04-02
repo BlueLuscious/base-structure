@@ -2,8 +2,8 @@
 
 from collections.abc import Callable
 from django.http import HttpRequest, HttpResponse
-from core.tenancy.runtime import ActiveTenantContext
-from core.tenancy.services import ActiveTenantResolver
+from tenancy.runtime import ActiveTenantContext
+from tenancy.services import ActiveTenantResolver
 
 
 class ActiveTenantMiddleware:

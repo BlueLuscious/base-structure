@@ -1,13 +1,13 @@
 """ Class-based view for explicit active-tenant switching. """
 
 from uuid import UUID
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from core.tenancy.services import ActiveTenantSwitcher
+from tenancy.services import ActiveTenantSwitcher
 
 
 class SwitchActiveTenantView(LoginRequiredMixin, View):
