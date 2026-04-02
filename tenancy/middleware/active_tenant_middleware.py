@@ -3,7 +3,7 @@
 from collections.abc import Callable
 from django.http import HttpRequest, HttpResponse
 from tenancy.runtime import ActiveTenantContext
-from tenancy.services import ActiveTenantResolver
+from tenancy.services.active_tenant_resolver import ActiveTenantResolver
 
 
 class ActiveTenantMiddleware:

@@ -46,6 +46,29 @@ class TestAdminSites(LoggedSimpleTestCase):
         self.assertTrue(self.owner_admin_site.has_permission(superuser_request))
         self.assertFalse(self.owner_admin_site.has_permission(customer_request))
 
+    def test_owner_admin_sidebar_navigation_includes_accounts_items_when_permissions_exist(self) -> None:
+        """Verify the owner admin sidebar exposes Users and Groups when the user can view them."""
+        owner = type(
+            "OwnerUser",
+            (),
+            {
+                "is_active": True,
+                "is_superuser": True,
+                "is_staff": True,
+                "is_authenticated": True,
+                "has_perm": lambda self, perm: perm in {"accounts.view_usermodel", "auth.view_group"},
+            },
+        )()
+
+        request = self.request_factory.get("/owner-admin/")
+        request.user = owner
+        request.tenant = object()
+
+        navigation = self.owner_admin_site.get_sidebar_navigation(request)
+        item_titles = [item["title"] for group in navigation for item in group["items"]]
+
+        self.assertEqual(["Users", "Groups"], item_titles)
+
     def test_admin_sites_reject_anonymous_and_inactive_users(self) -> None:
         """ Verify both admin sites reject anonymous or inactive users. """
         anonymous_request = self.request_factory.get("/admin/")

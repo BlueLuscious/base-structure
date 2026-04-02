@@ -18,10 +18,12 @@ It currently defines:
 
 - the base tenant entity
 - tenant-to-user memberships
+- tenant-to-group bindings
 - role choices for tenant memberships
 - typed query infrastructure for tenant data
 - request-time active tenant resolution
 - explicit active-tenant switching
+- tenant-scoped access policies
 - master admin registrations for technical administration
 
 `tenancy/` owns both:
@@ -62,6 +64,7 @@ The `tenancy/` app is responsible for:
 - defining how users belong to tenants
 - exposing reusable tenant query helpers
 - exposing shared request-time tenant resolution helpers
+- exposing shared tenant access policies
 - owning the active-tenant request flow end to end
 - registering tenant infrastructure in the master admin site
 
@@ -109,6 +112,22 @@ Current intent:
 - each user should have at most one primary tenant membership
 - tenant-specific roles should live on the membership rather than directly on the user model
 
+### `TenantGroupModel`
+
+`TenantGroupModel` links one Django auth group to one tenant.
+
+Current fields cover:
+
+- relation to `TenantModel`
+- relation to Django `Group`
+- audit timestamps
+
+Current intent:
+
+- groups remain compatible with Django auth
+- tenant ownership of groups stays explicit
+- future owner-facing group visibility and assignment can be scoped by the active tenant
+
 ## Choices
 
 The app keeps membership roles outside the model.
@@ -121,6 +140,7 @@ Current values:
 
 - `master`
 - `owner`
+- `employee`
 
 ## Active Tenant Resolution
 
@@ -184,6 +204,8 @@ Current intent:
 Current concrete use cases:
 
 - attach users to one or more tenants
+- attach Django groups to one tenant
+- assign tenant roles such as `owner` and `employee` to support users
 - choose the active tenant during owner-admin work
 - display tenant-aware owner admin metadata such as title and header
 - switch tenant context explicitly from the owner admin dropdown
@@ -232,6 +254,39 @@ Possible future composed resolvers:
 
 The goal is to support multiple resolution styles without turning the current middleware into one large conditional resolver.
 
+## Access Policies
+
+`tenancy/services/` now separates tenant authorization into small policy objects.
+
+Current policy split:
+
+- `TenantAccessPolicy`
+- `TenantAccountsAccessPolicy`
+
+### `TenantAccessPolicy`
+
+This is the base policy for tenant membership and role checks.
+
+Current responsibilities:
+
+- verify whether a user belongs to one tenant
+- verify whether a user has one tenant role
+- verify whether a user may manage a tenant as an active `owner`
+
+This policy should stay generic and reusable across apps that need tenant membership checks.
+
+### `TenantAccountsAccessPolicy`
+
+This is the `accounts/`-specific tenant policy.
+
+Current responsibilities:
+
+- verify whether the current request may manage owner-scoped accounts
+- decide whether one user is visible inside owner `Users`
+- decide whether one group is visible inside owner `Groups`
+
+This keeps the reusable tenant-role checks in the base policy while keeping tenant-scoped authorization inside `tenancy/`, even when the current consumer surface is `accounts/`.
+
 ## Relationship With `accounts/`
 
 `UserModel` keeps the authentication identity.
@@ -248,6 +303,7 @@ This keeps authentication and tenant membership related, but not collapsed into 
 Current master registrations:
 
 - `TenantModelAdmin`
+- `TenantGroupModelAdmin`
 - `TenantMembershipModelAdmin`
 
 These registrations exist so the multitenancy base can be inspected and administered from the technical admin surface before the owner-facing tenant flows are defined.
@@ -264,6 +320,7 @@ Current test areas:
 
 - `tenancy/tests/models/`
 - `tenancy/tests/querysets/`
+- `tenancy/tests/managers/`
 - `tenancy/tests/middleware/`
 - `tenancy/tests/views/`
 
