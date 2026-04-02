@@ -2,6 +2,12 @@
 
 This document explains the purpose of `core/config/` and how configuration modules should be organized there.
 
+See also:
+
+- `docs/project.md`
+- `docs/core/core.md`
+- `docs/core/config/storage/storage.md`
+
 ## Goal
 
 `core/config/` exists to keep `core/settings.py` readable while still allowing structured, testable, environment-driven configuration code.
@@ -28,6 +34,9 @@ The `storage/` package contains configuration logic for:
 See:
 
 - `docs/core/config/storage/storage.md`
+
+This document owns the boundary of the configuration layer.
+Detailed provider behavior, environment variables, and storage combinations belong in the storage-specific document instead of being repeated here.
 
 ## What Belongs In `core/config/`
 

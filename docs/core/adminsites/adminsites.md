@@ -2,6 +2,13 @@
 
 This document explains the purpose and structure of `core/adminsites/`.
 
+See also:
+
+- `docs/project.md`
+- `docs/core/core.md`
+- `docs/accounts/accounts.md`
+- `docs/tenancy/tenancy.md`
+
 ## Goal
 
 `core/adminsites/` contains project-level admin infrastructure shared across apps.
@@ -118,7 +125,7 @@ Recommended structure:
 Examples:
 
 - `accounts/admin/master/`
-- `catalog/admin/owner/`
+- `tenancy/admin/master/`
 
 This keeps:
 
@@ -158,3 +165,5 @@ If a concern is shared by all admin sites, place it in:
 - or the `unfold/` adapter layer when it is Unfold-specific
 
 If a concern is specific to one domain app, keep it inside that app instead of growing `core/adminsites/`.
+
+App docs should describe only their own registrations and then link back here for shared site infrastructure.

@@ -2,6 +2,13 @@
 
 This document explains the purpose and structure of the `accounts/` app.
 
+See also:
+
+- `docs/project.md`
+- `docs/core/core.md`
+- `docs/core/adminsites/adminsites.md`
+- `docs/tenancy/tenancy.md`
+
 ## Goal
 
 `accounts/` provides the authentication domain for the project.
@@ -88,6 +95,10 @@ Current master registrations:
 These admins are registered against the shared `master_admin_site`.
 
 This keeps the authentication admin visible inside the master admin site while following the project rule of keeping domain admin logic inside each app.
+
+The shared site classes, namespace resolution, and Unfold integration are documented in:
+
+- `docs/core/adminsites/adminsites.md`
 
 ## Relationship With `core/adminsites/`
 

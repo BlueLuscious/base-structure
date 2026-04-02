@@ -2,6 +2,14 @@
 
 This document explains the purpose and structure of the `tenancy/` app.
 
+See also:
+
+- `docs/project.md`
+- `docs/core/core.md`
+- `docs/core/adminsites/adminsites.md`
+- `docs/core/config/storage/storage.md`
+- `docs/accounts/accounts.md`
+
 ## Goal
 
 `tenancy/` provides the root multitenancy domain used to scope business data across the project.
@@ -120,6 +128,10 @@ Current request contract:
 
 This keeps tenant-aware admin and future tenant-aware web flows grounded in one shared base mechanism.
 
+Request-aware storage behavior that consumes the runtime active tenant is documented in:
+
+- `docs/core/config/storage/storage.md`
+
 ## Explicit Tenant Switching
 
 The base structure now supports explicit tenant switching.
@@ -157,6 +169,10 @@ Current master registrations:
 
 These registrations exist so the multitenancy base can be inspected and administered from the technical admin surface before the owner-facing tenant flows are defined.
 
+The shared site classes and project admin wiring live in:
+
+- `docs/core/adminsites/adminsites.md`
+
 ## Tests
 
 The app already follows the project test structure convention.
@@ -188,3 +204,8 @@ Examples:
 - quotation lifecycle rules
 - cart behavior
 - project-wide admin infrastructure
+
+Those concerns belong in:
+
+- `docs/core/core.md`
+- `docs/core/adminsites/adminsites.md`

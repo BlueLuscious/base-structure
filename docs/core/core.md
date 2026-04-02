@@ -2,6 +2,14 @@
 
 This document describes the purpose of the `core/` package and how it is used in this project.
 
+See also:
+
+- `docs/project.md`
+- `docs/core/config/config.md`
+- `docs/core/adminsites/adminsites.md`
+- `docs/accounts/accounts.md`
+- `docs/tenancy/tenancy.md`
+
 ## What `core/` Contains
 
 The `core/` package is the Django project package. It contains the project-level configuration and entrypoints that tie the whole application together.
@@ -16,6 +24,11 @@ Current contents:
 - `config/`
 - `testing/`
 - `tests/`
+
+Current runtime app scope wired by `core/settings.py`:
+
+- `accounts`
+- `tenancy`
 
 ## Responsibilities
 
@@ -52,6 +65,11 @@ Examples of code that should stay outside `core/`:
 - domain query logic
 - app-specific admin logic
 - DTOs or factories tied to one app
+
+For app-owned boundaries, see:
+
+- `docs/accounts/accounts.md`
+- `docs/tenancy/tenancy.md`
 
 ## Internal Structure
 

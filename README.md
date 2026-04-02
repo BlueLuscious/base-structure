@@ -70,6 +70,8 @@ Follow these steps to get a development copy running locally:
 
 ## Configuration Notes
 
+- Documentation map lives at:
+  - `docs/project.md`
 - The main environment example is:
   - `.env.example`
 - Storage configuration documentation lives at:
