@@ -24,9 +24,9 @@ class ActiveTenantSwitcher:
             PermissionDenied: If the user does not belong to the requested tenant.
         """
         membership = (
-            TenantMembershipModel.objects.active()
-            .filter(user=request.user, tenant_id=tenant_id, tenant__is_active=True)
-            .select_related("tenant")
+            TenantMembershipModel.objects.for_user_active_tenants(request.user)
+            .with_tenant()
+            .filter(tenant_id=tenant_id)
             .first()
         )
 

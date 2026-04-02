@@ -48,3 +48,82 @@ class TestTenantMembershipModelQuerySet(LoggedTestCase):
     def test_owners_filters_only_owner_memberships(self) -> None:
         """ Verify owner memberships filter excludes non-owner rows. """
         self.assertEqual([self.owner_membership], list(TenantMembershipModel.objects.owners()))
+
+    def test_for_active_tenant_filters_out_memberships_for_inactive_tenants(self) -> None:
+        """ Verify memberships can be filtered by active tenant state only. """
+        inactive_tenant = TenantModel.objects.create(
+            name="Inactive Center",
+            slug="inactive-center",
+            is_active=False,
+        )
+        active_tenant_membership = TenantMembershipModel.objects.create(
+            tenant=self.other_tenant,
+            user=self.user,
+            role=TenantRole.MASTER,
+            is_active=True,
+        )
+        inactive_tenant_membership = TenantMembershipModel.objects.create(
+            tenant=inactive_tenant,
+            user=self.user,
+            role=TenantRole.MASTER,
+            is_active=True,
+        )
+
+        self.assertEqual(
+            [self.owner_membership, self.inactive_membership, active_tenant_membership],
+            list(TenantMembershipModel.objects.for_active_tenant().order_by("id")),
+        )
+        self.assertNotIn(
+            inactive_tenant_membership,
+            list(TenantMembershipModel.objects.for_active_tenant()),
+        )
+
+    def test_for_user_active_tenants_combines_user_active_and_tenant_filters(self) -> None:
+        """ Verify memberships can be narrowed to one user's active memberships on active tenants. """
+        inactive_tenant = TenantModel.objects.create(
+            name="Inactive Center",
+            slug="inactive-center",
+            is_active=False,
+        )
+        active_secondary_membership = TenantMembershipModel.objects.create(
+            tenant=self.other_tenant,
+            user=self.user,
+            role=TenantRole.MASTER,
+            is_active=True,
+        )
+        TenantMembershipModel.objects.create(
+            tenant=inactive_tenant,
+            user=self.user,
+            role=TenantRole.MASTER,
+            is_active=True,
+        )
+
+        self.assertEqual(
+            [self.owner_membership, active_secondary_membership],
+            list(TenantMembershipModel.objects.for_user_active_tenants(self.user).order_by("id")),
+        )
+
+    def test_ordered_for_active_tenant_resolution_sorts_primary_first_then_tenant_label(self) -> None:
+        """ Verify active-tenant ordering remains deterministic. """
+        third_tenant = TenantModel.objects.create(name="Alpha Center", slug="alpha-center")
+        secondary_membership = TenantMembershipModel.objects.create(
+            tenant=self.other_tenant,
+            user=self.user,
+            role=TenantRole.MASTER,
+            is_active=True,
+            is_primary=False,
+        )
+        third_membership = TenantMembershipModel.objects.create(
+            tenant=third_tenant,
+            user=self.user,
+            role=TenantRole.MASTER,
+            is_active=True,
+            is_primary=False,
+        )
+
+        self.assertEqual(
+            [self.owner_membership, third_membership, secondary_membership],
+            list(
+                TenantMembershipModel.objects.for_user(self.user).ordered_for_active_tenant_resolution()
+            ),
+        )

@@ -33,10 +33,9 @@ class ActiveTenantResolver:
             return None
 
         active_memberships = (
-            TenantMembershipModel.objects.active()
-            .filter(user=user, tenant__is_active=True)
-            .select_related("tenant")
-            .order_by("-is_primary", "tenant__name", "tenant__slug")
+            TenantMembershipModel.objects.for_user_active_tenants(user)
+            .with_tenant()
+            .ordered_for_active_tenant_resolution()
         )
 
         session_tenant_id = cls.session_store_class.get_tenant_id(request)

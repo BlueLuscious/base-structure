@@ -40,10 +40,9 @@ class OwnerTenantDropdownBuilder:
             return []
 
         memberships = (
-            cls.get_membership_model().objects.active()
-            .filter(user=request.user, tenant__is_active=True)
-            .select_related("tenant")
-            .order_by("-is_primary", "tenant__name", "tenant__slug")
+            cls.get_membership_model().objects.for_user_active_tenants(request.user)
+            .with_tenant()
+            .ordered_for_active_tenant_resolution()
         )
         current_tenant_id = str(getattr(getattr(request, "tenant", None), "pk", ""))
 
