@@ -3,8 +3,8 @@
 import os
 from pathlib import Path
 from unittest.mock import patch
-from core.config.storage import build_media_storage_config
-from core.config.storage.media_storage.r2 import R2MediaStorageAdapter
+from core.config.storage import MediaStorageAdapterResolver
+from core.config.storage.media_storage.adapters.r2_media_storage_adapter import R2MediaStorageAdapter
 from core.testing.base import LoggedSimpleTestCase
 
 
@@ -49,13 +49,16 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
         environment.update(overrides)
         return environment
 
-    def test_r2_storage_adapter__build_media_storage_config_derives_endpoint_from_account_id(self) -> None:
+    def test_r2_storage_adapter__resolver_build_config_derives_endpoint_from_account_id(self) -> None:
         """ Verify the R2 adapter derives the endpoint when no explicit endpoint is configured. """
         with patch.dict(os.environ, self.build_environment(), clear=False):
-            storage_config = build_media_storage_config(self.base_dir)
+            storage_config = MediaStorageAdapterResolver.build_config(self.base_dir)
 
         self.assertEqual(storage_config.provider, "r2")
-        self.assertEqual(storage_config.storages["default"]["BACKEND"], "storages.backends.s3.S3Storage")
+        self.assertEqual(
+            storage_config.storages["default"]["BACKEND"],
+            "core.config.storage.media_storage.backends.tenant_s3_storage.TenantS3Storage",
+        )
         self.assertEqual(
             storage_config.storages["default"]["OPTIONS"]["endpoint_url"],
             "https://account-123.r2.cloudflarestorage.com",
@@ -86,7 +89,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
             ),
             clear=False,
         ):
-            storage_config = build_media_storage_config(self.base_dir)
+            storage_config = MediaStorageAdapterResolver.build_config(self.base_dir)
 
         self.assertEqual(storage_config.media_url, "https://cdn.example.com/product-media/")
 

@@ -12,6 +12,8 @@ It currently defines:
 - tenant-to-user memberships
 - role choices for tenant memberships
 - typed query infrastructure for tenant data
+- request-time active tenant resolution
+- explicit active-tenant switching
 - master admin registrations for technical administration
 
 The app should remain focused on tenant identity and membership scope.
@@ -34,6 +36,7 @@ The `tenancy/` app is responsible for:
 - defining the root tenant entity
 - defining how users belong to tenants
 - exposing reusable tenant query helpers
+- exposing shared request-time tenant resolution helpers
 - registering tenant infrastructure in the master admin site
 
 ## Models
@@ -86,6 +89,41 @@ Current values:
 
 - `master`
 - `owner`
+
+## Active Tenant Resolution
+
+The base structure now resolves an active tenant during the request cycle.
+
+Current behavior:
+
+- resolution happens through `ActiveTenantMiddleware`
+- the active tenant is stored in session
+- if the session does not define one, the request falls back to the user's primary active membership
+- if no primary membership exists, the first active membership is used
+- the active tenant is also exposed through a runtime context helper for request-bound infrastructure such as media storage
+
+Current request contract:
+
+- `request.tenant` contains the resolved tenant or `None`
+
+This keeps tenant-aware admin and future tenant-aware web flows grounded in one shared base mechanism.
+
+## Explicit Tenant Switching
+
+The base structure now supports explicit tenant switching.
+
+Current behavior:
+
+- the project exposes `switch-active-tenant`
+- it stores the selected tenant in session
+- it validates that the authenticated user still has one active membership for the requested tenant
+- it redirects back to a safe `next` URL when provided
+
+Current intent:
+
+- session state controls the current tenant context
+- the primary membership remains the fallback default
+- switching the active tenant does not rewrite `is_primary`
 
 ## Relationship With `accounts/`
 

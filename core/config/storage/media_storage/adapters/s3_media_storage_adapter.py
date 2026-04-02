@@ -2,8 +2,9 @@
 
 import os
 from pathlib import Path
+from typing import Any
 from core.config.storage.common import build_extra_apps, build_remote_url, build_s3_compatible_storage_options, normalize_location
-from core.config.storage.media_storage.base_media_storage_adapter import BaseMediaStorageAdapter, MediaStorageConfig
+from core.config.storage.media_storage.adapters.base_media_storage_adapter import BaseMediaStorageAdapter, MediaStorageConfig
 
 
 class S3MediaStorageAdapter(BaseMediaStorageAdapter):
@@ -28,7 +29,7 @@ class S3MediaStorageAdapter(BaseMediaStorageAdapter):
             media_root=self.get_media_root(base_dir),
             storages={
                 "default": {
-                    "BACKEND": "storages.backends.s3.S3Storage",
+                    "BACKEND": "core.config.storage.media_storage.backends.tenant_s3_storage.TenantS3Storage",
                     "OPTIONS": self.build_storage_options(),
                 },
             },
@@ -53,11 +54,11 @@ class S3MediaStorageAdapter(BaseMediaStorageAdapter):
             fallback_url=self.get_media_url(),
         )
 
-    def build_storage_options(self) -> dict[str, object]:
+    def build_storage_options(self) -> dict[str, Any]:
         """ Build common S3 media storage options from environment variables.
 
         Returns:
-            dict[str, object]: Keyword arguments for the S3 media storage backend.
+            dict[str, Any]: Keyword arguments for the S3 media storage backend.
         """
         return build_s3_compatible_storage_options(
             location_env_name="MEDIAFILES_LOCATION",

@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from core.config.storage.common import build_extra_apps
-from core.config.storage.media_storage.base_media_storage_adapter import BaseMediaStorageAdapter, MediaStorageConfig
+from core.config.storage.media_storage.adapters.base_media_storage_adapter import BaseMediaStorageAdapter, MediaStorageConfig
 
 
 class LocalMediaStorageAdapter(BaseMediaStorageAdapter):
@@ -25,7 +25,7 @@ class LocalMediaStorageAdapter(BaseMediaStorageAdapter):
             media_root=self.get_media_root(base_dir),
             storages={
                 "default": {
-                    "BACKEND": "django.core.files.storage.FileSystemStorage",
+                    "BACKEND": "core.config.storage.media_storage.backends.tenant_file_system_storage.TenantFileSystemStorage",
                     "OPTIONS": {},
                 },
             },

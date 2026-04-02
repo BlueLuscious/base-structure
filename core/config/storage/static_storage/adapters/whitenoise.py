@@ -2,7 +2,7 @@
 
 import importlib.util
 from pathlib import Path
-from core.config.storage.static_storage.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
+from core.config.storage.static_storage.adapters.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
 
 
 class WhiteNoiseStaticStorageAdapter(BaseStaticStorageAdapter):
@@ -36,6 +36,6 @@ class WhiteNoiseStaticStorageAdapter(BaseStaticStorageAdapter):
         )
 
     def ensure_dependencies(self) -> None:
-        """ Ensure WhiteNoise is available before using this provider. """
+        """ Ensure WhiteNoise is available before using this provider."""
         if importlib.util.find_spec("whitenoise") is None:
             raise RuntimeError("STATICFILES_PROVIDER=whitenoise requires whitenoise to be installed.")

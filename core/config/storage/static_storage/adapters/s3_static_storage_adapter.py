@@ -2,8 +2,9 @@
 
 import os
 from pathlib import Path
+from typing import Any
 from core.config.storage.common import build_extra_apps, build_remote_url, build_s3_compatible_storage_options, normalize_location
-from core.config.storage.static_storage.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
+from core.config.storage.static_storage.adapters.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
 
 
 class S3StaticStorageAdapter(BaseStaticStorageAdapter):
@@ -37,7 +38,7 @@ class S3StaticStorageAdapter(BaseStaticStorageAdapter):
         )
 
     def ensure_dependencies(self) -> None:
-        """ Ensure required third-party dependencies are available. """
+        """ Ensure required third-party dependencies are available."""
         if "storages" not in build_extra_apps():
             raise RuntimeError("Remote staticfiles storage requires django-storages to be installed.")
 
@@ -54,11 +55,11 @@ class S3StaticStorageAdapter(BaseStaticStorageAdapter):
             fallback_url=self.get_static_url(),
         )
 
-    def build_storage_options(self) -> dict[str, object]:
+    def build_storage_options(self) -> dict[str, Any]:
         """ Build common S3 static storage options from environment variables.
 
         Returns:
-            dict[str, object]: Keyword arguments for the S3 static storage backend.
+            dict[str, Any]: Keyword arguments for the S3 static storage backend.
         """
         return build_s3_compatible_storage_options(
             location_env_name="STATICFILES_LOCATION",

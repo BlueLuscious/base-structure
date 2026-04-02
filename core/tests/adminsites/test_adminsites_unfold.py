@@ -1,6 +1,7 @@
 """ Tests for admin site Unfold configuration resolution. """
 
 from django.test import RequestFactory
+from tenancy.models import TenantModel
 from core.adminsites.admin_namespace import AdminNamespace
 from core.adminsites.site_instances import owner_admin_site
 from core.adminsites.site_instances import master_admin_site
@@ -35,6 +36,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual(settings_dict["SITE_HEADER"].__name__, "site_header")
         self.assertEqual(settings_dict["SITE_SYMBOL"].__name__, "site_symbol")
         self.assertEqual(settings_dict["SITE_URL"].__name__, "site_url")
+        self.assertEqual(settings_dict["SITE_DROPDOWN"].__name__, "site_dropdown")
         self.assertEqual(settings_dict["SIDEBAR"]["navigation"].__name__, "sidebar_navigation")
         self.assertEqual(settings_dict["SCRIPTS"].__name__, "scripts")
         self.assertEqual(settings_dict["STYLES"].__name__, "styles")
@@ -60,6 +62,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual(AdminSiteUnfoldCallbacks.site_header(request), owner_admin_site.get_site_header(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.site_symbol(request), owner_admin_site.get_site_symbol(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.site_url(request), owner_admin_site.get_site_url(request))
+        self.assertEqual(AdminSiteUnfoldCallbacks.site_dropdown(request), owner_admin_site.get_site_dropdown(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.show_search(request), owner_admin_site.get_show_sidebar_search(request))
         self.assertEqual(
             AdminSiteUnfoldCallbacks.show_all_applications(request),
@@ -71,6 +74,14 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         )
         self.assertEqual(AdminSiteUnfoldCallbacks.scripts(request), owner_admin_site.get_scripts(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.styles(request), owner_admin_site.get_styles(request))
+
+    def test_owner_admin_site_metadata_prefers_the_active_tenant(self) -> None:
+        """ Verify the owner admin metadata uses the active tenant when one is available. """
+        request = self.request_factory.get("/owner-admin/")
+        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+
+        self.assertEqual("GEA Lubricantes", owner_admin_site.get_site_title(request))
+        self.assertEqual("GEA Lubricantes Administration", owner_admin_site.get_site_header(request))
 
     def test_master_admin_sidebar_navigation_includes_users_groups_and_tenancy(self) -> None:
         """ Verify the master admin sidebar includes account and tenancy management links. """

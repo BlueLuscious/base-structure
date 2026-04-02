@@ -4,6 +4,7 @@ import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -13,7 +14,7 @@ class StaticStorageConfig:
     provider: str
     static_url: str
     static_root: Path
-    storages: dict[str, dict[str, object]]
+    storages: dict[str, dict[str, Any]]
     extra_apps: list[str]
     extra_middleware: list[str]
 

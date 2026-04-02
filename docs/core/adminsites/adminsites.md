@@ -146,6 +146,9 @@ Characteristics:
 - active staff users
 - guided domain-specific admin experience
 - simpler navigation than the master site
+- tenant-aware metadata such as title and header when an active tenant is resolved
+- compatible with explicit active-tenant switching backed by session state
+- tenant switcher dropdown in the site header when the user belongs to multiple active tenants
 
 ## Maintenance Rule
 

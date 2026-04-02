@@ -97,6 +97,17 @@ class BaseAdminSite(UnfoldAdminSite):
         """
         return []
 
+    def get_site_dropdown(self, request: HttpRequest) -> list[dict[str, Any]]:
+        """ Return site dropdown items for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, Any]]: Dropdown items rendered by Unfold in the site header.
+        """
+        return []
+
     def get_scripts(self, request: HttpRequest) -> list[str]:
         """ Return additional Unfold script paths for the current request.
 

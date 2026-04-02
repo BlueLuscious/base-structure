@@ -1,5 +1,6 @@
 """ Request-aware Unfold callbacks for project admin sites. """
 
+from typing import Any
 from django.http import HttpRequest
 from django.utils.module_loading import import_string
 from core.adminsites.admin_namespace import AdminNamespace
@@ -89,17 +90,30 @@ class AdminSiteUnfoldCallbacks:
         return site_instance.get_show_all_applications(request)
 
     @classmethod
-    def sidebar_navigation(cls, request: HttpRequest) -> list[dict[str, object]]:
+    def sidebar_navigation(cls, request: HttpRequest) -> list[dict[str, Any]]:
         """ Return sidebar navigation for the current request.
 
         Args:
             request: Current admin request.
 
         Returns:
-            list[dict[str, object]]: Resolved sidebar navigation items.
+            list[dict[str, Any]]: Resolved sidebar navigation items.
         """
         site_instance = cls._resolve_admin_site_instance(request)
         return site_instance.get_sidebar_navigation(request)
+
+    @classmethod
+    def site_dropdown(cls, request: HttpRequest) -> list[dict[str, Any]]:
+        """ Return site dropdown items for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, Any]]: Resolved site dropdown items.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_site_dropdown(request)
 
     @classmethod
     def scripts(cls, request: HttpRequest) -> list[str]:

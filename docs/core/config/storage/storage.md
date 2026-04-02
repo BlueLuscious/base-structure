@@ -10,6 +10,11 @@ Storage configuration lives under:
 - `core/config/storage/media_storage/`
 - `core/config/storage/static_storage/`
 
+Both storage domains expose a resolver entrypoint:
+
+- `MediaStorageAdapterResolver.build_config(...)`
+- `StaticStorageAdapterResolver.build_config(...)`
+
 `media` and `staticfiles` share the same storage namespace, but they keep separate contracts:
 
 - `MediaStorageConfig`
@@ -169,6 +174,11 @@ Recommendation:
   - `media`
   - `static`
 
+Current tenancy direction:
+
+- media is tenant-aware at runtime and stores uploaded objects under `tenants/<tenant-slug>/...` when one active tenant exists
+- static files remain global unless real per-tenant branding assets are introduced
+
 ### 5. Local Media + WhiteNoise Staticfiles
 
 - `MEDIAFILES_PROVIDER=local`
@@ -205,6 +215,13 @@ Conceptual result:
 - media objects live under `media/...`
 - static objects live under `static/...`
 - public delivery can be served through a CDN or custom domain
+
+With tenant-aware media enabled, the final stored object key becomes:
+
+- `media/tenants/<tenant-slug>/...` for remote backends
+- `MEDIA_ROOT/tenants/<tenant-slug>/...` for local media
+
+If no active tenant exists during the save operation, media keeps the original relative path unchanged.
 
 ## Optional Integration Toggle
 

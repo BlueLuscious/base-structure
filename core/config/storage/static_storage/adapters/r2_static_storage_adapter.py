@@ -1,7 +1,8 @@
 """ Cloudflare R2 static storage adapter. """
 
 import os
-from core.config.storage.static_storage.s3 import S3StaticStorageAdapter
+from typing import Any
+from core.config.storage.static_storage.adapters.s3_static_storage_adapter import S3StaticStorageAdapter
 
 
 class R2StaticStorageAdapter(S3StaticStorageAdapter):
@@ -9,11 +10,11 @@ class R2StaticStorageAdapter(S3StaticStorageAdapter):
 
     provider = "r2"
 
-    def build_storage_options(self) -> dict[str, object]:
+    def build_storage_options(self) -> dict[str, Any]:
         """ Build R2 static storage options from environment variables.
 
         Returns:
-            dict[str, object]: Keyword arguments for the R2-compatible static backend.
+            dict[str, Any]: Keyword arguments for the R2-compatible static backend.
         """
         options = super().build_storage_options()
         if not options["endpoint_url"]:

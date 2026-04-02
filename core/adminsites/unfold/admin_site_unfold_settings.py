@@ -43,6 +43,7 @@ class AdminSiteUnfoldSettings:
             "SITE_HEADER": AdminSiteUnfoldCallbacks.site_header,
             "SITE_SYMBOL": AdminSiteUnfoldCallbacks.site_symbol,
             "SITE_URL": AdminSiteUnfoldCallbacks.site_url,
+            "SITE_DROPDOWN": AdminSiteUnfoldCallbacks.site_dropdown,
             "SIDEBAR": {
                 "show_search": AdminSiteUnfoldCallbacks.show_search,
                 "show_all_applications": AdminSiteUnfoldCallbacks.show_all_applications,

@@ -5,7 +5,7 @@ from pathlib import Path
 from django_components import ComponentsSettings
 from core.adminsites.admin_namespace import AdminNamespace
 from core.adminsites.unfold import AdminSiteUnfoldSettings
-from core.config.storage import build_media_storage_config, build_static_storage_config
+from core.config.storage import MediaStorageAdapterResolver, StaticStorageAdapterResolver
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,8 +38,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Application definition
 
-MEDIA_STORAGE_CONFIG = build_media_storage_config(BASE_DIR)
-STATIC_STORAGE_CONFIG = build_static_storage_config(BASE_DIR)
+MEDIA_STORAGE_CONFIG = MediaStorageAdapterResolver.build_config(BASE_DIR)
+STATIC_STORAGE_CONFIG = StaticStorageAdapterResolver.build_config(BASE_DIR)
 
 INSTALLED_APPS = [
     'unfold',
@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.tenancy.middleware.active_tenant_middleware.ActiveTenantMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

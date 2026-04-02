@@ -1,7 +1,7 @@
 """ Local filesystem static storage adapter. """
 
 from pathlib import Path
-from core.config.storage.static_storage.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
+from core.config.storage.static_storage.adapters.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
 
 
 class LocalStaticStorageAdapter(BaseStaticStorageAdapter):

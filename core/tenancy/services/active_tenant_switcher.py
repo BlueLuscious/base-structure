@@ -1,0 +1,36 @@
+""" Service for explicit active-tenant switching. """
+
+from uuid import UUID
+from django.core.exceptions import PermissionDenied
+from django.http import HttpRequest
+from core.tenancy.session import ActiveTenantSessionStore
+from tenancy.models import TenantMembershipModel
+
+
+class ActiveTenantSwitcher:
+    """ Switch the active tenant for one request after validating membership access. """
+
+    session_store_class = ActiveTenantSessionStore
+
+    @classmethod
+    def switch(cls, request: HttpRequest, tenant_id: UUID) -> None:
+        """ Switch the active tenant for the current authenticated user.
+
+        Args:
+            request: Current HTTP request.
+            tenant_id: Tenant identifier requested by the user.
+
+        Raises:
+            PermissionDenied: If the user does not belong to the requested tenant.
+        """
+        membership = (
+            TenantMembershipModel.objects.active()
+            .filter(user=request.user, tenant_id=tenant_id, tenant__is_active=True)
+            .select_related("tenant")
+            .first()
+        )
+
+        if membership is None:
+            raise PermissionDenied("You do not have access to the requested tenant.")
+
+        cls.session_store_class.set_tenant(request, membership.tenant)
