@@ -6,7 +6,7 @@ from unfold.admin import TabularInline
 from accounts.admin.owner.tenant_membership_inline_form import TenantMembershipInlineForm
 from accounts.admin.owner.tenant_membership_inline_formset import TenantMembershipInlineFormSet
 from tenancy.models import TenantMembershipModel
-from tenancy.services.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
 if TYPE_CHECKING:
     from accounts.models.user_model import UserModel

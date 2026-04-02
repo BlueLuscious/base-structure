@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from django.apps import apps
 from django.http import HttpRequest
 from tenancy.choices import TenantRole
-from tenancy.services.tenant_access_policy import TenantAccessPolicy
+from tenancy.access.tenant_access_policy import TenantAccessPolicy
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import Group

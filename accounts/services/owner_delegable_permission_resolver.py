@@ -4,7 +4,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.auth.models import PermissionsMixin
 from django.db.models import Q, QuerySet
 from tenancy.models import TenantModel
-from tenancy.services.tenant_access_policy import TenantAccessPolicy
+from tenancy.access.tenant_access_policy import TenantAccessPolicy
 
 
 class OwnerDelegablePermissionResolver:

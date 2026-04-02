@@ -12,7 +12,7 @@ from accounts.admin.owner.user_model_admin_form import OwnerUserModelAdminForm
 from accounts.models import UserModel
 from core.adminsites.site_instances import owner_admin_site
 from tenancy.choices import TenantRole
-from tenancy.services.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
 
 @admin.register(UserModel, site=owner_admin_site)

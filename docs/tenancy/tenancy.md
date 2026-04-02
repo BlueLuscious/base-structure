@@ -5,6 +5,7 @@ This document explains the purpose and structure of the `tenancy/` app and the a
 See also:
 
 - `docs/project.md`
+- `docs/tenancy/resolution/resolution.md`
 - `docs/core/core.md`
 - `docs/core/adminsites/adminsites.md`
 - `docs/core/config/storage/storage.md`
@@ -42,7 +43,9 @@ Current contents:
 - `urls.py`
 - `choices/`
 - `models/`
-- `services/`
+- `access/`
+- `resolution/`
+- `switching/`
 - `session/`
 - `runtime/`
 - `middleware/`
@@ -150,7 +153,7 @@ Current behavior:
 
 - resolution happens through `ActiveTenantMiddleware`
 - middleware lives in `tenancy/middleware/`
-- resolution rules live in `tenancy/services/`
+- resolution rules live in `tenancy/resolution/`
 - session persistence lives in `tenancy/session/`
 - runtime request context lives in `tenancy/runtime/`
 - the active tenant is stored in session
@@ -168,19 +171,9 @@ Request-aware storage behavior that consumes the runtime active tenant is docume
 
 - `docs/core/config/storage/storage.md`
 
-### Current Resolution Order
+The detailed structure, strategy contract, and future path or host resolution options are documented in:
 
-Today the active tenant is resolved in this order:
-
-1. tenant stored in session
-2. primary active tenant membership for the authenticated user
-3. first active tenant membership for the authenticated user
-
-This is the current behavior used by:
-
-- owner admin metadata
-- owner admin tenant switching
-- tenant-aware media storage
+- `docs/tenancy/resolution/resolution.md`
 
 ## Explicit Tenant Switching
 
@@ -218,45 +211,15 @@ The project does not yet expose a tenant-aware public frontend flow.
 
 The current implementation is intentionally centered on session-backed resolution because it fits the owner admin flow.
 
-Future frontend work may require path-based tenant resolution without changing the current admin URL shape.
+Future frontend work may require path-based or host-based tenant resolution without changing the current admin URL shape.
 
-Examples of future frontend URL patterns:
+The detailed resolution roadmap, strategy breakdown, and future examples are documented in:
 
-- `/t/<tenant-slug>/products/`
-- `/t/<tenant-slug>/quotes/`
-- `/t/<tenant-slug>/checkout/`
-
-In that future direction:
-
-- admin flows can keep using session-backed tenant switching
-- frontend flows can resolve tenant from the path
-- both can share the same tenant and membership models
-
-### Target Architecture Direction
-
-This is not implemented yet, but it is the current design target:
-
-- small tenant-resolution strategies
-- one composed resolver per context
-- admin resolver focused on session plus membership fallback
-- frontend resolver focused on path-based resolution
-
-Possible future strategy examples:
-
-- `SessionTenantResolutionStrategy`
-- `MembershipTenantResolutionStrategy`
-- `PathTenantResolutionStrategy`
-
-Possible future composed resolvers:
-
-- `AdminActiveTenantResolver`
-- `FrontendActiveTenantResolver`
-
-The goal is to support multiple resolution styles without turning the current middleware into one large conditional resolver.
+- `docs/tenancy/resolution/resolution.md`
 
 ## Access Policies
 
-`tenancy/services/` now separates tenant authorization into small policy objects.
+`tenancy/access/` now separates tenant authorization into small policy objects.
 
 Current policy split:
 
@@ -318,6 +281,8 @@ The app already follows the project test structure convention.
 
 Current test areas:
 
+- `tenancy/tests/access/`
+- `tenancy/tests/resolution/`
 - `tenancy/tests/models/`
 - `tenancy/tests/querysets/`
 - `tenancy/tests/managers/`

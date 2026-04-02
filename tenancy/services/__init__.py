@@ -1,1 +1,0 @@
-""" Tenancy service package. """

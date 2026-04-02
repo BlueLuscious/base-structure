@@ -30,6 +30,7 @@ Other domain apps may exist as future work or on other branches, but they are no
 
 - Accounts app: `docs/accounts/accounts.md`
 - Tenancy app: `docs/tenancy/tenancy.md`
+- Tenancy resolution layer: `docs/tenancy/resolution/resolution.md`
 
 ## Ownership Rule
 
@@ -41,6 +42,7 @@ To avoid repeating the same explanation in multiple places:
 - `docs/core/config/storage/storage.md` owns storage provider and env-var details
 - `docs/accounts/accounts.md` owns the `accounts/` domain structure
 - `docs/tenancy/tenancy.md` owns the `tenancy/` domain structure
+- `docs/tenancy/resolution/resolution.md` owns the active-tenant resolution design and strategy layer
 - `docs/pending-tasks.md` owns branch-local backlog items, not architectural truth
 
 When one topic depends on another, the app or subsystem doc should link to the owning document instead of duplicating the full explanation.

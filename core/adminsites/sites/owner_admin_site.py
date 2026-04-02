@@ -5,7 +5,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from core.adminsites.services import OwnerTenantDropdownBuilder
 from core.adminsites.sites.base_admin_site import BaseAdminSite
-from tenancy.services.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
 
 class OwnerAdminSite(BaseAdminSite):

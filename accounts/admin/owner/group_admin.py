@@ -10,7 +10,7 @@ from accounts.admin.owner.group_admin_form import OwnerGroupAdminForm
 from accounts.services.owner_delegable_permission_resolver import OwnerDelegablePermissionResolver
 from core.adminsites.site_instances import owner_admin_site
 from tenancy.models import TenantGroupModel
-from tenancy.services.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
 
 @admin.register(Group, site=owner_admin_site)

@@ -157,6 +157,7 @@ Characteristics:
 - compatible with explicit active-tenant switching backed by session state
 - tenant switcher dropdown in the site header when the user belongs to multiple active tenants
 - owner sidebar entries are curated instead of mirroring the full Django app list
+- the current `Accounts` navigation is intentionally owner-only even inside the owner admin site
 
 ## Maintenance Rule
 

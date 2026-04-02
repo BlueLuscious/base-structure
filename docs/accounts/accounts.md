@@ -114,6 +114,7 @@ For the owner admin flow:
 - groups are scoped to the active tenant through `TenantGroupModel`
 - user group assignment is filtered to groups that belong to the active tenant
 - group permissions are filtered to the permissions already held by the current owner
+- non-owner tenant members do not gain access to owner `Users` or `Groups` only by receiving Django permissions
 
 The current owner admin flow consumes tenant authorization through two policy layers owned by `tenancy/`:
 

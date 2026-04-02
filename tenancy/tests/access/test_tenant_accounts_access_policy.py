@@ -6,7 +6,7 @@ from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
 from tenancy.choices import TenantRole
 from tenancy.models import TenantGroupModel, TenantMembershipModel, TenantModel
-from tenancy.services.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
 
 class TestTenantAccountsAccessPolicy(LoggedTestCase):
