@@ -18,6 +18,7 @@ It currently defines:
 
 - the base tenant entity
 - tenant-to-user memberships
+- tenant-to-group bindings
 - role choices for tenant memberships
 - typed query infrastructure for tenant data
 - request-time active tenant resolution
@@ -109,6 +110,22 @@ Current intent:
 - each user should have at most one primary tenant membership
 - tenant-specific roles should live on the membership rather than directly on the user model
 
+### `TenantGroupModel`
+
+`TenantGroupModel` links one Django auth group to one tenant.
+
+Current fields cover:
+
+- relation to `TenantModel`
+- relation to Django `Group`
+- audit timestamps
+
+Current intent:
+
+- groups remain compatible with Django auth
+- tenant ownership of groups stays explicit
+- future owner-facing group visibility and assignment can be scoped by the active tenant
+
 ## Choices
 
 The app keeps membership roles outside the model.
@@ -184,6 +201,7 @@ Current intent:
 Current concrete use cases:
 
 - attach users to one or more tenants
+- attach Django groups to one tenant
 - choose the active tenant during owner-admin work
 - display tenant-aware owner admin metadata such as title and header
 - switch tenant context explicitly from the owner admin dropdown
@@ -248,6 +266,7 @@ This keeps authentication and tenant membership related, but not collapsed into 
 Current master registrations:
 
 - `TenantModelAdmin`
+- `TenantGroupModelAdmin`
 - `TenantMembershipModelAdmin`
 
 These registrations exist so the multitenancy base can be inspected and administered from the technical admin surface before the owner-facing tenant flows are defined.
@@ -264,6 +283,7 @@ Current test areas:
 
 - `tenancy/tests/models/`
 - `tenancy/tests/querysets/`
+- `tenancy/tests/managers/`
 - `tenancy/tests/middleware/`
 - `tenancy/tests/views/`
 

@@ -108,4 +108,5 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertIn("/admin/accounts/usermodel/", item_links)
         self.assertIn("/admin/auth/group/", item_links)
         self.assertIn("/admin/tenancy/tenantmodel/", item_links)
+        self.assertIn("/admin/tenancy/tenantgroupmodel/", item_links)
         self.assertIn("/admin/tenancy/tenantmembershipmodel/", item_links)

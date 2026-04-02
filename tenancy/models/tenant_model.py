@@ -7,6 +7,7 @@ from tenancy.models.managers.tenant_model_manager import TenantModelManager
 
 if TYPE_CHECKING:
     from accounts.models.managers.user_model_manager import UserModelManager
+    from tenancy.models.managers.tenant_group_model_manager import TenantGroupModelManager
     from tenancy.models.managers.tenant_membership_model_manager import TenantMembershipModelManager
 
 
@@ -23,6 +24,7 @@ class TenantModel(models.Model):
     objects: TenantModelManager = TenantModelManager()
 
     memberships: "TenantMembershipModelManager"
+    tenant_groups: "TenantGroupModelManager"
     users: "UserModelManager"
 
     class Meta:
