@@ -6,13 +6,14 @@ from django.contrib.auth.models import AbstractUser
 from accounts.models.managers.user_model_manager import UserModelManager
 
 if TYPE_CHECKING:
-    from tenancy.models.managers import TenantMembershipModelManager, TenantModelManager
+    from django.db.models.manager import RelatedManager
+    from tenancy.models.querysets import TenantMembershipModelQuerySet, TenantModelQuerySet
 
 
 class UserModel(AbstractUser):
     """ Base user model used by Django auth within this project. """
 
-    tenants = models.ManyToManyField(
+    tenants: "RelatedManager[TenantModelQuerySet]" = models.ManyToManyField(
         "tenancy.TenantModel",
         through="tenancy.TenantMembershipModel",
         related_name="users",
@@ -20,5 +21,4 @@ class UserModel(AbstractUser):
     )
     objects: UserModelManager = UserModelManager()
 
-    tenant_memberships: "TenantMembershipModelManager"
-    tenants: "TenantModelManager"
+    tenant_memberships: "RelatedManager[TenantMembershipModelQuerySet]"
