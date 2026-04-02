@@ -1,6 +1,6 @@
 # Tenancy App
 
-This document explains the purpose and structure of the `tenancy/` app.
+This document explains the purpose and structure of the `tenancy/` app and the active-tenant flow it owns.
 
 See also:
 
@@ -24,7 +24,12 @@ It currently defines:
 - explicit active-tenant switching
 - master admin registrations for technical administration
 
-The app should remain focused on tenant identity and membership scope.
+`tenancy/` owns both:
+
+- tenant persistence
+- active-tenant request behavior
+
+Tenant persistence and active-tenant runtime behavior are documented together here because they belong to the same app boundary.
 
 ## Current Structure
 
@@ -44,6 +49,11 @@ Current contents:
 - `migrations/`
 - `tests/`
 
+The current package groups two related concerns:
+
+- persistence and membership rules
+- request-time tenant context
+
 ## Responsibilities
 
 The `tenancy/` app is responsible for:
@@ -54,6 +64,12 @@ The `tenancy/` app is responsible for:
 - exposing shared request-time tenant resolution helpers
 - owning the active-tenant request flow end to end
 - registering tenant infrastructure in the master admin site
+
+It is also the current home for tenant-aware request utilities because those utilities are tightly coupled to:
+
+- `TenantModel`
+- `TenantMembershipModel`
+- tenant-scoped request resolution
 
 ## Models
 
@@ -132,6 +148,20 @@ Request-aware storage behavior that consumes the runtime active tenant is docume
 
 - `docs/core/config/storage/storage.md`
 
+### Current Resolution Order
+
+Today the active tenant is resolved in this order:
+
+1. tenant stored in session
+2. primary active tenant membership for the authenticated user
+3. first active tenant membership for the authenticated user
+
+This is the current behavior used by:
+
+- owner admin metadata
+- owner admin tenant switching
+- tenant-aware media storage
+
 ## Explicit Tenant Switching
 
 The base structure now supports explicit tenant switching.
@@ -148,6 +178,59 @@ Current intent:
 - session state controls the current tenant context
 - the primary membership remains the fallback default
 - switching the active tenant does not rewrite `is_primary`
+
+## Use Cases
+
+Current concrete use cases:
+
+- attach users to one or more tenants
+- choose the active tenant during owner-admin work
+- display tenant-aware owner admin metadata such as title and header
+- switch tenant context explicitly from the owner admin dropdown
+- prefix uploaded media under `tenants/<tenant-slug>/...`
+
+These are internal or admin-facing use cases.
+The project does not yet expose a tenant-aware public frontend flow.
+
+## Future Direction
+
+The current implementation is intentionally centered on session-backed resolution because it fits the owner admin flow.
+
+Future frontend work may require path-based tenant resolution without changing the current admin URL shape.
+
+Examples of future frontend URL patterns:
+
+- `/t/<tenant-slug>/products/`
+- `/t/<tenant-slug>/quotes/`
+- `/t/<tenant-slug>/checkout/`
+
+In that future direction:
+
+- admin flows can keep using session-backed tenant switching
+- frontend flows can resolve tenant from the path
+- both can share the same tenant and membership models
+
+### Target Architecture Direction
+
+This is not implemented yet, but it is the current design target:
+
+- small tenant-resolution strategies
+- one composed resolver per context
+- admin resolver focused on session plus membership fallback
+- frontend resolver focused on path-based resolution
+
+Possible future strategy examples:
+
+- `SessionTenantResolutionStrategy`
+- `MembershipTenantResolutionStrategy`
+- `PathTenantResolutionStrategy`
+
+Possible future composed resolvers:
+
+- `AdminActiveTenantResolver`
+- `FrontendActiveTenantResolver`
+
+The goal is to support multiple resolution styles without turning the current middleware into one large conditional resolver.
 
 ## Relationship With `accounts/`
 

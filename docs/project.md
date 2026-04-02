@@ -1,23 +1,23 @@
 # Project Documentation Map
 
-This directory contains the main architectural and operational documentation for the current branch.
+This directory contains the main architectural and operational documentation for the project.
 
 Use this file first to understand where each topic is documented and which document owns each concern.
 
-## Scope Of This Branch
+## Current Documented Scope
 
-The runtime code currently documented in this branch is centered on:
+The runtime code currently documented here is centered on:
 
 - `accounts/`
 - `tenancy/`
 - `core/`
 
-Other domain apps may exist in other branches or as future work, but they are not the primary documented runtime scope here.
+Other domain apps may exist as future work or on other branches, but they are not the primary documented runtime scope here.
 
 ## Project Entry Docs
 
 - Repository setup and development workflow: `README.md`
-- Current branch backlog and postponed decisions: `docs/pending-tasks.md`
+- Branch-local backlog and postponed decisions: `docs/pending-tasks.md`
 
 ## Core Docs
 
