@@ -72,7 +72,7 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
             raise ValidationError(_("Add one business access entry before saving this user."))
 
         membership_form = visible_forms[0]
-        resulting_role = membership_form.cleaned_data.get("role") or TenantRole.EMPLOYEE
+        resulting_role = membership_form.cleaned_data.get("role") or TenantRole.OPERATOR
         resulting_is_active = bool(membership_form.cleaned_data.get("is_active", False))
         current_user_id = getattr(self.instance, "pk", None)
         other_active_owner_exists = (

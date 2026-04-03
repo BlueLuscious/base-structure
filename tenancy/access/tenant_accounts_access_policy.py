@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class TenantAccountsAccessPolicy:
     """ Resolve access to owner-managed users and groups inside one tenant. """
 
-    visible_user_roles = (TenantRole.OWNER, TenantRole.EMPLOYEE)
+    visible_user_roles = (TenantRole.OWNER, TenantRole.OPERATOR)
 
     @classmethod
     def can_manage_accounts(cls, request: HttpRequest) -> bool:

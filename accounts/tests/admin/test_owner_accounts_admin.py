@@ -63,19 +63,19 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         TenantMembershipModel.objects.create(
             tenant=self.tenant,
             user=self.tenant_user,
-            role=TenantRole.EMPLOYEE,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
         TenantMembershipModel.objects.create(
             tenant=self.other_tenant,
             user=self.other_tenant_user,
-            role=TenantRole.EMPLOYEE,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
         TenantMembershipModel.objects.create(
             tenant=self.tenant,
             user=self.non_owner,
-            role=TenantRole.EMPLOYEE,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
         TenantMembershipModel.objects.create(
@@ -210,12 +210,12 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
 
         self.assertEqual([], list(form_field.queryset))
 
-    def test_owner_membership_inline_limits_role_choices_to_owner_and_employee(self) -> None:
+    def test_owner_membership_inline_limits_role_choices_to_owner_and_operator(self) -> None:
         """ Verify the owner membership inline exposes only owner-managed tenant roles. """
         form = self.membership_inline.form()
 
         self.assertEqual(
-            [(TenantRole.OWNER, _("Owner")), (TenantRole.EMPLOYEE, _("Employee"))],
+            [(TenantRole.OWNER, _("Owner")), (TenantRole.OPERATOR, _("Operator"))],
             list(form.fields["role"].choices),
         )
 
@@ -223,10 +223,10 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         """ Verify the membership inline saves one tenant-scoped membership for the active tenant. """
         request = self.build_request()
         new_user = UserModel.objects.create_user(
-            username="new-employee",
-            email="new-employee@example.com",
+            username="new-operator",
+            email="new-operator@example.com",
             first_name="New",
-            last_name="Employee",
+            last_name="Operator",
             password="test-pass",
             is_staff=True,
             is_active=True,
@@ -239,7 +239,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
                 f"{prefix}-INITIAL_FORMS": "0",
                 f"{prefix}-MIN_NUM_FORMS": "0",
                 f"{prefix}-MAX_NUM_FORMS": "1",
-                f"{prefix}-0-role": TenantRole.EMPLOYEE,
+                f"{prefix}-0-role": TenantRole.OPERATOR,
                 f"{prefix}-0-is_active": "on",
             },
             instance=new_user,
@@ -254,7 +254,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
             TenantMembershipModel.objects.filter(
                 tenant=self.tenant,
                 user=new_user,
-                role=TenantRole.EMPLOYEE,
+                role=TenantRole.OPERATOR,
                 is_active=True,
             ).exists()
         )
@@ -281,7 +281,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
                 "tenant_memberships-INITIAL_FORMS": "0",
                 "tenant_memberships-MIN_NUM_FORMS": "1",
                 "tenant_memberships-MAX_NUM_FORMS": "1",
-                "tenant_memberships-0-role": TenantRole.EMPLOYEE,
+                "tenant_memberships-0-role": TenantRole.OPERATOR,
                 "tenant_memberships-0-is_active": "on",
             },
         )
@@ -292,7 +292,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
             TenantMembershipModel.objects.filter(
                 tenant=self.tenant,
                 user=created_user,
-                role=TenantRole.EMPLOYEE,
+                role=TenantRole.OPERATOR,
                 is_active=True,
             ).exists()
         )

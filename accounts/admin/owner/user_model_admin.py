@@ -107,7 +107,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
 
         return queryset.filter(
             tenant_memberships__tenant=tenant,
-            tenant_memberships__role__in=(TenantRole.OWNER, TenantRole.EMPLOYEE),
+            tenant_memberships__role__in=(TenantRole.OWNER, TenantRole.OPERATOR),
         ).distinct()
 
     def get_readonly_fields(self, request: HttpRequest, obj: UserModel | None = None) -> tuple[str, ...]:

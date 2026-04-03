@@ -21,8 +21,8 @@ class TestTenantAccountsAccessPolicy(LoggedTestCase):
             is_active=True,
             is_staff=True,
         )
-        self.employee = UserModel.objects.create_user(
-            username="employee",
+        self.operator = UserModel.objects.create_user(
+            username="operator",
             password="test-pass",
             is_active=True,
             is_staff=True,
@@ -44,8 +44,8 @@ class TestTenantAccountsAccessPolicy(LoggedTestCase):
         )
         TenantMembershipModel.objects.create(
             tenant=self.tenant,
-            user=self.employee,
-            role=TenantRole.EMPLOYEE,
+            user=self.operator,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
         TenantMembershipModel.objects.create(

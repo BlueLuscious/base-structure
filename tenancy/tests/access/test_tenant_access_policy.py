@@ -17,7 +17,7 @@ class TestTenantAccessPolicy(LoggedTestCase):
         TenantMembershipModel.objects.create(
             tenant=tenant,
             user=user,
-            role=TenantRole.EMPLOYEE,
+            role=TenantRole.OPERATOR,
             is_active=True,
             is_primary=True,
         )
@@ -31,7 +31,7 @@ class TestTenantAccessPolicy(LoggedTestCase):
         TenantMembershipModel.objects.create(
             tenant=tenant,
             user=user,
-            role=TenantRole.EMPLOYEE,
+            role=TenantRole.OPERATOR,
             is_active=True,
             is_primary=True,
         )

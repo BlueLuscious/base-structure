@@ -9,4 +9,4 @@ class TenantRole(models.TextChoices):
 
     MASTER = "master", _("Master")
     OWNER = "owner", _("Owner")
-    EMPLOYEE = "employee", _("Employee")
+    OPERATOR = "operator", _("Operator")

@@ -34,10 +34,10 @@ class TenantMembershipInlineForm(forms.ModelForm):
         
         role_field = self.fields.get("role")
         if role_field is not None:
-            role_field.initial = TenantRole.EMPLOYEE
+            role_field.initial = TenantRole.OPERATOR
             role_field.choices = [
                 (TenantRole.OWNER, TenantRole.OWNER.label),
-                (TenantRole.EMPLOYEE, TenantRole.EMPLOYEE.label),
+                (TenantRole.OPERATOR, TenantRole.OPERATOR.label),
             ]
 
         is_active_field = self.fields.get("is_active")

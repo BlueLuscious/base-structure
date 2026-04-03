@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gea-trader-core\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 02:49-0300\n"
+"POT-Creation-Date: 2026-04-03 03:15-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -228,8 +228,8 @@ msgstr "Propietario"
 
 #: .\accounts\tests\admin\test_owner_accounts_admin.py:218
 #: .\tenancy\choices\tenant_role.py:12
-msgid "Employee"
-msgstr "Empleado"
+msgid "Operator"
+msgstr "Operador"
 
 #: .\core\adminsites\services\owner_tenant_dropdown_builder.py:54
 #: .\core\tests\adminsites\test_owner_admin_site_dropdown.py:45
@@ -289,7 +289,7 @@ msgid "System"
 msgstr "Sistema"
 
 #: .\core\i18n\translation_anchors.py:16
-msgid "After you've created a user, you'll be able to edit more user options."
+msgid "After you've created a user, you’ll be able to edit more user options."
 msgstr ""
 "Después de crear un usuario, vas a poder editar más opciones de la cuenta."
 
@@ -462,7 +462,7 @@ msgstr "Eliminado:"
 
 #: .\core\i18n\translation_anchors.py:57
 msgid ""
-"This object doesn't have a change history. It probably wasn't added via this "
+"This object doesn’t have a change history. It probably wasn’t added via this "
 "admin site."
 msgstr ""
 "Este objeto no tiene historial de cambios. Probablemente no se agregó desde "
@@ -482,7 +482,7 @@ msgstr "Cambiar mi contraseña"
 
 #: .\core\i18n\translation_anchors.py:61
 msgid ""
-"Forgotten your password? Enter your email address below, and we'll email "
+"Forgotten your password? Enter your email address below, and we’ll email "
 "instructions for setting a new one."
 msgstr ""
 "¿Olvidaste tu contraseña? Ingresa tu correo electrónico aquí abajo y te "
@@ -494,7 +494,7 @@ msgstr "Correo electrónico:"
 
 #: .\core\i18n\translation_anchors.py:63
 msgid ""
-"If you don't receive an email, please make sure you've entered the address "
+"If you don’t receive an email, please make sure you’ve entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
 "Si no recibes un correo, asegúrate de haber ingresado la dirección con la "
