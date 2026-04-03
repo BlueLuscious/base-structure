@@ -18,6 +18,7 @@ See also:
 It currently defines:
 
 - the base tenant entity
+- tenant branding assets and display metadata
 - tenant-to-user memberships
 - tenant-to-group bindings
 - role choices for tenant memberships
@@ -114,6 +115,26 @@ Current intent:
 - a user may belong to multiple tenants
 - each user should have at most one primary tenant membership
 - tenant-specific roles should live on the membership rather than directly on the user model
+
+### `TenantBrandingModel`
+
+`TenantBrandingModel` stores reusable visual identity data for one tenant.
+
+Current fields cover:
+
+- relation to `TenantModel`
+- optional display name
+- light and dark logo variants
+- light and dark icon variants
+- light and dark favicon variants
+- login image
+- audit timestamps
+
+Current intent:
+
+- keep branding out of `TenantModel`
+- reuse the same branding data across admin and future frontend surfaces
+- let tenant-aware media storage place branding uploads under the active tenant path when one exists
 
 ### `TenantGroupModel`
 
