@@ -1,4 +1,4 @@
-""" Custom admin language switcher view. """
+""" Custom language switching views. """
 
 from urllib.parse import urlsplit, urlunsplit
 from django.conf import settings

@@ -1,4 +1,4 @@
-""" Admin-site helper views. """
+""" Internationalization views shared across the project. """
 
 from .set_admin_language_view import SetAdminLanguageView
 

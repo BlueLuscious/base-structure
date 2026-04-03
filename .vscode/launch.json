@@ -3,6 +3,28 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    "inputs": [
+        {
+            "id": "djangoI18nLanguage",
+            "type": "pickString",
+            "description": "Select the target language",
+            "options": [
+                "es",
+                "en"
+            ],
+            "default": "es"
+        },
+        {
+            "id": "djangoI18nDomain",
+            "type": "pickString",
+            "description": "Select the translation domain",
+            "options": [
+                "django",
+                "djangojs"
+            ],
+            "default": "django"
+        }
+    ],
     "configurations": [
         {
             "name": "Django: Run Server",
@@ -77,6 +99,83 @@
             "envFile": "${workspaceFolder}\\.env"
         },
         {
+            "name": "Django: Make Messages",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "makemessages",
+                "-l",
+                "${input:djangoI18nLanguage}",
+                "-d",
+                "${input:djangoI18nDomain}",
+                "--ignore",
+                ".venv/*",
+                "--ignore",
+                "locale/*",
+                "--ignore",
+                "*.md",
+                "--ignore",
+                "**/*.md",
+                "--ignore",
+                "*.txt",
+                "--ignore",
+                "**/*.txt",
+                "--ignore",
+                "staticfiles/*",
+                "--ignore",
+                "**/__pycache__/*"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
+            "name": "Django: Update Messages",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "makemessages",
+                "-a",
+                "-d",
+                "${input:djangoI18nDomain}",
+                "--ignore",
+                ".venv/*",
+                "--ignore",
+                "locale/*",
+                "--ignore",
+                "*.md",
+                "--ignore",
+                "**/*.md",
+                "--ignore",
+                "*.txt",
+                "--ignore",
+                "**/*.txt",
+                "--ignore",
+                "staticfiles/*",
+                "--ignore",
+                "**/__pycache__/*"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
+            "name": "Django: Compile Messages",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "compilemessages",
+                "-l",
+                "${input:djangoI18nLanguage}"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
             "name": "Django: Test",
             "type": "debugpy",
             "request": "launch",
@@ -87,6 +186,6 @@
             "autoStartBrowser": false,
             "program": "${workspaceFolder}\\manage.py",
             "envFile": "${workspaceFolder}\\.env"
-        },
+        }
     ]
 }
