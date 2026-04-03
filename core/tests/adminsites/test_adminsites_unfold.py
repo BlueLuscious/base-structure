@@ -25,8 +25,10 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
 
         self.assertEqual(settings_dict["SITE_TITLE"](request), MasterAdminSite.get_site_title(request))
         self.assertEqual(settings_dict["SITE_HEADER"](request), MasterAdminSite.get_site_header(request))
+        self.assertEqual(settings_dict["SITE_SUBHEADER"](request), MasterAdminSite.get_site_subheader(request))
         self.assertEqual(settings_dict["SITE_SYMBOL"](request), MasterAdminSite.get_site_symbol(request))
         self.assertEqual(settings_dict["SITE_URL"](request), MasterAdminSite.get_site_url(request))
+        self.assertEqual(settings_dict["ENVIRONMENT"](request), MasterAdminSite.get_environment(request))
 
     def test_build_admin_site_unfold_settings_keeps_dynamic_sidebar_and_assets(self) -> None:
         """ Verify the generated settings dictionary keeps request-aware hooks only where needed. """
@@ -34,8 +36,10 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
 
         self.assertEqual(settings_dict["SITE_TITLE"].__name__, "site_title")
         self.assertEqual(settings_dict["SITE_HEADER"].__name__, "site_header")
+        self.assertEqual(settings_dict["SITE_SUBHEADER"].__name__, "site_subheader")
         self.assertEqual(settings_dict["SITE_SYMBOL"].__name__, "site_symbol")
         self.assertEqual(settings_dict["SITE_URL"].__name__, "site_url")
+        self.assertEqual(settings_dict["ENVIRONMENT"].__name__, "environment")
         self.assertEqual(settings_dict["SITE_DROPDOWN"].__name__, "site_dropdown")
         self.assertEqual(settings_dict["SIDEBAR"]["navigation"].__name__, "sidebar_navigation")
         self.assertEqual(settings_dict["SCRIPTS"].__name__, "scripts")
@@ -44,6 +48,21 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
 
     def test_dynamic_callbacks_dispatch_to_owner_site_instance(self) -> None:
         """ Verify dynamic callbacks resolve the owner admin site instance from the request namespace. """
+        membership = type(
+            "Membership",
+            (),
+            {
+                "role": "owner",
+                "get_role_display": lambda self: "Owner",
+            },
+        )()
+        tenant_memberships = type(
+            "TenantMemberships",
+            (),
+            {
+                "filter": lambda self, **kwargs: type("QuerySet", (), {"first": lambda self: membership})(),
+            },
+        )()
         request = self.request_factory.get("/owner-admin/")
         request.user = type(
             "OwnerUser",
@@ -54,14 +73,18 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
                 "is_staff": True,
                 "has_module_perms": lambda self, app_label: True,
                 "has_perm": lambda self, perm: True,
+                "tenant_memberships": tenant_memberships,
             },
         )()
+        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
         request.resolver_match = type("ResolverMatch", (), {"namespace": owner_admin_site.name})()
 
         self.assertEqual(AdminSiteUnfoldCallbacks.site_title(request), owner_admin_site.get_site_title(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.site_header(request), owner_admin_site.get_site_header(request))
+        self.assertEqual(AdminSiteUnfoldCallbacks.site_subheader(request), owner_admin_site.get_site_subheader(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.site_symbol(request), owner_admin_site.get_site_symbol(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.site_url(request), owner_admin_site.get_site_url(request))
+        self.assertEqual(AdminSiteUnfoldCallbacks.environment(request), owner_admin_site.get_environment(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.site_dropdown(request), owner_admin_site.get_site_dropdown(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.show_search(request), owner_admin_site.get_show_sidebar_search(request))
         self.assertEqual(
@@ -89,6 +112,29 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
 
         self.assertEqual("GEA Lubricantes", owner_admin_site.get_site_title(request))
+
+    def test_owner_admin_environment_uses_the_active_membership_role(self) -> None:
+        """ Verify the owner admin environment badge reflects the active tenant role. """
+        request = self.request_factory.get("/owner-admin/")
+        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+        membership = type(
+            "Membership",
+            (),
+            {
+                "role": "owner",
+                "get_role_display": lambda self: "Owner",
+            },
+        )()
+        tenant_memberships = type(
+            "TenantMemberships",
+            (),
+            {
+                "filter": lambda self, **kwargs: type("QuerySet", (), {"first": lambda self: membership})(),
+            },
+        )()
+        request.user = type("OwnerUser", (), {"tenant_memberships": tenant_memberships})()
+
+        self.assertEqual(["Owner", "primary"], owner_admin_site.get_environment(request))
 
     def test_master_admin_sidebar_navigation_includes_users_groups_and_tenancy(self) -> None:
         """ Verify the master admin sidebar includes account and tenancy management links. """

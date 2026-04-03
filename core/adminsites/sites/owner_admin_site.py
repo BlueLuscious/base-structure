@@ -50,6 +50,32 @@ class OwnerAdminSite(BaseAdminSite):
             return str(tenant_name)
         return super().get_site_header(request)
 
+    @classmethod
+    def get_environment(cls, request: HttpRequest) -> list[str] | None:
+        """ Return the owner environment badge using the active membership role.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[str] | None: Role label and badge variant, or ``None`` when unavailable.
+        """
+        tenant = getattr(request, "tenant", None)
+        tenant_id = getattr(tenant, "pk", None)
+
+        if tenant_id is None:
+            return None
+
+        membership = request.user.tenant_memberships.filter(
+            tenant_id=tenant_id,
+            is_active=True,
+        ).first()
+
+        if membership is None:
+            return None
+
+        return [membership.get_role_display(), "primary"]
+
     def has_permission(self, request: HttpRequest) -> bool:
         """ Return whether the request user can access the owner admin site.
 

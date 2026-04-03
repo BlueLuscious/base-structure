@@ -41,8 +41,10 @@ class AdminSiteUnfoldSettings:
         return {
             "SITE_TITLE": AdminSiteUnfoldCallbacks.site_title,
             "SITE_HEADER": AdminSiteUnfoldCallbacks.site_header,
+            "SITE_SUBHEADER": AdminSiteUnfoldCallbacks.site_subheader,
             "SITE_SYMBOL": AdminSiteUnfoldCallbacks.site_symbol,
             "SITE_URL": AdminSiteUnfoldCallbacks.site_url,
+            "ENVIRONMENT": AdminSiteUnfoldCallbacks.environment,
             "SHOW_LANGUAGES": AdminSiteUnfoldCallbacks.show_languages,
             "LANGUAGES": {
                 "action": AdminSiteUnfoldCallbacks.languages_action,

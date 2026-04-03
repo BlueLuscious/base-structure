@@ -51,6 +51,19 @@ class AdminSiteUnfoldCallbacks:
         return site_instance.get_site_symbol(request)
 
     @classmethod
+    def site_subheader(cls, request: HttpRequest) -> str | None:
+        """ Return the site subheader for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            str | None: Resolved site subheader.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_site_subheader(request)
+
+    @classmethod
     def site_url(cls, request: HttpRequest) -> str:
         """ Return the site URL for the current request.
 
@@ -62,6 +75,19 @@ class AdminSiteUnfoldCallbacks:
         """
         site_instance = cls._resolve_admin_site_instance(request)
         return site_instance.get_site_url(request)
+
+    @classmethod
+    def environment(cls, request: HttpRequest) -> list[str] | tuple[str, str] | None:
+        """ Return the environment badge for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[str] | tuple[str, str] | None: Label and variant pair, or ``None``.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_environment(request)
 
     @classmethod
     def show_search(cls, request: HttpRequest) -> bool:

@@ -55,6 +55,18 @@ class BaseAdminSite(UnfoldAdminSite):
         return cls.site_symbol
 
     @classmethod
+    def get_site_subheader(cls, request: HttpRequest) -> str | None:
+        """ Return the site subheader for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            str | None: Optional site subheader.
+        """
+        return None
+
+    @classmethod
     def get_site_url(cls, request: HttpRequest) -> str:
         """ Return the site URL for the current request.
 
@@ -65,6 +77,18 @@ class BaseAdminSite(UnfoldAdminSite):
             str: Site URL.
         """
         return cls.site_url
+
+    @classmethod
+    def get_environment(cls, request: HttpRequest) -> list[str] | tuple[str, str] | None:
+        """ Return the environment badge shown in the admin header.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[str] | tuple[str, str] | None: Label and variant pair, or ``None``.
+        """
+        return None
 
     @classmethod
     def get_languages_navigation(cls, request: HttpRequest) -> list[dict[str, str]]:
