@@ -164,7 +164,7 @@ Current values:
 
 - `master`
 - `owner`
-- `employee`
+- `operator`
 
 ## Active Tenant Resolution
 
@@ -219,7 +219,7 @@ Current concrete use cases:
 
 - attach users to one or more tenants
 - attach Django groups to one tenant
-- assign tenant roles such as `owner` and `employee` to support users
+- assign tenant roles such as `owner` and `operator` to support users
 - choose the active tenant during owner-admin work
 - display tenant-aware owner admin metadata such as title and header
 - switch tenant context explicitly from the owner admin dropdown

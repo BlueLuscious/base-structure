@@ -110,7 +110,7 @@ For the owner admin flow:
 - users remain owner-managed support accounts
 - only users with an active `owner` membership for the active tenant may manage `Users` and `Groups`
 - owner-visible users are scoped to users that belong to the active tenant
-- the user screen exposes the active-tenant membership inline so owners can switch a person between `owner` and `employee`
+- the user screen exposes the active-tenant membership inline so owners can switch a person between `owner` and `operator`
 - groups are scoped to the active tenant through `TenantGroupModel`
 - user group assignment is filtered to groups that belong to the active tenant
 - group permissions are filtered to the permissions already held by the current owner
