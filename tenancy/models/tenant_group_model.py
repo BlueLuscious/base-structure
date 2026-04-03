@@ -17,11 +17,15 @@ class TenantGroupModel(models.Model):
         "tenancy.TenantModel",
         on_delete=models.CASCADE,
         related_name="tenant_groups",
+        verbose_name=_("Business"),
+        help_text=_("Business that owns this permission group."),
     )
     group: Group = models.OneToOneField(
         Group,
         on_delete=models.CASCADE,
         related_name="tenant_binding",
+        verbose_name=_("Permission group"),
+        help_text=_("Django auth group scoped to the selected business."),
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

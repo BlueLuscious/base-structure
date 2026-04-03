@@ -21,15 +21,33 @@ class TenantMembershipModel(models.Model):
         "tenancy.TenantModel",
         on_delete=models.CASCADE,
         related_name="memberships",
+        verbose_name=_("Business"),
+        help_text=_("Business where this account receives access."),
     )
     user: "UserModel" = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="tenant_memberships",
+        verbose_name=_("User"),
+        help_text=_("Account that receives this business access."),
     )
-    role = models.CharField(max_length=16, choices=TenantRole.choices, default=TenantRole.OWNER)
-    is_active = models.BooleanField(default=True)
-    is_primary = models.BooleanField(default=False)
+    role = models.CharField(
+        max_length=16,
+        choices=TenantRole.choices,
+        default=TenantRole.OWNER,
+        verbose_name=_("Business role"),
+        help_text=_("Role this account will have inside the selected business."),
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_("Access active"),
+        help_text=_("Uncheck this to keep the access record without allowing day-to-day access."),
+    )
+    is_primary = models.BooleanField(
+        default=False,
+        verbose_name=_("Primary access"),
+        help_text=_("Marks this as the default business access used as a fallback context for the account."),
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

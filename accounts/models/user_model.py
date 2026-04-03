@@ -19,6 +19,8 @@ class UserModel(AbstractUser):
         through="tenancy.TenantMembershipModel",
         related_name="users",
         blank=True,
+        verbose_name=_("Businesses"),
+        help_text=_("Businesses this account can access through business access records."),
     )
     objects: UserModelManager = UserModelManager()
 

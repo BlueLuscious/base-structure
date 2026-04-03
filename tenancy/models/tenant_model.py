@@ -16,9 +16,22 @@ class TenantModel(models.Model):
     """ Root tenant entity used to scope business data across the project. """
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True)
-    is_active = models.BooleanField(default=True)
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Business name"),
+        help_text=_("Public name used to identify this business across the admin."),
+    )
+    slug = models.SlugField(
+        max_length=255,
+        unique=True,
+        verbose_name=_("Business slug"),
+        help_text=_("Stable URL-friendly identifier for this business."),
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_("Business active"),
+        help_text=_("Uncheck this to hide the business from active business selection and day-to-day use."),
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

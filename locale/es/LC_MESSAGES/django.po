@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gea-trader-core\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 03:15-0300\n"
+"POT-Creation-Date: 2026-04-03 04:06-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -67,16 +67,18 @@ msgstr "Las personas de este grupo recibirán los permisos seleccionados aquí."
 
 #: .\accounts\admin\owner\tenant_membership_inline.py:28
 #: .\accounts\admin\owner\tenant_membership_inline.py:29 .\tenancy\apps.py:12
-#: .\tenancy\models\tenant_membership_model.py:55
-#: .\tenancy\models\tenant_membership_model.py:56
+#: .\tenancy\models\tenant_membership_model.py:73
+#: .\tenancy\models\tenant_membership_model.py:74
 msgid "Business access"
 msgstr "Acceso al negocio"
 
 #: .\accounts\admin\owner\tenant_membership_inline_form.py:18
+#: .\tenancy\models\tenant_membership_model.py:38
 msgid "Business role"
 msgstr "Rol en el negocio"
 
 #: .\accounts\admin\owner\tenant_membership_inline_form.py:19
+#: .\tenancy\models\tenant_membership_model.py:43
 msgid "Access active"
 msgstr "Acceso activo"
 
@@ -211,11 +213,20 @@ msgstr "Aquí solo se pueden asignar grupos de permisos del negocio actual."
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: .\accounts\models\user_model.py:30
+#: .\accounts\models\user_model.py:22 .\tenancy\models\tenant_model.py:47
+msgid "Businesses"
+msgstr "Negocios"
+
+#: .\accounts\models\user_model.py:23
+msgid "Businesses this account can access through business access records."
+msgstr "Negocios a los que esta cuenta puede acceder mediante sus accesos al negocio."
+
+#: .\accounts\models\user_model.py:32
+#: .\tenancy\models\tenant_membership_model.py:31
 msgid "User"
 msgstr "Usuario"
 
-#: .\accounts\models\user_model.py:31
+#: .\accounts\models\user_model.py:33
 #: .\core\adminsites\sites\owner_admin_site.py:90
 #: .\core\tests\adminsites\test_adminsites.py:72
 msgid "Users"
@@ -514,31 +525,94 @@ msgstr "resultados"
 
 #: .\core\settings.py:152
 msgid "Spanish"
-msgstr ""
+msgstr "Español"
 
 #: .\core\settings.py:153
 msgid "English"
-msgstr ""
+msgstr "Inglés"
 
 #: .\tenancy\choices\tenant_role.py:10
 msgid "Master"
 msgstr "Maestro"
 
-#: .\tenancy\models\tenant_group_model.py:36
-msgid "Business group"
-msgstr "Grupo del negocio"
-
-#: .\tenancy\models\tenant_group_model.py:37
-msgid "Business groups"
-msgstr "Grupos del negocio"
-
-#: .\tenancy\models\tenant_model.py:33
+#: .\tenancy\models\tenant_group_model.py:20
+#: .\tenancy\models\tenant_membership_model.py:24
+#: .\tenancy\models\tenant_model.py:46
 msgid "Business"
 msgstr "Negocio"
 
-#: .\tenancy\models\tenant_model.py:34
-msgid "Businesses"
+#: .\tenancy\models\tenant_group_model.py:21
+msgid "Business that owns this permission group."
+msgstr "Negocio que posee este grupo de permisos."
+
+#: .\tenancy\models\tenant_group_model.py:27
+msgid "Permission group"
+msgstr "Grupo del equipo"
+
+#: .\tenancy\models\tenant_group_model.py:28
+msgid "Django auth group scoped to the selected business."
+msgstr "No tienes acceso al negocio solicitado."
+
+#: .\tenancy\models\tenant_group_model.py:40
+msgid "Business group"
+msgstr "Grupo del negocio"
+
+#: .\tenancy\models\tenant_group_model.py:41
+msgid "Business groups"
+msgstr "Grupos del negocio"
+
+#: .\tenancy\models\tenant_membership_model.py:25
+msgid "Business where this account receives access."
+msgstr "Negocio en el que esta cuenta recibe acceso."
+
+#: .\tenancy\models\tenant_membership_model.py:32
+msgid "Account that receives this business access."
+msgstr "Cuenta que recibe este acceso al negocio."
+
+#: .\tenancy\models\tenant_membership_model.py:39
+msgid "Role this account will have inside the selected business."
+msgstr "No tienes acceso al negocio solicitado."
+
+#: .\tenancy\models\tenant_membership_model.py:44
+msgid ""
+"Uncheck this to keep the access record without allowing day-to-day access."
+msgstr "Desmarca esta opción para conservar el acceso, pero sin permitir el uso diario."
+
+#: .\tenancy\models\tenant_membership_model.py:48
+msgid "Primary access"
+msgstr "Acceso principal"
+
+#: .\tenancy\models\tenant_membership_model.py:49
+msgid ""
+"Marks this as the default business access used as a fallback context for the "
+"account."
+msgstr "Marca este acceso como el predeterminado para usarlo como contexto de respaldo de la cuenta."
+
+#: .\tenancy\models\tenant_model.py:21
+msgid "Business name"
+msgstr "Acceso al negocio"
+
+#: .\tenancy\models\tenant_model.py:22
+msgid "Public name used to identify this business across the admin."
+msgstr "Nombre visible que identifica este negocio en toda la administración."
+
+#: .\tenancy\models\tenant_model.py:27
+msgid "Business slug"
 msgstr "Negocios"
+
+#: .\tenancy\models\tenant_model.py:28
+msgid "Stable URL-friendly identifier for this business."
+msgstr "Identificador estable y amigable para URLs de este negocio."
+
+#: .\tenancy\models\tenant_model.py:32
+msgid "Business active"
+msgstr "Acceso al negocio"
+
+#: .\tenancy\models\tenant_model.py:33
+msgid ""
+"Uncheck this to hide the business from active business selection and day-to-"
+"day use."
+msgstr "Desmarca esta opción para ocultar el negocio de la selección activa y del uso diario."
 
 #: .\tenancy\switching\active_tenant_switcher.py:35
 msgid "You do not have access to the requested business."
