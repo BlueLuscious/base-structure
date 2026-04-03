@@ -1,5 +1,6 @@
 """ Form used by the owner user admin change view. """
 
+from django.utils.translation import gettext_lazy as _
 from unfold.forms import UserChangeForm
 from accounts.models import UserModel
 
@@ -13,17 +14,17 @@ class OwnerUserModelAdminForm(UserChangeForm):
         model = UserModel
         fields = ("username", "first_name", "last_name", "email", "is_active", "is_staff", "groups")
         labels = {
-            "username": "Username",
-            "first_name": "First name",
-            "last_name": "Last name",
-            "email": "Email",
-            "is_active": "Active",
-            "is_staff": "Can access owner admin",
-            "groups": "Groups",
+            "username": _("Username"),
+            "first_name": _("First name"),
+            "last_name": _("Last name"),
+            "email": _("Email"),
+            "is_active": _("Active"),
+            "is_staff": _("Can open business admin"),
+            "groups": _("Groups"),
         }
         help_texts = {
-            "email": "Use a real contact address for support and password recovery.",
-            "is_active": "Disable this user instead of deleting the account.",
-            "is_staff": "Keep this enabled so the user can access the owner administration site.",
-            "groups": "Only groups that belong to the active tenant can be assigned here.",
+            "email": _("Use a real contact email for notifications and password recovery."),
+            "is_active": _("Disable this user instead of deleting the account."),
+            "is_staff": _("Keep this enabled so this person can open the business admin."),
+            "groups": _("Only permission groups for the current business can be assigned here."),
         }

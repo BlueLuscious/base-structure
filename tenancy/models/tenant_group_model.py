@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING
 from django.contrib.auth.models import Group
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from tenancy.models.managers.tenant_group_model_manager import TenantGroupModelManager
 
 if TYPE_CHECKING:
@@ -32,8 +33,8 @@ class TenantGroupModel(models.Model):
 
     class Meta:
         ordering = ("tenant__name", "group__name", "id")
-        verbose_name = "Tenant group"
-        verbose_name_plural = "Tenant groups"
+        verbose_name = _("Business group")
+        verbose_name_plural = _("Business groups")
 
     def __str__(self) -> str:
         """ Return the admin-friendly tenant-group label.

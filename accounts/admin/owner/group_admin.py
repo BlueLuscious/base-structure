@@ -2,9 +2,12 @@
 
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
+from django.apps import apps
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from django.utils.text import capfirst
+from django.utils.translation import gettext, gettext_lazy as _
 from unfold.admin import ModelAdmin
 from accounts.admin.owner.group_admin_form import OwnerGroupAdminForm
 from accounts.services.owner_delegable_permission_resolver import OwnerDelegablePermissionResolver
@@ -32,18 +35,18 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
 
     fieldsets = (
         (
-            "Group details",
+            _("Team group"),
             {
                 "classes": ("tab",),
-                "description": "Create and maintain support groups for the active tenant.",
+                "description": _("Create permission groups for people working in this business."),
                 "fields": ("name",),
             },
         ),
         (
-            "Permissions",
+            _("Access permissions"),
             {
                 "classes": ("tab",),
-                "description": "Delegate only the permissions already held by the current owner.",
+                "description": _("This group can include any permissions you already have."),
                 "fields": ("permissions",),
             },
         ),
@@ -83,7 +86,64 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
                 getattr(request, "tenant", None),
             )
 
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
+        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
+
+        if db_field.name == "permissions":
+            form_field.label_from_instance = self._build_permission_label
+
+        return form_field
+
+    @staticmethod
+    def _build_permission_label(permission: Permission) -> str:
+        """ Return one translated label for the permission chooser widget.
+
+        Args:
+            permission: Permission option being rendered in the admin widget.
+
+        Returns:
+            str: Human-friendly translated permission label.
+        """
+        model_class = permission.content_type.model_class()
+
+        if model_class is None:
+            try:
+                model_class = apps.get_model(permission.content_type.app_label, permission.content_type.model)
+            except LookupError:
+                model_class = None
+
+        app_label = permission.content_type.app_label.replace("_", " ")
+        model_label = permission.content_type.model.replace("_", " ")
+
+        if model_class is not None:
+            app_label = str(model_class._meta.app_config.verbose_name)
+            model_label = str(model_class._meta.verbose_name)
+
+        return f"{capfirst(app_label)} | {capfirst(model_label)} | {OwnerGroupAdmin._build_permission_action_label(permission, model_label)}"
+
+    @staticmethod
+    def _build_permission_action_label(permission: Permission, model_label: str) -> str:
+        """ Return one translated action label for a permission option.
+
+        Args:
+            permission: Permission option being rendered in the admin widget.
+            model_label: Lowercase verbose model name used in the sentence.
+
+        Returns:
+            str: Translated action description or the stored permission name.
+        """
+        sentence_model_label = model_label[:1].lower() + model_label[1:] if model_label else model_label
+        action_templates = {
+            f"add_{permission.content_type.model}": gettext("Can add %(name)s"),
+            f"change_{permission.content_type.model}": gettext("Can change %(name)s"),
+            f"delete_{permission.content_type.model}": gettext("Can delete %(name)s"),
+            f"view_{permission.content_type.model}": gettext("Can view %(name)s"),
+        }
+        template = action_templates.get(permission.codename)
+
+        if template is None:
+            return permission.name
+
+        return template % {"name": sentence_model_label}
 
     def save_model(self, request: HttpRequest, obj: Group, form: OwnerGroupAdminForm, change: bool) -> None:
         """ Persist one tenant-scoped group and create its tenant binding on add.

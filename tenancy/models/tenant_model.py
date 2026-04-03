@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING
 from uuid import uuid4
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from tenancy.models.managers.tenant_model_manager import TenantModelManager
 
 if TYPE_CHECKING:
@@ -29,8 +30,8 @@ class TenantModel(models.Model):
 
     class Meta:
         ordering = ("name",)
-        verbose_name = "Tenant"
-        verbose_name_plural = "Tenants"
+        verbose_name = _("Business")
+        verbose_name_plural = _("Businesses")
 
     def __str__(self) -> str:
         """ Return the admin-friendly tenant label.

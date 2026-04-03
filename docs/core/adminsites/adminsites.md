@@ -31,6 +31,7 @@ Current contents:
 - `site_instances.py`
 - `sites/`
 - `unfold/`
+- `views/`
 
 ## Responsibilities
 
@@ -88,6 +89,16 @@ This package should keep two responsibilities clearly separated:
 - `AdminSiteUnfoldCallbacks`: resolves the current site instance from the request and serves runtime callbacks
 
 It should not become a second source of truth for site identity.
+
+### `views/`
+
+Contains admin-site support views that are shared across admin namespaces.
+
+Current use:
+
+- `SetAdminLanguageView`
+
+This package should stay limited to cross-site admin behavior that belongs to the admin infrastructure itself, not to any specific domain app.
 
 ## Design Rules
 
@@ -156,6 +167,7 @@ Characteristics:
 - tenant-aware metadata such as title and header when an active tenant is resolved
 - compatible with explicit active-tenant switching backed by session state
 - tenant switcher dropdown in the site header when the user belongs to multiple active tenants
+- custom language switching endpoint used by the Unfold language selector to keep the default language unprefixed
 - owner sidebar entries are curated instead of mirroring the full Django app list
 - the current `Accounts` navigation is intentionally owner-only even inside the owner admin site
 

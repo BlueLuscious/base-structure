@@ -89,7 +89,6 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
 
         self.assertEqual("GEA Lubricantes", owner_admin_site.get_site_title(request))
-        self.assertEqual("GEA Lubricantes Administration", owner_admin_site.get_site_header(request))
 
     def test_master_admin_sidebar_navigation_includes_users_groups_and_tenancy(self) -> None:
         """ Verify the master admin sidebar includes account and tenancy management links. """

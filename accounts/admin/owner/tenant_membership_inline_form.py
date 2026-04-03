@@ -1,6 +1,7 @@
 """ Form used by the owner user admin tenant membership inline. """
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from tenancy.choices import TenantRole
 from tenancy.models import TenantMembershipModel
 
@@ -14,12 +15,12 @@ class TenantMembershipInlineForm(forms.ModelForm):
         model = TenantMembershipModel
         fields = ("role", "is_active")
         labels = {
-            "role": "Tenant role",
-            "is_active": "Membership active",
+            "role": _("Business role"),
+            "is_active": _("Access active"),
         }
         help_texts = {
-            "role": "Choose whether this person manages the tenant or works as staff for it.",
-            "is_active": "Disable the tenant membership without deleting the user account.",
+            "role": _("Choose whether this person manages this business or works on the team."),
+            "is_active": _("Turn off access to this business without deleting the user."),
         }
 
     def __init__(self, *args, **kwargs) -> None:

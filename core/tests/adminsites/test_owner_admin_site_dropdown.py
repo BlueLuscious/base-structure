@@ -1,6 +1,7 @@
 """ Tests for the owner admin tenant switcher dropdown. """
 
 from django.test import RequestFactory
+from django.utils.translation import gettext as _
 from core.adminsites.site_instances import owner_admin_site
 from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
@@ -41,7 +42,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         dropdown_items = owner_admin_site.get_site_dropdown(request)
 
         self.assertEqual(2, len(dropdown_items))
-        self.assertEqual("GEA Center (Current)", dropdown_items[0]["title"])
+        self.assertEqual(f"GEA Center ({_('Current')})", dropdown_items[0]["title"])
         self.assertIn(str(self.primary_tenant.pk), dropdown_items[0]["link"])
         self.assertEqual("check_circle", dropdown_items[0]["icon"])
         self.assertEqual("North Center", dropdown_items[1]["title"])

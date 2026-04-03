@@ -3,6 +3,7 @@
 import dj_database_url, os
 from pathlib import Path
 from django_components import ComponentsSettings
+from django.utils.translation import gettext_lazy as _
 from core.adminsites.admin_namespace import AdminNamespace
 from core.adminsites.unfold import AdminSiteUnfoldSettings
 from core.config.storage import MediaStorageAdapterResolver, StaticStorageAdapterResolver
@@ -148,8 +149,8 @@ USE_I18N = True
 USE_TZ = True
 
 LANGUAGES = [
-    ('es', 'Español'),
-    ('en', 'English'),
+    ('es', _('Spanish')),
+    ('en', _('English')),
 ]
 
 LOCALE_PATHS = [

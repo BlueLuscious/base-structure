@@ -43,6 +43,11 @@ class AdminSiteUnfoldSettings:
             "SITE_HEADER": AdminSiteUnfoldCallbacks.site_header,
             "SITE_SYMBOL": AdminSiteUnfoldCallbacks.site_symbol,
             "SITE_URL": AdminSiteUnfoldCallbacks.site_url,
+            "SHOW_LANGUAGES": AdminSiteUnfoldCallbacks.show_languages,
+            "LANGUAGES": {
+                "action": AdminSiteUnfoldCallbacks.languages_action,
+                "navigation": AdminSiteUnfoldCallbacks.languages_navigation,
+            },
             "SITE_DROPDOWN": AdminSiteUnfoldCallbacks.site_dropdown,
             "SIDEBAR": {
                 "show_search": AdminSiteUnfoldCallbacks.show_search,

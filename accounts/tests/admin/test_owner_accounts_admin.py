@@ -3,6 +3,7 @@
 from django.contrib.auth.models import Group, Permission
 from django.test import Client, RequestFactory
 from django.urls import reverse
+from django.utils.translation import gettext as _, override
 from core.adminsites.site_instances import owner_admin_site
 from core.testing.base import LoggedTestCase
 from accounts.admin.owner.group_admin import OwnerGroupAdmin
@@ -179,6 +180,17 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         self.assertIn("view_tenantgroupmodel", visible_codenames)
         self.assertIn("view_tenantmodel", visible_codenames)
 
+    def test_owner_group_admin_translates_permission_option_labels(self) -> None:
+        """ Verify the permission chooser uses translated, user-friendly labels. """
+        request = self.build_request()
+        permission = Permission.objects.get(codename="view_tenantgroupmodel")
+
+        with override("es"):
+            form_field = self.group_admin.formfield_for_manytomany(Group._meta.get_field("permissions"), request)
+            label = form_field.label_from_instance(permission)
+
+        self.assertEqual("Acceso al negocio | Grupo del negocio | Puede ver grupo del negocio", label)
+
     def test_non_owner_tenant_member_cannot_manage_owner_users_or_groups(self) -> None:
         """ Verify non-owner tenant members cannot administer owner accounts surfaces. """
         request = self.build_non_owner_request()
@@ -203,7 +215,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         form = self.membership_inline.form()
 
         self.assertEqual(
-            [(TenantRole.OWNER, "Owner"), (TenantRole.EMPLOYEE, "Employee")],
+            [(TenantRole.OWNER, _("Owner")), (TenantRole.EMPLOYEE, _("Employee"))],
             list(form.fields["role"].choices),
         )
 

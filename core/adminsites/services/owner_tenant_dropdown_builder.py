@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING, Any, cast
 from django.apps import apps
 from django.http import HttpRequest
+from django.utils.translation import gettext as _
 from core.adminsites.services.active_tenant_switch_url_builder import ActiveTenantSwitchUrlBuilder
 
 if TYPE_CHECKING:
@@ -50,7 +51,7 @@ class OwnerTenantDropdownBuilder:
         for membership in list(memberships):
             tenant = membership.tenant
             is_current_tenant = str(tenant.pk) == current_tenant_id
-            title = f"{tenant.name} (Current)" if is_current_tenant else tenant.name
+            title = f"{tenant.name} ({_('Current')})" if is_current_tenant else tenant.name
 
             dropdown_items.append(
                 {

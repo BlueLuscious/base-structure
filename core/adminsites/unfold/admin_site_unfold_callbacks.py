@@ -77,6 +77,19 @@ class AdminSiteUnfoldCallbacks:
         return site_instance.get_show_sidebar_search(request)
 
     @classmethod
+    def show_languages(cls, request: HttpRequest) -> bool:
+        """ Return whether the language switcher should be visible.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            bool: True when the language switcher should be shown.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_show_languages(request)
+
+    @classmethod
     def show_all_applications(cls, request: HttpRequest) -> bool:
         """ Return whether all applications should be visible in the sidebar.
 
@@ -114,6 +127,25 @@ class AdminSiteUnfoldCallbacks:
         """
         site_instance = cls._resolve_admin_site_instance(request)
         return site_instance.get_site_dropdown(request)
+
+    @classmethod
+    def languages_navigation(cls, request: HttpRequest) -> list[dict[str, str]]:
+        """ Return language switcher items for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, str]]: Language metadata for the Unfold switcher.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_languages_navigation(request)
+
+    @classmethod
+    def languages_action(cls, request: HttpRequest) -> str:
+        """ Return the URL used by the admin language switcher form. """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_languages_action(request)
 
     @classmethod
     def scripts(cls, request: HttpRequest) -> list[str]:

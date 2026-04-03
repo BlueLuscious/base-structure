@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm
 from accounts.admin.owner.tenant_membership_inline import TenantMembershipInline
@@ -39,10 +40,10 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
 
     add_fieldsets = (
         (
-            "Profile",
+            _("Profile"),
             {
                 "classes": ("tab",),
-                "description": "Create a support account that your team can recognize easily.",
+                "description": _("Create a team account your staff can recognize easily."),
                 "fields": (
                     ("username", "email"),
                     ("first_name", "last_name"),
@@ -51,20 +52,20 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
             },
         ),
         (
-            "Access",
+            _("Access"),
             {
                 "classes": ("tab",),
-                "description": "Control whether this account can sign in and access the owner admin.",
+                "description": _("Control whether this account can sign in and open the business admin."),
                 "fields": (("is_active", "is_staff"), "groups"),
             },
         ),
     )
     fieldsets = (
         (
-            "Profile",
+            _("Profile"),
             {
                 "classes": ("tab",),
-                "description": "Keep the support user's identity and contact details up to date.",
+                "description": _("Keep this team member's profile and contact details up to date."),
                 "fields": (
                     ("username", "email"),
                     ("first_name", "last_name"),
@@ -72,18 +73,18 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
             },
         ),
         (
-            "Access",
+            _("Access"),
             {
                 "classes": ("tab",),
-                "description": "Control whether this account can sign in and access the owner admin.",
+                "description": _("Control whether this account can sign in and open the business admin."),
                 "fields": (("is_active", "is_staff"), "groups"),
             },
         ),
         (
-            "Activity",
+            _("Activity"),
             {
                 "classes": ("tab",),
-                "description": "Recent sign-in information for support and auditing.",
+                "description": _("Recent sign-in details for support and auditing."),
                 "fields": ("last_login", "date_joined"),
             },
         ),

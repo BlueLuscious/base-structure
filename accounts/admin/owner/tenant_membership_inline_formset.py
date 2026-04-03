@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from tenancy.choices import TenantRole
 from tenancy.models import TenantMembershipModel
 
@@ -59,7 +60,7 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
 
         tenant = getattr(getattr(self, "request", None), "tenant", None)
         if tenant is None:
-            raise ValidationError("Users require an active tenant context.")
+            raise ValidationError(_("This screen requires an active business in context."))
 
         visible_forms = [
             form
@@ -68,7 +69,7 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
         ]
 
         if not visible_forms:
-            raise ValidationError("Users require one tenant membership for the active tenant.")
+            raise ValidationError(_("Add one business access entry before saving this user."))
 
         membership_form = visible_forms[0]
         resulting_role = membership_form.cleaned_data.get("role") or TenantRole.EMPLOYEE
@@ -83,7 +84,7 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
         )
 
         if (resulting_role != TenantRole.OWNER or not resulting_is_active) and not other_active_owner_exists:
-            raise ValidationError("Each tenant must keep at least one active owner membership.")
+            raise ValidationError(_("Each business must keep at least one active owner account."))
 
     def save_new(self, form: "TenantMembershipInlineForm", commit: bool = True) -> TenantMembershipModel:
         """ Create one membership bound to the active tenant and current user.

@@ -3,6 +3,7 @@
 from typing import Any
 from django.http import HttpRequest
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from core.adminsites.services import OwnerTenantDropdownBuilder
 from core.adminsites.sites.base_admin_site import BaseAdminSite
 from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
@@ -12,10 +13,10 @@ class OwnerAdminSite(BaseAdminSite):
     """ Guided admin site intended for business owners and operators. """
 
     settings_name = "OWNER_ADMIN_UNFOLD"
-    site_header = "Owner Administration"
-    site_title = "Owner Admin"
+    site_header = _("Business Administration")
+    site_title = _("Business Admin")
     site_symbol = "storefront"
-    index_title = "Business operations"
+    index_title = _("Business operations")
 
     @classmethod
     def get_site_title(cls, request: HttpRequest) -> str:
@@ -46,7 +47,7 @@ class OwnerAdminSite(BaseAdminSite):
         tenant = getattr(request, "tenant", None)
         tenant_name = getattr(tenant, "name", "")
         if tenant_name:
-            return f"{tenant_name} Administration"
+            return str(tenant_name)
         return super().get_site_header(request)
 
     def has_permission(self, request: HttpRequest) -> bool:
@@ -83,10 +84,10 @@ class OwnerAdminSite(BaseAdminSite):
         """
         return [
             {
-                "title": "Accounts",
+                "title": _("Accounts"),
                 "items": [
                     {
-                        "title": "Users",
+                        "title": _("Users"),
                         "icon": "group",
                         "link": reverse("owner_admin:accounts_usermodel_changelist"),
                         "permission": lambda req: (
@@ -95,7 +96,7 @@ class OwnerAdminSite(BaseAdminSite):
                         ),
                     },
                     {
-                        "title": "Groups",
+                        "title": _("Groups"),
                         "icon": "admin_panel_settings",
                         "link": reverse("owner_admin:auth_group_changelist"),
                         "permission": lambda req: (

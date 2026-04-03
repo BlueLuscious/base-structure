@@ -1,6 +1,7 @@
 """ Form used by the owner user admin add view. """
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from unfold.forms import UserCreationForm
 from accounts.models import UserModel
 
@@ -9,16 +10,16 @@ class OwnerUserModelAdminCreationForm(UserCreationForm):
     """ Owner-facing form for creating support user accounts. """
 
     password1 = forms.CharField(
-        label="Password",
+        label=_("Password"),
         strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
-        help_text="Set an initial password for this support account.",
+        help_text=_("Set a temporary password for this team account."),
     )
     password2 = forms.CharField(
-        label="Confirm password",
+        label=_("Confirm password"),
         strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
-        help_text="Re-enter the same password to confirm it.",
+        help_text=_("Type the same password again to confirm it."),
     )
     
     class Meta(UserCreationForm.Meta):
@@ -27,19 +28,19 @@ class OwnerUserModelAdminCreationForm(UserCreationForm):
         model = UserModel
         fields = ("username", "first_name", "last_name", "email", "is_active", "is_staff", "groups")
         labels = {
-            "username": "Username",
-            "first_name": "First name",
-            "last_name": "Last name",
-            "email": "Email",
-            "is_active": "Active",
-            "is_staff": "Can access owner admin",
-            "groups": "Groups",
+            "username": _("Username"),
+            "first_name": _("First name"),
+            "last_name": _("Last name"),
+            "email": _("Email"),
+            "is_active": _("Active"),
+            "is_staff": _("Can open business admin"),
+            "groups": _("Groups"),
         }
         help_texts = {
-            "email": "Use a real contact address for support and password recovery.",
-            "is_active": "Disable this user instead of deleting the account.",
-            "is_staff": "Keep this enabled so the user can access the owner administration site.",
-            "groups": "Only groups that belong to the active tenant can be assigned here.",
+            "email": _("Use a real contact email for notifications and password recovery."),
+            "is_active": _("Disable this user instead of deleting the account."),
+            "is_staff": _("Keep this enabled so this person can open the business admin."),
+            "groups": _("Only permission groups for the current business can be assigned here."),
         }
 
     def __init__(self, *args, **kwargs) -> None:

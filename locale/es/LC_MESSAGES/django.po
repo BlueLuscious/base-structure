@@ -1,0 +1,370 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gea-trader-core\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-02 00:00+0000\n"
+"PO-Revision-Date: 2026-04-02 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Master"
+msgstr "Maestro"
+
+msgid "Owner"
+msgstr "Propietario"
+
+msgid "Employee"
+msgstr "Empleado"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Access"
+msgstr "Acceso"
+
+msgid "Activity"
+msgstr "Actividad"
+
+msgid "Create a team account your staff can recognize easily."
+msgstr "Crea una cuenta de equipo que tu personal pueda reconocer fácilmente."
+
+msgid "Control whether this account can sign in and open the business admin."
+msgstr "Controla si esta cuenta puede iniciar sesión y abrir el admin del negocio."
+
+msgid "Keep this team member's profile and contact details up to date."
+msgstr "Mantén actualizados el perfil y los datos de contacto de esta persona."
+
+msgid "Recent sign-in details for support and auditing."
+msgstr "Detalles recientes de acceso para soporte y auditoría."
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "First name"
+msgstr "Nombre"
+
+msgid "Last name"
+msgstr "Apellido"
+
+msgid "Email"
+msgstr "Correo electrónico"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Can open business admin"
+msgstr "Puede abrir el admin del negocio"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "Use a real contact email for notifications and password recovery."
+msgstr "Usa un correo real para notificaciones y recuperación de contraseña."
+
+msgid "Disable this user instead of deleting the account."
+msgstr "Desactiva este usuario en lugar de eliminar la cuenta."
+
+msgid "Keep this enabled so this person can open the business admin."
+msgstr "Mantén esto habilitado para que esta persona pueda abrir el admin del negocio."
+
+msgid "Only permission groups for the current business can be assigned here."
+msgstr "Aquí solo se pueden asignar grupos de permisos del negocio actual."
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Set a temporary password for this team account."
+msgstr "Define una contraseña temporal para esta cuenta de equipo."
+
+msgid "Confirm password"
+msgstr "Confirmar contraseña"
+
+msgid "Type the same password again to confirm it."
+msgstr "Escribe la misma contraseña otra vez para confirmarla."
+
+msgid "Team group"
+msgstr "Grupo del equipo"
+
+msgid "Create permission groups for people working in this business."
+msgstr "Crea grupos de permisos para las personas que trabajan en este negocio."
+
+msgid "Access permissions"
+msgstr "Permisos de acceso"
+
+msgid "This group can include any permissions you already have."
+msgstr "Este grupo puede incluir cualquiera de los permisos que ya tienes."
+
+msgid "Group name"
+msgstr "Nombre del grupo"
+
+msgid "Granted permissions"
+msgstr "Permisos otorgados"
+
+msgid "Use a clear name that describes what this team group is for."
+msgstr "Usa un nombre claro que describa para qué sirve este grupo."
+
+msgid "People in this group will receive the permissions selected here."
+msgstr "Las personas de este grupo recibirán los permisos seleccionados aquí."
+
+msgid "Business access"
+msgstr "Acceso al negocio"
+
+msgid "Business role"
+msgstr "Rol en el negocio"
+
+msgid "Access active"
+msgstr "Acceso activo"
+
+msgid "Choose whether this person manages this business or works on the team."
+msgstr "Elige si esta persona administra este negocio o trabaja en el equipo."
+
+msgid "Turn off access to this business without deleting the user."
+msgstr "Desactiva el acceso a este negocio sin eliminar el usuario."
+
+msgid "This screen requires an active business in context."
+msgstr "Esta pantalla requiere un negocio activo en contexto."
+
+msgid "Add one business access entry before saving this user."
+msgstr "Agrega un acceso al negocio antes de guardar este usuario."
+
+msgid "Each business must keep at least one active owner account."
+msgstr "Cada negocio debe conservar al menos una cuenta propietaria activa."
+
+msgid "Business Administration"
+msgstr "Administración del negocio"
+
+msgid "Business Admin"
+msgstr "Admin del negocio"
+
+msgid "Business operations"
+msgstr "Operaciones del negocio"
+
+msgid "Welcome back to"
+msgstr "Bienvenido de nuevo a"
+
+msgid "Return to site"
+msgstr "Volver al sitio"
+
+msgid "Django site admin"
+msgstr "Administración del sitio"
+
+msgid "Accounts"
+msgstr "Cuentas"
+
+msgid "User"
+msgstr "Usuario"
+
+msgid "Users"
+msgstr "Usuarios"
+
+msgid "Business"
+msgstr "Negocio"
+
+msgid "Businesses"
+msgstr "Negocios"
+
+msgid "Business group"
+msgstr "Grupo del negocio"
+
+msgid "Business groups"
+msgstr "Grupos del negocio"
+
+msgid "Can add %(name)s"
+msgstr "Puede agregar %(name)s"
+
+msgid "Can change %(name)s"
+msgstr "Puede cambiar %(name)s"
+
+msgid "Can delete %(name)s"
+msgstr "Puede eliminar %(name)s"
+
+msgid "Can view %(name)s"
+msgstr "Puede ver %(name)s"
+
+msgid "Search apps and models..."
+msgstr "Buscar apps y modelos..."
+
+msgid "Type to search"
+msgstr "Escribe para buscar"
+
+msgid "Filters"
+msgstr "Filtros"
+
+msgid "Filter navigation items"
+msgstr "Filtrar elementos de navegación"
+
+msgid "Light"
+msgstr "Claro"
+
+msgid "Dark"
+msgstr "Oscuro"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "After you've created a user, you'll be able to edit more user options."
+msgstr "Después de crear un usuario, vas a poder editar más opciones de la cuenta."
+
+msgid "After you've created a user, you’ll be able to edit more user options."
+msgstr "Después de crear un usuario, vas a poder editar más opciones de la cuenta."
+
+msgid "You do not have access to the requested business."
+msgstr "No tienes acceso al negocio solicitado."
+
+msgid "You have been successfully logged out from the administration"
+msgstr "Cerraste sesión correctamente en la administración"
+
+msgid "Thanks for spending some quality time with the web site today."
+msgstr "Gracias por pasar un buen rato en el sitio web hoy."
+
+msgid "Log in again"
+msgstr "Iniciar sesión de nuevo"
+
+msgid "Authentication and authorization"
+msgstr "Autenticación y autorización"
+
+msgid "History"
+msgstr "Historial"
+
+msgid "Change password"
+msgstr "Cambiar contraseña"
+
+msgid "Change password: %s"
+msgstr "Cambiar contraseña: %s"
+
+msgid "View site"
+msgstr "Ver el sitio"
+
+msgid "Log out"
+msgstr "Cerrar sesión"
+
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+msgid "Recent actions"
+msgstr "Acciones recientes"
+
+msgid "Show counts"
+msgstr "Mostrar recuentos"
+
+msgid "Save as new"
+msgstr "Guardar como nuevo"
+
+msgid "Save and add another"
+msgstr "Guardar y agregar otro"
+
+msgid "Save and continue editing"
+msgstr "Guardar y seguir editando"
+
+msgid "Delete?"
+msgstr "¿Eliminar?"
+
+msgid "Delete selected %(verbose_name_plural)s"
+msgstr "Eliminar %(verbose_name_plural)s seleccionados"
+
+msgid "Delete multiple objects"
+msgstr "Eliminar varios objetos"
+
+msgid "Delete selected %(model)s"
+msgstr "Eliminar %(model)s seleccionados"
+
+msgid "Clear selection"
+msgstr "Limpiar selección"
+
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr "Seleccionar los %(total_count)s %(module_name)s"
+
+msgid "Select all objects on this page for an action"
+msgstr "Seleccionar todos los objetos de esta página para una acción"
+
+msgid "Select this object for an action - {}"
+msgstr "Seleccionar este objeto para una acción - {}"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "Documentation"
+msgstr "Documentación"
+
+msgid "Add"
+msgstr "Agregar"
+
+msgid "Change"
+msgstr "Cambiar"
+
+msgid "Add %(name)s"
+msgstr "Agregar %(name)s"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Save and view"
+msgstr "Guardar y ver"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "Hide counts"
+msgstr "Ocultar recuentos"
+
+msgid "Clear all filters"
+msgstr "Limpiar todos los filtros"
+
+msgid "Click here to select the objects across all pages"
+msgstr "Haz clic aquí para seleccionar los objetos de todas las páginas"
+
+msgid "None available"
+msgstr "Nada disponible"
+
+msgid "Added:"
+msgstr "Agregado:"
+
+msgid "Changed:"
+msgstr "Cambiado:"
+
+msgid "Deleted:"
+msgstr "Eliminado:"
+
+msgid "This object doesn’t have a change history. It probably wasn’t added via this admin site."
+msgstr "Este objeto no tiene historial de cambios. Probablemente no se agregó desde este sitio de administración."
+
+msgid "Password change"
+msgstr "Cambio de contraseña"
+
+msgid "Your password was changed."
+msgstr "Tu contraseña fue cambiada."
+
+msgid "Change my password"
+msgstr "Cambiar mi contraseña"
+
+msgid "Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one."
+msgstr "¿Olvidaste tu contraseña? Ingresa tu correo electrónico aquí abajo y te enviaremos instrucciones para definir una nueva."
+
+msgid "Email address:"
+msgstr "Correo electrónico:"
+
+msgid "If you don’t receive an email, please make sure you’ve entered the address you registered with, and check your spam folder."
+msgstr "Si no recibes un correo, asegúrate de haber ingresado la dirección con la que te registraste y revisa tu carpeta de spam."
+
+msgid "Show all"
+msgstr "Mostrar todo"
+
+msgid "result"
+msgstr "resultado"
+
+msgid "results"
+msgstr "resultados"
+
+msgid "%(full_result_count)s total"
+msgstr "%(full_result_count)s en total"
+
+msgid "Current"
+msgstr "Actual"

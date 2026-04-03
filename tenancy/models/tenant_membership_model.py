@@ -5,6 +5,7 @@ from uuid import UUID
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 from tenancy.choices import TenantRole
 from tenancy.models.managers.tenant_membership_model_manager import TenantMembershipModelManager
 
@@ -51,8 +52,8 @@ class TenantMembershipModel(models.Model):
                 name="tenant_membership_unique_primary_per_user",
             ),
         ]
-        verbose_name = "Tenant membership"
-        verbose_name_plural = "Tenant memberships"
+        verbose_name = _("Business access")
+        verbose_name_plural = _("Business access")
 
     def __str__(self) -> str:
         """ Return the admin-friendly tenant membership label.

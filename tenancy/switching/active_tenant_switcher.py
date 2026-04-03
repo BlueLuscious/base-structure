@@ -3,6 +3,7 @@
 from uuid import UUID
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from tenancy.models import TenantMembershipModel
 from tenancy.session import ActiveTenantSessionStore
 
@@ -31,6 +32,6 @@ class ActiveTenantSwitcher:
         )
 
         if membership is None:
-            raise PermissionDenied("You do not have access to the requested tenant.")
+            raise PermissionDenied(_("You do not have access to the requested business."))
 
         cls.session_store_class.set_tenant(request, membership.tenant)

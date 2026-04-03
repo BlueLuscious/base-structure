@@ -1,7 +1,10 @@
 """ Shared base admin site for project-specific admin sites. """
 
 from typing import Any
+from django.conf import settings
 from django.http import HttpRequest
+from django.urls import reverse
+from django.utils.translation import get_language
 from unfold.sites import UnfoldAdminSite
 
 
@@ -10,6 +13,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     site_symbol = ""
     site_url = "/"
+    show_languages = True
     show_all_applications = False
     show_sidebar_search = True
     dashboard_callback: str | None = None
@@ -61,6 +65,52 @@ class BaseAdminSite(UnfoldAdminSite):
             str: Site URL.
         """
         return cls.site_url
+
+    @classmethod
+    def get_languages_navigation(cls, request: HttpRequest) -> list[dict[str, str]]:
+        """ Return language switcher items sourced from Django settings.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, str]]: Language metadata for the Unfold switcher.
+        """
+        current_language = get_language()
+
+        return [
+            {
+                "code": code,
+                "name_local": str(label),
+                "name_translated": str(label),
+                "active": str(code == current_language).lower(),
+            }
+            for code, label in settings.LANGUAGES
+        ]
+
+    @classmethod
+    def get_languages_action(cls, request: HttpRequest) -> str:
+        """ Return the URL used by the admin language switcher form.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            str: URL for the admin language switcher endpoint.
+        """
+        return reverse("set_admin_language")
+
+    @classmethod
+    def get_show_languages(cls, request: HttpRequest) -> bool:
+        """ Return whether the site should show the language switcher.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            bool: True when the language switcher should be shown.
+        """
+        return cls.show_languages
 
     @classmethod
     def get_show_all_applications(cls, request: HttpRequest) -> bool:

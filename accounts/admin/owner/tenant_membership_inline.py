@@ -2,6 +2,7 @@
 
 from typing import TYPE_CHECKING
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from unfold.admin import TabularInline
 from accounts.admin.owner.tenant_membership_inline_form import TenantMembershipInlineForm
 from accounts.admin.owner.tenant_membership_inline_formset import TenantMembershipInlineFormSet
@@ -24,8 +25,8 @@ class TenantMembershipInline(TabularInline):
     max_num = 1
     can_delete = False
     fields = ("role", "is_active")
-    verbose_name = "Tenant membership"
-    verbose_name_plural = "Tenant membership"
+    verbose_name = _("Business access")
+    verbose_name_plural = _("Business access")
 
     def has_view_permission(self, request: HttpRequest, obj=None) -> bool:
         """ Allow the inline when the current user may manage the active tenant.
