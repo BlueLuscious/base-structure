@@ -5,6 +5,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from core.adminsites.services import OwnerTenantDropdownBuilder
+from core.adminsites.services import OwnerTenantBrandingResolver
 from core.adminsites.sites.base_admin_site import BaseAdminSite
 from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
@@ -28,10 +29,10 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             str: Tenant-aware site title.
         """
-        tenant = getattr(request, "tenant", None)
-        tenant_name = getattr(tenant, "name", "")
-        if tenant_name:
-            return str(tenant_name)
+        display_name = OwnerTenantBrandingResolver.get_display_name(request)
+        if display_name:
+            return display_name
+
         return super().get_site_title(request)
 
     @classmethod
@@ -44,11 +45,59 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             str: Tenant-aware site header.
         """
-        tenant = getattr(request, "tenant", None)
-        tenant_name = getattr(tenant, "name", "")
-        if tenant_name:
-            return str(tenant_name)
+        display_name = OwnerTenantBrandingResolver.get_display_name(request)
+        if display_name:
+            return display_name
+
         return super().get_site_header(request)
+
+    @classmethod
+    def get_site_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the owner site logo from tenant branding when available.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Tenant-aware logo payload.
+        """
+        return OwnerTenantBrandingResolver.get_logo(request)
+
+    @classmethod
+    def get_site_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the owner site icon from tenant branding when available.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Tenant-aware icon payload.
+        """
+        return OwnerTenantBrandingResolver.get_icon(request)
+
+    @classmethod
+    def get_site_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
+        """ Return tenant-specific favicon entries when branding provides them.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, str]]: Favicon metadata for Unfold.
+        """
+        return OwnerTenantBrandingResolver.get_favicons(request)
+
+    @classmethod
+    def get_login_image(cls, request: HttpRequest) -> str | None:
+        """ Return the owner login image from tenant branding when available.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            str | None: Tenant-aware login image URL.
+        """
+        return OwnerTenantBrandingResolver.get_login_image(request)
 
     @classmethod
     def get_environment(cls, request: HttpRequest) -> list[str] | None:

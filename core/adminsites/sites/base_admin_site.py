@@ -55,6 +55,54 @@ class BaseAdminSite(UnfoldAdminSite):
         return cls.site_symbol
 
     @classmethod
+    def get_site_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the site logo for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Theme-aware logo mapping, single URL, or ``None``.
+        """
+        return None
+
+    @classmethod
+    def get_site_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the site icon for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Theme-aware icon mapping, single URL, or ``None``.
+        """
+        return None
+
+    @classmethod
+    def get_site_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
+        """ Return favicon entries for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, str]]: Favicon metadata consumed by Unfold.
+        """
+        return []
+
+    @classmethod
+    def get_login_image(cls, request: HttpRequest) -> str | None:
+        """ Return the login image for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            str | None: Login image URL when available.
+        """
+        return None
+
+    @classmethod
     def get_site_subheader(cls, request: HttpRequest) -> str | None:
         """ Return the site subheader for the current request.
 

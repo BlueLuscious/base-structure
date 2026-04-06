@@ -30,6 +30,7 @@ Current contents:
 - `registry.py`
 - `site_instances.py`
 - `sites/`
+- `services/`
 - `unfold/`
 
 ## Responsibilities
@@ -77,6 +78,22 @@ Rules:
 - let concrete sites override hooks rather than duplicating wiring
 - keep metadata getters at class level when they only expose site identity
 - prefer instance methods for hooks that depend on the real admin site runtime state such as app registry, app list, or per-instance navigation
+
+### `services/`
+
+Contains small admin-infrastructure services used by site classes.
+
+Current services include:
+
+- active-tenant switch URL building
+- owner tenant dropdown building
+- owner tenant branding resolution
+
+Rules:
+
+- keep request-aware helper logic here when it does not belong in the ORM model itself
+- avoid pushing Unfold-specific payload shaping into unrelated domain models
+- keep site classes focused on metadata hooks and admin behavior orchestration
 
 ### `unfold/`
 
@@ -156,6 +173,7 @@ Characteristics:
 - tenant-aware metadata such as title and header when an active tenant is resolved
 - compatible with explicit active-tenant switching backed by session state
 - tenant switcher dropdown in the site header when the user belongs to multiple active tenants
+- tenant branding-aware title, header, logo, icon, favicons, and login image through a dedicated adminsite service
 - custom language switching endpoint from `core/i18n/` used by the Unfold language selector to keep the default language unprefixed
 - owner sidebar entries are curated instead of mirroring the full Django app list
 - the current `Accounts` navigation is intentionally owner-only even inside the owner admin site

@@ -51,6 +51,58 @@ class AdminSiteUnfoldCallbacks:
         return site_instance.get_site_symbol(request)
 
     @classmethod
+    def site_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the site logo for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Resolved logo value.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_site_logo(request)
+
+    @classmethod
+    def site_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the site icon for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Resolved icon value.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_site_icon(request)
+
+    @classmethod
+    def site_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
+        """ Return favicon entries for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, str]]: Resolved favicon metadata.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_site_favicons(request)
+
+    @classmethod
+    def login_image(cls, request: HttpRequest) -> str | None:
+        """ Return the login image for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            str | None: Resolved login image URL.
+        """
+        site_instance = cls._resolve_admin_site_instance(request)
+        return site_instance.get_login_image(request)
+
+    @classmethod
     def site_subheader(cls, request: HttpRequest) -> str | None:
         """ Return the site subheader for the current request.
 
