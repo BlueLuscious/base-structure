@@ -61,12 +61,6 @@ class TenantBrandingModel(models.Model):
         verbose_name=_("Dark favicon"),
         help_text=_("Favicon variant intended for dark browser themes or dark backgrounds."),
     )
-    login_image = models.ImageField(
-        upload_to="branding/login/",
-        blank=True,
-        verbose_name=_("Login image"),
-        help_text=_("Large image that can be reused on login or access screens."),
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

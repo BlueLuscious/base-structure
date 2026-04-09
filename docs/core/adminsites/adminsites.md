@@ -88,6 +88,7 @@ Current services include:
 - active-tenant switch URL building
 - owner tenant dropdown building
 - owner tenant branding resolution
+- owner tenant sidebar navigation building
 
 Rules:
 
@@ -142,6 +143,7 @@ Recommended structure:
 Examples:
 
 - `accounts/admin/master/`
+- `tenancy/admin/owner/`
 - `tenancy/admin/master/`
 
 This keeps:
@@ -173,7 +175,9 @@ Characteristics:
 - tenant-aware metadata such as title and header when an active tenant is resolved
 - compatible with explicit active-tenant switching backed by session state
 - tenant switcher dropdown in the site header when the user belongs to multiple active tenants
-- tenant branding-aware title, header, logo, icon, favicons, and login image through a dedicated adminsite service
+- tenant branding-aware title, header, logo, icon, and favicons through a dedicated adminsite service
+- `Business -> Settings` links directly to the native tenant-scoped `TenantModel` change form with owner-admin helper classes from `tenancy/admin/owner/`
+- tenant switching keeps the tenant settings screen tenant-aware and falls back from other admin change screens to portable destinations
 - custom language switching endpoint from `core/i18n/` used by the Unfold language selector to keep the default language unprefixed
 - owner sidebar entries are curated instead of mirroring the full Django app list
 - the current `Accounts` navigation is intentionally owner-only even inside the owner admin site

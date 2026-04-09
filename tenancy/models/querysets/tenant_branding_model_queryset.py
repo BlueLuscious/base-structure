@@ -44,5 +44,4 @@ class TenantBrandingModelQuerySet(models.QuerySet["TenantBrandingModel"]):
             | Q(icon_dark__gt="")
             | Q(favicon_light__gt="")
             | Q(favicon_dark__gt="")
-            | Q(login_image__gt="")
         )

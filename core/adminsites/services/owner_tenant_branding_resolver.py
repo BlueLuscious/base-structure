@@ -1,15 +1,19 @@
 """ Tenant-branding resolver used by the owner admin site. """
 
-from typing import Any
+from typing import TYPE_CHECKING
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
+
+if TYPE_CHECKING:
+    from django.db.models.fields.files import ImageFieldFile
+    from tenancy.models import TenantBrandingModel, TenantModel
 
 
 class OwnerTenantBrandingResolver:
     """ Resolve tenant branding assets for the owner admin site. """
 
     @classmethod
-    def get_branding(cls, request: HttpRequest) -> Any | None:
+    def get_branding(cls, request: HttpRequest) -> "TenantBrandingModel | None":
         """ Return tenant branding for the current request when available.
 
         Args:
@@ -18,11 +22,11 @@ class OwnerTenantBrandingResolver:
         Returns:
             Any | None: Tenant branding object or ``None``.
         """
-        tenant = getattr(request, "tenant", None)
+        tenant: "TenantModel | None" = getattr(request, "tenant", None)
         if tenant is None:
             return None
 
-        cached_branding = tenant._state.fields_cache.get("branding")
+        cached_branding: "TenantBrandingModel | None" = tenant._state.fields_cache.get("branding")
         if cached_branding is not None:
             return cached_branding
 
@@ -45,19 +49,19 @@ class OwnerTenantBrandingResolver:
             str | None: Branding display name, tenant name fallback, or ``None``.
         """
         branding = cls.get_branding(request)
-        display_name = getattr(branding, "display_name", "")
+        display_name: str = getattr(branding, "display_name", "")
         if display_name:
             return str(display_name)
 
-        tenant = getattr(request, "tenant", None)
-        tenant_name = getattr(tenant, "name", "")
+        tenant: "TenantModel | None" = getattr(request, "tenant", None)
+        tenant_name: str = getattr(tenant, "name", "")
         if tenant_name:
             return str(tenant_name)
 
         return None
 
     @staticmethod
-    def get_file_url(field: Any) -> str | None:
+    def get_file_url(field: "ImageFieldFile") -> str | None:
         """ Return the URL of one file-like field when available.
 
         Args:
@@ -72,7 +76,7 @@ class OwnerTenantBrandingResolver:
         return getattr(field, "url", None)
 
     @classmethod
-    def build_themed_asset(cls, light_field: Any, dark_field: Any) -> dict[str, str] | str | None:
+    def build_themed_asset(cls, light_field: "ImageFieldFile", dark_field: "ImageFieldFile") -> dict[str, str] | str | None:
         """ Build the Unfold asset payload for one optional light or dark pair.
 
         Args:
@@ -159,16 +163,3 @@ class OwnerTenantBrandingResolver:
             )
 
         return favicons
-
-    @classmethod
-    def get_login_image(cls, request: HttpRequest) -> str | None:
-        """ Return the owner-site login image URL from tenant branding.
-
-        Args:
-            request: Current admin request.
-
-        Returns:
-            str | None: Login image URL when available.
-        """
-        branding = cls.get_branding(request)
-        return cls.get_file_url(getattr(branding, "login_image", None))

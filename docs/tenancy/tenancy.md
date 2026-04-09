@@ -26,6 +26,7 @@ It currently defines:
 - request-time active tenant resolution
 - explicit active-tenant switching
 - tenant-scoped access policies
+- owner-admin business settings helpers
 - master admin registrations for technical administration
 
 `tenancy/` owns both:
@@ -60,6 +61,8 @@ The current package groups two related concerns:
 - persistence and membership rules
 - request-time tenant context
 
+The app also contains owner-admin tenant settings helpers because those screens are tenant-domain behavior, even when they are mounted inside the shared owner admin site.
+
 ## Responsibilities
 
 The `tenancy/` app is responsible for:
@@ -70,6 +73,7 @@ The `tenancy/` app is responsible for:
 - exposing shared request-time tenant resolution helpers
 - exposing shared tenant access policies
 - owning the active-tenant request flow end to end
+- exposing owner-facing business settings flows for the active tenant
 - registering tenant infrastructure in the master admin site
 
 It is also the current home for tenant-aware request utilities because those utilities are tightly coupled to:
@@ -127,7 +131,6 @@ Current fields cover:
 - light and dark logo variants
 - light and dark icon variants
 - light and dark favicon variants
-- login image
 - audit timestamps
 
 Current intent:
@@ -223,6 +226,7 @@ Current concrete use cases:
 - choose the active tenant during owner-admin work
 - display tenant-aware owner admin metadata such as title and header
 - switch tenant context explicitly from the owner admin dropdown
+- let active tenant owners update tenant branding from the owner admin business settings screen
 - prefix uploaded media under `tenants/<tenant-slug>/...`
 
 These are internal or admin-facing use cases.

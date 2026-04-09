@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gea-trader-core\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 06:03-0300\n"
+"POT-Creation-Date: 2026-04-09 18:34-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -182,7 +182,7 @@ msgstr "Puede abrir el admin del negocio"
 
 #: .\accounts\admin\owner\user_model_admin_creation_form.py:37
 #: .\accounts\admin\owner\user_model_admin_form.py:23
-#: .\core\adminsites\sites\owner_admin_site.py:125
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:76
 #: .\core\tests\adminsites\test_adminsites.py:72
 msgid "Groups"
 msgstr "Grupos"
@@ -209,7 +209,8 @@ msgstr ""
 msgid "Only permission groups for the current business can be assigned here."
 msgstr "Aquí solo se pueden asignar grupos de permisos del negocio actual."
 
-#: .\accounts\apps.py:12 .\core\adminsites\sites\owner_admin_site.py:113
+#: .\accounts\apps.py:12
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:64
 msgid "Accounts"
 msgstr "Cuentas"
 
@@ -228,7 +229,7 @@ msgid "User"
 msgstr "Usuario"
 
 #: .\accounts\models\user_model.py:33
-#: .\core\adminsites\sites\owner_admin_site.py:116
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:67
 #: .\core\tests\adminsites\test_adminsites.py:72
 msgid "Users"
 msgstr "Usuarios"
@@ -244,19 +245,33 @@ msgid "Operator"
 msgstr "Operador"
 
 #: .\core\adminsites\services\owner_tenant_dropdown_builder.py:54
-#: .\core\tests\adminsites\test_owner_admin_site_dropdown.py:45
+#: .\core\tests\adminsites\test_owner_admin_site_dropdown.py:47
 msgid "Current"
 msgstr "Actual"
 
-#: .\core\adminsites\sites\owner_admin_site.py:16
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:51
+#: .\tenancy\admin\owner\owner_tenant_settings_admin.py:34
+#: .\tenancy\models\tenant_branding_model.py:19
+#: .\tenancy\models\tenant_group_model.py:20
+#: .\tenancy\models\tenant_membership_model.py:24
+#: .\tenancy\models\tenant_model.py:48
+msgid "Business"
+msgstr "Negocio"
+
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:54
+#: .\core\tests\adminsites\test_adminsites.py:72
+msgid "Settings"
+msgstr "Configuración"
+
+#: .\core\adminsites\sites\owner_admin_site.py:19
 msgid "Business Administration"
 msgstr "Administración del negocio"
 
-#: .\core\adminsites\sites\owner_admin_site.py:17
+#: .\core\adminsites\sites\owner_admin_site.py:20
 msgid "Business Admin"
 msgstr "Admin del negocio"
 
-#: .\core\adminsites\sites\owner_admin_site.py:19
+#: .\core\adminsites\sites\owner_admin_site.py:22
 msgid "Business operations"
 msgstr "Operaciones del negocio"
 
@@ -524,6 +539,18 @@ msgstr "resultado"
 msgid "results"
 msgstr "resultados"
 
+#: .\core\i18n\translation_anchors.py:67
+msgid "Choose file to upload"
+msgstr "Elija el archivo para cargar"
+
+#: .\core\i18n\translation_anchors.py:68
+msgid "Select action"
+msgstr "Seleccionar acción"
+
+#: .\core\i18n\translation_anchors.py:69
+msgid "Run"
+msgstr "Ejecutar"
+
 #: .\core\settings.py:152
 msgid "Spanish"
 msgstr "Español"
@@ -532,16 +559,16 @@ msgstr "Español"
 msgid "English"
 msgstr "Inglés"
 
+#: .\tenancy\admin\owner\tenant_branding_inline.py:23
+#: .\tenancy\admin\owner\tenant_branding_inline.py:24
+#: .\tenancy\models\tenant_branding_model.py:73
+#: .\tenancy\models\tenant_branding_model.py:74
+msgid "Business branding"
+msgstr "Marca del negocio"
+
 #: .\tenancy\choices\tenant_role.py:10
 msgid "Master"
 msgstr "Maestro"
-
-#: .\tenancy\models\tenant_branding_model.py:19
-#: .\tenancy\models\tenant_group_model.py:20
-#: .\tenancy\models\tenant_membership_model.py:24
-#: .\tenancy\models\tenant_model.py:48
-msgid "Business"
-msgstr "Negocio"
 
 #: .\tenancy\models\tenant_branding_model.py:20
 msgid "Business that owns this branding configuration."
@@ -609,21 +636,6 @@ msgid "Favicon variant intended for dark browser themes or dark backgrounds."
 msgstr ""
 "Variante del favicon pensada para temas oscuros del navegador o fondos "
 "oscuros."
-
-#: .\tenancy\models\tenant_branding_model.py:67
-msgid "Login image"
-msgstr "Imagen de inicio de sesión"
-
-#: .\tenancy\models\tenant_branding_model.py:68
-msgid "Large image that can be reused on login or access screens."
-msgstr ""
-"Imagen grande que puede reutilizarse en pantallas de acceso o inicio de "
-"sesión."
-
-#: .\tenancy\models\tenant_branding_model.py:79
-#: .\tenancy\models\tenant_branding_model.py:80
-msgid "Business branding"
-msgstr "Marca del negocio"
 
 #: .\tenancy\models\tenant_group_model.py:21
 msgid "Business that owns this permission group."

@@ -94,7 +94,6 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
                 "icon_dark": self.build_file("/media/icon-dark.png"),
                 "favicon_light": self.build_file("/media/favicon-light.png"),
                 "favicon_dark": self.build_file("/media/favicon-dark.png"),
-                "login_image": self.build_file("/media/login-image.png"),
             },
         )()
         request = self.request_factory.get("/owner-admin/")
@@ -161,7 +160,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual("GEA Trader", owner_admin_site.get_site_title(request))
         self.assertEqual("GEA Trader", owner_admin_site.get_site_header(request))
 
-    def test_owner_admin_branding_builds_logo_icon_favicons_and_login_image(self) -> None:
+    def test_owner_admin_branding_builds_logo_icon_and_favicons(self) -> None:
         """ Verify owner admin exposes tenant branding assets in the shapes expected by Unfold. """
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
@@ -175,7 +174,6 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
                 "icon_dark": self.build_file("/media/icon-dark.png"),
                 "favicon_light": self.build_file("/media/favicon-light.png"),
                 "favicon_dark": self.build_file("/media/favicon-dark.png"),
-                "login_image": self.build_file("/media/login-image.png"),
             },
         )()
 
@@ -200,7 +198,6 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
             ],
             owner_admin_site.get_site_favicons(request),
         )
-        self.assertEqual("/media/login-image.png", owner_admin_site.get_login_image(request))
 
     def test_owner_admin_environment_uses_the_active_membership_role(self) -> None:
         """ Verify the owner admin environment badge reflects the active tenant role. """

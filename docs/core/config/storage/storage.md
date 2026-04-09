@@ -221,6 +221,11 @@ With tenant-aware media enabled, the final stored object key becomes:
 - `media/tenants/<tenant-slug>/...` for remote backends
 - `MEDIA_ROOT/tenants/<tenant-slug>/...` for local media
 
+The tenant prefix is generated through the storage backend `generate_filename()`
+hook. When saving to storage directly instead of going through a Django
+`FileField` or `ImageField`, generate the final object name first and then pass
+that name into `save()`.
+
 If no active tenant exists during the save operation, media keeps the original relative path unchanged.
 
 ## Optional Integration Toggle

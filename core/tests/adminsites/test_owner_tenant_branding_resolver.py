@@ -64,8 +64,8 @@ class TestOwnerTenantBrandingResolver(LoggedSimpleTestCase):
             OwnerTenantBrandingResolver.get_icon(request),
         )
 
-    def test_get_favicons_and_login_image_return_unfold_ready_values(self) -> None:
-        """ Verify the branding resolver returns favicon metadata and login image URLs. """
+    def test_get_favicons_return_unfold_ready_values(self) -> None:
+        """ Verify the branding resolver returns favicon metadata. """
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
         request.tenant._state.fields_cache["branding"] = type(
@@ -74,7 +74,6 @@ class TestOwnerTenantBrandingResolver(LoggedSimpleTestCase):
             {
                 "favicon_light": self.build_file("/media/favicon-light.png"),
                 "favicon_dark": self.build_file("/media/favicon-dark.png"),
-                "login_image": self.build_file("/media/login-image.png"),
             },
         )()
 
@@ -85,4 +84,3 @@ class TestOwnerTenantBrandingResolver(LoggedSimpleTestCase):
             ],
             OwnerTenantBrandingResolver.get_favicons(request),
         )
-        self.assertEqual("/media/login-image.png", OwnerTenantBrandingResolver.get_login_image(request))

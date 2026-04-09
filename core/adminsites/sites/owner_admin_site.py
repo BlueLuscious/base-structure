@@ -1,13 +1,15 @@
 """ Owner admin site definition. """
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 from django.http import HttpRequest
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from core.adminsites.services import OwnerTenantDropdownBuilder
 from core.adminsites.services import OwnerTenantBrandingResolver
+from core.adminsites.services import OwnerTenantSidebarNavigationBuilder
 from core.adminsites.sites.base_admin_site import BaseAdminSite
-from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+
+if TYPE_CHECKING:
+    from tenancy.models.tenant_membership_model import TenantMembershipModel, TenantModel
 
 
 class OwnerAdminSite(BaseAdminSite):
@@ -88,18 +90,6 @@ class OwnerAdminSite(BaseAdminSite):
         return OwnerTenantBrandingResolver.get_favicons(request)
 
     @classmethod
-    def get_login_image(cls, request: HttpRequest) -> str | None:
-        """ Return the owner login image from tenant branding when available.
-
-        Args:
-            request: Current admin request.
-
-        Returns:
-            str | None: Tenant-aware login image URL.
-        """
-        return OwnerTenantBrandingResolver.get_login_image(request)
-
-    @classmethod
     def get_environment(cls, request: HttpRequest) -> list[str] | None:
         """ Return the owner environment badge using the active membership role.
 
@@ -109,13 +99,13 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             list[str] | None: Role label and badge variant, or ``None`` when unavailable.
         """
-        tenant = getattr(request, "tenant", None)
-        tenant_id = getattr(tenant, "pk", None)
+        tenant: "TenantModel | None" = getattr(request, "tenant", None)
+        tenant_id: str = getattr(tenant, "pk", None)
 
         if tenant_id is None:
             return None
 
-        membership = request.user.tenant_memberships.filter(
+        membership: "TenantMembershipModel | None" = request.user.tenant_memberships.filter(
             tenant_id=tenant_id,
             is_active=True,
         ).first()
@@ -157,28 +147,4 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             list[dict[str, Any]]: Sidebar navigation groups for the owner site.
         """
-        return [
-            {
-                "title": _("Accounts"),
-                "items": [
-                    {
-                        "title": _("Users"),
-                        "icon": "group",
-                        "link": reverse("owner_admin:accounts_usermodel_changelist"),
-                        "permission": lambda req: (
-                            TenantAccountsAccessPolicy.can_manage_accounts(req)
-                            and req.user.has_perm("accounts.view_usermodel")
-                        ),
-                    },
-                    {
-                        "title": _("Groups"),
-                        "icon": "admin_panel_settings",
-                        "link": reverse("owner_admin:auth_group_changelist"),
-                        "permission": lambda req: (
-                            TenantAccountsAccessPolicy.can_manage_accounts(req)
-                            and req.user.has_perm("auth.view_group")
-                        ),
-                    },
-                ]
-            },
-        ]
+        return OwnerTenantSidebarNavigationBuilder.build(request)

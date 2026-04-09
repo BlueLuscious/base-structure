@@ -64,3 +64,6 @@ gettext_noop("If you don’t receive an email, please make sure you’ve entered
 gettext_noop("Show all")
 gettext_noop("result")
 gettext_noop("results")
+gettext_noop("Choose file to upload")
+gettext_noop("Select action")
+gettext_noop("Run")
