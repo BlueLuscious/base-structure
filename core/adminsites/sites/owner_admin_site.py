@@ -2,6 +2,7 @@
 
 from typing import Any, TYPE_CHECKING
 from django.http import HttpRequest
+from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 from core.adminsites.services import OwnerTenantDropdownBuilder
 from core.adminsites.services import OwnerTenantBrandingResolver
@@ -148,3 +149,17 @@ class OwnerAdminSite(BaseAdminSite):
             list[dict[str, Any]]: Sidebar navigation groups for the owner site.
         """
         return OwnerTenantSidebarNavigationBuilder.build(request)
+
+    def get_scripts(self, request: HttpRequest) -> list[str]:
+        """ Return owner-admin scripts including favicon post-processing.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[str]: Owner-admin script asset paths.
+        """
+        return [
+            *super().get_scripts(request),
+            static("tenancy/admin/owner/owner_tenant_favicons.js"),
+        ]

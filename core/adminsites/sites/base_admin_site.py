@@ -6,6 +6,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import get_language
 from unfold.sites import UnfoldAdminSite
+from unfold.settings import get_config
 
 
 class BaseAdminSite(UnfoldAdminSite):
@@ -251,3 +252,22 @@ class BaseAdminSite(UnfoldAdminSite):
             list[str]: Style asset paths.
         """
         return []
+
+    def _get_list(self, key: str, *args: Any) -> list[Any]:
+        """ Resolve one Unfold list setting, including callable root values.
+
+        Args:
+            key: Setting key to resolve.
+            *args: Runtime arguments forwarded to configured callbacks.
+
+        Returns:
+            list[Any]: Resolved list items or an empty list when the configured
+            value does not resolve to a list.
+        """
+        configured_items = get_config(self.settings_name)[key]
+        resolved_items = self._get_value(configured_items, *args)
+
+        if not isinstance(resolved_items, list):
+            return []
+
+        return [self._get_value(item, *args) for item in resolved_items]

@@ -1,6 +1,7 @@
 """ Tests for admin site Unfold configuration resolution. """
 
 from django.test import RequestFactory
+from django.templatetags.static import static
 from tenancy.models import TenantModel
 from core.adminsites.admin_namespace import AdminNamespace
 from core.adminsites.site_instances import owner_admin_site
@@ -197,6 +198,27 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
                 {"href": "/media/favicon-dark.png", "rel": "icon", "type": "image/png"},
             ],
             owner_admin_site.get_site_favicons(request),
+        )
+
+    def test_owner_admin_each_context_includes_script_assets_from_callable_settings(self) -> None:
+        """ Verify owner admin scripts configured through Unfold callbacks reach the template context. """
+        request = self.request_factory.get("/owner-admin/")
+        request.user = type(
+            "AnonymousLikeUser",
+            (),
+            {
+                "is_active": False,
+                "is_staff": False,
+                "is_authenticated": False,
+            },
+        )()
+        request.resolver_match = type("ResolverMatch", (), {"namespace": owner_admin_site.name})()
+
+        context = owner_admin_site.each_context(request)
+
+        self.assertIn(
+            static("tenancy/admin/owner/owner_tenant_favicons.js"),
+            context["scripts"],
         )
 
     def test_owner_admin_environment_uses_the_active_membership_role(self) -> None:

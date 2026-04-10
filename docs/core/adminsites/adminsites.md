@@ -176,8 +176,10 @@ Characteristics:
 - compatible with explicit active-tenant switching backed by session state
 - tenant switcher dropdown in the site header when the user belongs to multiple active tenants
 - tenant branding-aware title, header, logo, icon, and favicons through a dedicated adminsite service
+- callable Unfold asset settings such as `SCRIPTS` and `STYLES` are resolved through the shared `BaseAdminSite` adapter so request-aware asset hooks actually reach the rendered template context
 - `Business -> Settings` links directly to the native tenant-scoped `TenantModel` change form with owner-admin helper classes from `tenancy/admin/owner/`
 - tenant switching keeps the tenant settings screen tenant-aware and falls back from other admin change screens to portable destinations
+- owner favicon light and dark variants are finalized with one small admin script because upstream Unfold does not expose a narrow template hook for favicon `media` attributes
 - custom language switching endpoint from `core/i18n/` used by the Unfold language selector to keep the default language unprefixed
 - owner sidebar entries are curated instead of mirroring the full Django app list
 - the current `Accounts` navigation is intentionally owner-only even inside the owner admin site

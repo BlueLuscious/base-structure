@@ -84,3 +84,23 @@ class TestOwnerTenantBrandingResolver(LoggedSimpleTestCase):
             ],
             OwnerTenantBrandingResolver.get_favicons(request),
         )
+
+    def test_get_favicons_returns_one_plain_entry_when_only_one_variant_exists(self) -> None:
+        """ Verify the branding resolver keeps one plain favicon when only one variant exists. """
+        request = self.request_factory.get("/owner-admin/")
+        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+        request.tenant._state.fields_cache["branding"] = type(
+            "Branding",
+            (),
+            {
+                "favicon_light": self.build_file("/media/favicon-light.png"),
+                "favicon_dark": None,
+            },
+        )()
+
+        self.assertEqual(
+            [
+                {"href": "/media/favicon-light.png", "rel": "icon", "type": "image/png"},
+            ],
+            OwnerTenantBrandingResolver.get_favicons(request),
+        )

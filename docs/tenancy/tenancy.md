@@ -138,6 +138,7 @@ Current intent:
 - keep branding out of `TenantModel`
 - reuse the same branding data across admin and future frontend surfaces
 - let tenant-aware media storage place branding uploads under the active tenant path when one exists
+- let the owner admin resolve light and dark favicon variants from branding, with final theme-specific selection handled by a small admin-side script
 
 ### `TenantGroupModel`
 

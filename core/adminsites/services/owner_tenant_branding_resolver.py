@@ -97,6 +97,22 @@ class OwnerTenantBrandingResolver:
 
         return light_url or dark_url
 
+    @staticmethod
+    def build_favicon_entry(href: str) -> dict[str, str]:
+        """ Build one favicon entry for Unfold.
+
+        Args:
+            href: Public URL of the favicon asset.
+
+        Returns:
+            dict[str, str]: Normalized favicon metadata.
+        """
+        return {
+            "href": href,
+            "rel": "icon",
+            "type": "image/png",
+        }
+
     @classmethod
     def get_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
         """ Return the owner-site logo payload from tenant branding.
@@ -145,21 +161,9 @@ class OwnerTenantBrandingResolver:
         favicons: list[dict[str, str]] = []
 
         if light_url:
-            favicons.append(
-                {
-                    "href": light_url,
-                    "rel": "icon",
-                    "type": "image/png",
-                }
-            )
+            favicons.append(cls.build_favicon_entry(light_url))
 
         if dark_url:
-            favicons.append(
-                {
-                    "href": dark_url,
-                    "rel": "icon",
-                    "type": "image/png",
-                }
-            )
+            favicons.append(cls.build_favicon_entry(dark_url))
 
         return favicons
