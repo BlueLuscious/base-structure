@@ -123,6 +123,12 @@ The current layout direction is:
 - allow future template override by template name
 - avoid full layout replacement as the default extension path
 
+Current tenant-aware direction:
+
+- `product_name` should eventually resolve from tenant branding display data when tenant context exists
+- `support_email` should eventually resolve from tenant operational contact data on `TenantModel`
+- when neither value exists, templates should degrade to a neutral layout instead of inventing unrelated branding
+
 ### `tasks/`
 
 This package is intentionally reserved for future async delivery.
@@ -225,6 +231,11 @@ Current expected next step:
 - keep synchronous payload building and framework integration inside the existing DTO, backend, and factory layers
 
 The project already expects Celery plus Redis to become the async stack when async delivery is wired.
+
+Additional future direction:
+
+- add one tenant-aware mail context resolver that can pull display and support metadata from the active tenant
+- keep technical sender configuration separate from simple contact metadata until verified outbound sender rules are defined
 
 ## What Should Live Here
 

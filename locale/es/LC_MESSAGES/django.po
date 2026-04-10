@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gea-trader-core\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-09 18:34-0300\n"
+"POT-Creation-Date: 2026-04-10 19:32-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -214,7 +214,7 @@ msgstr "Aquí solo se pueden asignar grupos de permisos del negocio actual."
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: .\accounts\models\user_model.py:22 .\tenancy\models\tenant_model.py:49
+#: .\accounts\models\user_model.py:22 .\tenancy\models\tenant_model.py:70
 msgid "Businesses"
 msgstr "Negocios"
 
@@ -254,7 +254,7 @@ msgstr "Actual"
 #: .\tenancy\models\tenant_branding_model.py:19
 #: .\tenancy\models\tenant_group_model.py:20
 #: .\tenancy\models\tenant_membership_model.py:24
-#: .\tenancy\models\tenant_model.py:48
+#: .\tenancy\models\tenant_model.py:69
 msgid "Business"
 msgstr "Negocio"
 
@@ -263,15 +263,15 @@ msgstr "Negocio"
 msgid "Settings"
 msgstr "Configuración"
 
-#: .\core\adminsites\sites\owner_admin_site.py:19
+#: .\core\adminsites\sites\owner_admin_site.py:20
 msgid "Business Administration"
 msgstr "Administración del negocio"
 
-#: .\core\adminsites\sites\owner_admin_site.py:20
+#: .\core\adminsites\sites\owner_admin_site.py:21
 msgid "Business Admin"
 msgstr "Admin del negocio"
 
-#: .\core\adminsites\sites\owner_admin_site.py:22
+#: .\core\adminsites\sites\owner_admin_site.py:23
 msgid "Business operations"
 msgstr "Operaciones del negocio"
 
@@ -551,13 +551,56 @@ msgstr "Seleccionar acción"
 msgid "Run"
 msgstr "Ejecutar"
 
-#: .\core\settings.py:152
+#: .\core\settings.py:153
 msgid "Spanish"
 msgstr "Español"
 
-#: .\core\settings.py:153
+#: .\core\settings.py:154
 msgid "English"
 msgstr "Inglés"
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:22
+#: .\tenancy\models\tenant_model.py:33
+msgid "Business email"
+msgstr "Correo del negocio"
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:23
+#: .\tenancy\models\tenant_model.py:38
+msgid "Support email"
+msgstr "Correo de soporte"
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:24
+#: .\tenancy\models\tenant_model.py:44
+msgid "Phone number"
+msgstr "Teléfono"
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:25
+#: .\tenancy\models\tenant_model.py:49
+msgid "Website"
+msgstr "Sitio web"
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:28
+#: .\tenancy\models\tenant_model.py:34
+msgid "Main contact email for this business."
+msgstr "Correo principal de contacto de este negocio."
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:29
+#: .\tenancy\models\tenant_model.py:39
+msgid ""
+"Optional support email shown in emails and messages sent for this business."
+msgstr ""
+"Correo de soporte opcional que se muestra en correos y mensajes enviados "
+"para este negocio."
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:30
+#: .\tenancy\models\tenant_model.py:45
+msgid "Optional public phone number for this business."
+msgstr "Número de teléfono público opcional de este negocio."
+
+#: .\tenancy\admin\owner\owner_tenant_settings_form.py:31
+#: .\tenancy\models\tenant_model.py:50
+msgid "Optional public website URL for this business."
+msgstr "URL pública opcional del sitio web de este negocio."
 
 #: .\tenancy\admin\owner\tenant_branding_inline.py:23
 #: .\tenancy\admin\owner\tenant_branding_inline.py:24
@@ -704,11 +747,11 @@ msgstr "Slug del negocio"
 msgid "Stable URL-friendly identifier for this business."
 msgstr "Identificador estable y amigable para URLs de este negocio."
 
-#: .\tenancy\models\tenant_model.py:33
+#: .\tenancy\models\tenant_model.py:54
 msgid "Business active"
 msgstr "Negocio activo"
 
-#: .\tenancy\models\tenant_model.py:34
+#: .\tenancy\models\tenant_model.py:55
 msgid ""
 "Uncheck this to hide the business from active business selection and day-to-"
 "day use."

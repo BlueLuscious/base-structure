@@ -34,7 +34,11 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
             _("Business"),
             {
                 "classes": ("tab",),
-                "fields": ("name",),
+                "fields": (
+                    "name",
+                    ("business_email", "support_email",),
+                    ("phone_number", "website_url",),
+                ),
             },
         ),
     )

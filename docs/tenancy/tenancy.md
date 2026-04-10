@@ -93,13 +93,25 @@ Current fields cover:
 - UUID primary key
 - human-friendly tenant name
 - unique slug
+- optional business email
+- optional support email
+- optional phone number
+- optional website URL
 - active flag
 - audit timestamps
 
 Current intent:
 
 - tenants should be introduced before domain apps start depending on them
+- operational business contact data should live on `TenantModel`
 - later domain models can reference `TenantModel` directly once multitenancy is wired through the rest of the project
+
+Current examples of data that belong here:
+
+- business contact channels
+- support contact channels
+- website links
+- other non-visual business identity fields
 
 ### `TenantMembershipModel`
 
@@ -139,6 +151,14 @@ Current intent:
 - reuse the same branding data across admin and future frontend surfaces
 - let tenant-aware media storage place branding uploads under the active tenant path when one exists
 - let the owner admin resolve light and dark favicon variants from branding, with final theme-specific selection handled by a small admin-side script
+- keep this model focused on visual identity rather than operational contact data
+
+Examples of data that should stay out of `TenantBrandingModel`:
+
+- support email
+- business email
+- phone numbers
+- website URLs
 
 ### `TenantGroupModel`
 
@@ -275,6 +295,23 @@ Current responsibilities:
 - decide whether one group is visible inside owner `Groups`
 
 This keeps the reusable tenant-role checks in the base policy while keeping tenant-scoped authorization inside `tenancy/`, even when the current consumer surface is `accounts/`.
+
+## Future Tenant Metadata Direction
+
+The current base keeps the first operational contact fields on `TenantModel` and the visual identity fields on `TenantBrandingModel`.
+
+Current rule of thumb:
+
+- use `TenantModel` for business contact and operating metadata
+- use `TenantBrandingModel` for display-oriented and asset-oriented metadata
+
+Likely future additions when real business flows require them:
+
+- `legal_name` on `TenantModel`
+- `support_phone` on `TenantModel`
+- tenant-specific sender metadata for outbound mail, potentially including a future verified `from_email`
+
+Those fields remain future work because they require clearer product and deliverability rules than the current base structure needs.
 
 ## Policy Direction For Future Apps
 
