@@ -6,6 +6,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import get_language
 from unfold.sites import UnfoldAdminSite
+from unfold.settings import get_config
 
 
 class BaseAdminSite(UnfoldAdminSite):
@@ -53,6 +54,54 @@ class BaseAdminSite(UnfoldAdminSite):
             str: Site symbol.
         """
         return cls.site_symbol
+
+    @classmethod
+    def get_site_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the site logo for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Theme-aware logo mapping, single URL, or ``None``.
+        """
+        return None
+
+    @classmethod
+    def get_site_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the site icon for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Theme-aware icon mapping, single URL, or ``None``.
+        """
+        return None
+
+    @classmethod
+    def get_site_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
+        """ Return favicon entries for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, str]]: Favicon metadata consumed by Unfold.
+        """
+        return []
+
+    @classmethod
+    def get_login_image(cls, request: HttpRequest) -> str | None:
+        """ Return the login image for the current request.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            str | None: Login image URL when available.
+        """
+        return None
 
     @classmethod
     def get_site_subheader(cls, request: HttpRequest) -> str | None:
@@ -203,3 +252,22 @@ class BaseAdminSite(UnfoldAdminSite):
             list[str]: Style asset paths.
         """
         return []
+
+    def _get_list(self, key: str, *args: Any) -> list[Any]:
+        """ Resolve one Unfold list setting, including callable root values.
+
+        Args:
+            key: Setting key to resolve.
+            *args: Runtime arguments forwarded to configured callbacks.
+
+        Returns:
+            list[Any]: Resolved list items or an empty list when the configured
+            value does not resolve to a list.
+        """
+        configured_items = get_config(self.settings_name)[key]
+        resolved_items = self._get_value(configured_items, *args)
+
+        if not isinstance(resolved_items, list):
+            return []
+
+        return [self._get_value(item, *args) for item in resolved_items]

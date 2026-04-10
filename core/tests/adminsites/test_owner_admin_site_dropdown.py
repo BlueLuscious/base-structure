@@ -1,5 +1,7 @@
 """ Tests for the owner admin tenant switcher dropdown. """
 
+from urllib.parse import parse_qs, urlparse
+from django.urls import resolve, reverse
 from django.test import RequestFactory
 from django.utils.translation import gettext as _
 from core.adminsites.site_instances import owner_admin_site
@@ -56,3 +58,40 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         request.tenant = None
 
         self.assertEqual([], owner_admin_site.get_site_dropdown(request))
+
+    def test_get_site_dropdown_rebuilds_tenant_change_next_for_target_tenant(self) -> None:
+        """ Verify tenant settings links keep the business settings screen for the target tenant. """
+        current_change_path = reverse(
+            "owner_admin:tenancy_tenantmodel_change",
+            kwargs={"object_id": str(self.primary_tenant.pk)},
+        )
+        request = self.request_factory.get(current_change_path)
+        request.user = self.user
+        request.tenant = self.primary_tenant
+        request.resolver_match = resolve(current_change_path)
+
+        dropdown_items = owner_admin_site.get_site_dropdown(request)
+        secondary_link = dropdown_items[1]["link"]
+        next_path = parse_qs(urlparse(secondary_link).query)["next"][0]
+
+        self.assertEqual(
+            reverse(
+                "owner_admin:tenancy_tenantmodel_change",
+                kwargs={"object_id": str(self.secondary_tenant.pk)},
+            ),
+            next_path,
+        )
+
+    def test_get_site_dropdown_falls_back_to_group_changelist_from_group_change_view(self) -> None:
+        """ Verify non-tenant change screens fall back to the model changelist after switching. """
+        current_group_change_path = reverse("owner_admin:auth_group_change", args=(1,))
+        request = self.request_factory.get(current_group_change_path)
+        request.user = self.user
+        request.tenant = self.primary_tenant
+        request.resolver_match = resolve(current_group_change_path)
+
+        dropdown_items = owner_admin_site.get_site_dropdown(request)
+        secondary_link = dropdown_items[1]["link"]
+        next_path = parse_qs(urlparse(secondary_link).query)["next"][0]
+
+        self.assertEqual(reverse("owner_admin:auth_group_changelist"), next_path)

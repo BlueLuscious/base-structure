@@ -1,12 +1,16 @@
 """ Owner admin site definition. """
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 from django.http import HttpRequest
-from django.urls import reverse
+from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 from core.adminsites.services import OwnerTenantDropdownBuilder
+from core.adminsites.services import OwnerTenantBrandingResolver
+from core.adminsites.services import OwnerTenantSidebarNavigationBuilder
 from core.adminsites.sites.base_admin_site import BaseAdminSite
-from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+
+if TYPE_CHECKING:
+    from tenancy.models.tenant_membership_model import TenantMembershipModel, TenantModel
 
 
 class OwnerAdminSite(BaseAdminSite):
@@ -28,10 +32,10 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             str: Tenant-aware site title.
         """
-        tenant = getattr(request, "tenant", None)
-        tenant_name = getattr(tenant, "name", "")
-        if tenant_name:
-            return str(tenant_name)
+        display_name = OwnerTenantBrandingResolver.get_display_name(request)
+        if display_name:
+            return display_name
+
         return super().get_site_title(request)
 
     @classmethod
@@ -44,11 +48,47 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             str: Tenant-aware site header.
         """
-        tenant = getattr(request, "tenant", None)
-        tenant_name = getattr(tenant, "name", "")
-        if tenant_name:
-            return str(tenant_name)
+        display_name = OwnerTenantBrandingResolver.get_display_name(request)
+        if display_name:
+            return display_name
+
         return super().get_site_header(request)
+
+    @classmethod
+    def get_site_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the owner site logo from tenant branding when available.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Tenant-aware logo payload.
+        """
+        return OwnerTenantBrandingResolver.get_logo(request)
+
+    @classmethod
+    def get_site_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
+        """ Return the owner site icon from tenant branding when available.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            dict[str, str] | str | None: Tenant-aware icon payload.
+        """
+        return OwnerTenantBrandingResolver.get_icon(request)
+
+    @classmethod
+    def get_site_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
+        """ Return tenant-specific favicon entries when branding provides them.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[dict[str, str]]: Favicon metadata for Unfold.
+        """
+        return OwnerTenantBrandingResolver.get_favicons(request)
 
     @classmethod
     def get_environment(cls, request: HttpRequest) -> list[str] | None:
@@ -60,13 +100,13 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             list[str] | None: Role label and badge variant, or ``None`` when unavailable.
         """
-        tenant = getattr(request, "tenant", None)
-        tenant_id = getattr(tenant, "pk", None)
+        tenant: "TenantModel | None" = getattr(request, "tenant", None)
+        tenant_id: str = getattr(tenant, "pk", None)
 
         if tenant_id is None:
             return None
 
-        membership = request.user.tenant_memberships.filter(
+        membership: "TenantMembershipModel | None" = request.user.tenant_memberships.filter(
             tenant_id=tenant_id,
             is_active=True,
         ).first()
@@ -108,28 +148,18 @@ class OwnerAdminSite(BaseAdminSite):
         Returns:
             list[dict[str, Any]]: Sidebar navigation groups for the owner site.
         """
+        return OwnerTenantSidebarNavigationBuilder.build(request)
+
+    def get_scripts(self, request: HttpRequest) -> list[str]:
+        """ Return owner-admin scripts including favicon post-processing.
+
+        Args:
+            request: Current admin request.
+
+        Returns:
+            list[str]: Owner-admin script asset paths.
+        """
         return [
-            {
-                "title": _("Accounts"),
-                "items": [
-                    {
-                        "title": _("Users"),
-                        "icon": "group",
-                        "link": reverse("owner_admin:accounts_usermodel_changelist"),
-                        "permission": lambda req: (
-                            TenantAccountsAccessPolicy.can_manage_accounts(req)
-                            and req.user.has_perm("accounts.view_usermodel")
-                        ),
-                    },
-                    {
-                        "title": _("Groups"),
-                        "icon": "admin_panel_settings",
-                        "link": reverse("owner_admin:auth_group_changelist"),
-                        "permission": lambda req: (
-                            TenantAccountsAccessPolicy.can_manage_accounts(req)
-                            and req.user.has_perm("auth.view_group")
-                        ),
-                    },
-                ]
-            },
+            *super().get_scripts(request),
+            static("tenancy/admin/owner/owner_tenant_favicons.js"),
         ]

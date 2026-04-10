@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gea-trader-core\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 04:06-0300\n"
+"POT-Creation-Date: 2026-04-09 18:34-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -182,7 +182,7 @@ msgstr "Puede abrir el admin del negocio"
 
 #: .\accounts\admin\owner\user_model_admin_creation_form.py:37
 #: .\accounts\admin\owner\user_model_admin_form.py:23
-#: .\core\adminsites\sites\owner_admin_site.py:99
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:76
 #: .\core\tests\adminsites\test_adminsites.py:72
 msgid "Groups"
 msgstr "Grupos"
@@ -209,17 +209,19 @@ msgstr ""
 msgid "Only permission groups for the current business can be assigned here."
 msgstr "Aquí solo se pueden asignar grupos de permisos del negocio actual."
 
-#: .\accounts\apps.py:12 .\core\adminsites\sites\owner_admin_site.py:87
+#: .\accounts\apps.py:12
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:64
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: .\accounts\models\user_model.py:22 .\tenancy\models\tenant_model.py:47
+#: .\accounts\models\user_model.py:22 .\tenancy\models\tenant_model.py:49
 msgid "Businesses"
 msgstr "Negocios"
 
 #: .\accounts\models\user_model.py:23
 msgid "Businesses this account can access through business access records."
-msgstr "Negocios a los que esta cuenta puede acceder mediante sus accesos al negocio."
+msgstr ""
+"Negocios a los que esta cuenta puede acceder mediante sus accesos al negocio."
 
 #: .\accounts\models\user_model.py:32
 #: .\tenancy\models\tenant_membership_model.py:31
@@ -227,7 +229,7 @@ msgid "User"
 msgstr "Usuario"
 
 #: .\accounts\models\user_model.py:33
-#: .\core\adminsites\sites\owner_admin_site.py:90
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:67
 #: .\core\tests\adminsites\test_adminsites.py:72
 msgid "Users"
 msgstr "Usuarios"
@@ -243,19 +245,33 @@ msgid "Operator"
 msgstr "Operador"
 
 #: .\core\adminsites\services\owner_tenant_dropdown_builder.py:54
-#: .\core\tests\adminsites\test_owner_admin_site_dropdown.py:45
+#: .\core\tests\adminsites\test_owner_admin_site_dropdown.py:47
 msgid "Current"
 msgstr "Actual"
 
-#: .\core\adminsites\sites\owner_admin_site.py:16
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:51
+#: .\tenancy\admin\owner\owner_tenant_settings_admin.py:34
+#: .\tenancy\models\tenant_branding_model.py:19
+#: .\tenancy\models\tenant_group_model.py:20
+#: .\tenancy\models\tenant_membership_model.py:24
+#: .\tenancy\models\tenant_model.py:48
+msgid "Business"
+msgstr "Negocio"
+
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:54
+#: .\core\tests\adminsites\test_adminsites.py:72
+msgid "Settings"
+msgstr "Configuración"
+
+#: .\core\adminsites\sites\owner_admin_site.py:19
 msgid "Business Administration"
 msgstr "Administración del negocio"
 
-#: .\core\adminsites\sites\owner_admin_site.py:17
+#: .\core\adminsites\sites\owner_admin_site.py:20
 msgid "Business Admin"
 msgstr "Admin del negocio"
 
-#: .\core\adminsites\sites\owner_admin_site.py:19
+#: .\core\adminsites\sites\owner_admin_site.py:22
 msgid "Business operations"
 msgstr "Operaciones del negocio"
 
@@ -523,6 +539,18 @@ msgstr "resultado"
 msgid "results"
 msgstr "resultados"
 
+#: .\core\i18n\translation_anchors.py:67
+msgid "Choose file to upload"
+msgstr "Elija el archivo para cargar"
+
+#: .\core\i18n\translation_anchors.py:68
+msgid "Select action"
+msgstr "Seleccionar acción"
+
+#: .\core\i18n\translation_anchors.py:69
+msgid "Run"
+msgstr "Ejecutar"
+
 #: .\core\settings.py:152
 msgid "Spanish"
 msgstr "Español"
@@ -531,15 +559,83 @@ msgstr "Español"
 msgid "English"
 msgstr "Inglés"
 
+#: .\tenancy\admin\owner\tenant_branding_inline.py:23
+#: .\tenancy\admin\owner\tenant_branding_inline.py:24
+#: .\tenancy\models\tenant_branding_model.py:73
+#: .\tenancy\models\tenant_branding_model.py:74
+msgid "Business branding"
+msgstr "Marca del negocio"
+
 #: .\tenancy\choices\tenant_role.py:10
 msgid "Master"
 msgstr "Maestro"
 
-#: .\tenancy\models\tenant_group_model.py:20
-#: .\tenancy\models\tenant_membership_model.py:24
-#: .\tenancy\models\tenant_model.py:46
-msgid "Business"
-msgstr "Negocio"
+#: .\tenancy\models\tenant_branding_model.py:20
+msgid "Business that owns this branding configuration."
+msgstr "Negocio que posee esta configuración de branding."
+
+#: .\tenancy\models\tenant_branding_model.py:25
+msgid "Display name"
+msgstr "Nombre visible"
+
+#: .\tenancy\models\tenant_branding_model.py:26
+msgid ""
+"Optional public name used instead of the business name when branding is "
+"shown."
+msgstr ""
+"Nombre público opcional que se usa en lugar del nombre del negocio cuando se "
+"muestra el branding."
+
+#: .\tenancy\models\tenant_branding_model.py:31
+msgid "Light logo"
+msgstr "Logo claro"
+
+#: .\tenancy\models\tenant_branding_model.py:32
+msgid "Logo variant intended for light backgrounds."
+msgstr "Variante del logo pensada para fondos claros."
+
+#: .\tenancy\models\tenant_branding_model.py:37
+msgid "Dark logo"
+msgstr "Logo oscuro"
+
+#: .\tenancy\models\tenant_branding_model.py:38
+msgid "Logo variant intended for dark backgrounds."
+msgstr "Variante del logo pensada para fondos oscuros."
+
+#: .\tenancy\models\tenant_branding_model.py:43
+msgid "Light icon"
+msgstr "Ícono claro"
+
+#: .\tenancy\models\tenant_branding_model.py:44
+msgid "Compact icon variant intended for light backgrounds."
+msgstr "Variante compacta del ícono pensada para fondos claros."
+
+#: .\tenancy\models\tenant_branding_model.py:49
+msgid "Dark icon"
+msgstr "Ícono oscuro"
+
+#: .\tenancy\models\tenant_branding_model.py:50
+msgid "Compact icon variant intended for dark backgrounds."
+msgstr "Variante compacta del ícono pensada para fondos oscuros."
+
+#: .\tenancy\models\tenant_branding_model.py:55
+msgid "Light favicon"
+msgstr "Favicon claro"
+
+#: .\tenancy\models\tenant_branding_model.py:56
+msgid "Favicon variant intended for light browser themes or light backgrounds."
+msgstr ""
+"Variante del favicon pensada para temas claros del navegador o fondos claros."
+
+#: .\tenancy\models\tenant_branding_model.py:61
+msgid "Dark favicon"
+msgstr "Favicon oscuro"
+
+#: .\tenancy\models\tenant_branding_model.py:62
+msgid "Favicon variant intended for dark browser themes or dark backgrounds."
+msgstr ""
+"Variante del favicon pensada para temas oscuros del navegador o fondos "
+"oscuros."
 
 #: .\tenancy\models\tenant_group_model.py:21
 msgid "Business that owns this permission group."
@@ -547,11 +643,11 @@ msgstr "Negocio que posee este grupo de permisos."
 
 #: .\tenancy\models\tenant_group_model.py:27
 msgid "Permission group"
-msgstr "Grupo del equipo"
+msgstr "Grupo de permisos"
 
 #: .\tenancy\models\tenant_group_model.py:28
 msgid "Django auth group scoped to the selected business."
-msgstr "No tienes acceso al negocio solicitado."
+msgstr "Grupo de autenticación de Django asociado al negocio seleccionado."
 
 #: .\tenancy\models\tenant_group_model.py:40
 msgid "Business group"
@@ -571,12 +667,14 @@ msgstr "Cuenta que recibe este acceso al negocio."
 
 #: .\tenancy\models\tenant_membership_model.py:39
 msgid "Role this account will have inside the selected business."
-msgstr "No tienes acceso al negocio solicitado."
+msgstr "Rol que tendrá esta cuenta dentro del negocio seleccionado."
 
 #: .\tenancy\models\tenant_membership_model.py:44
 msgid ""
 "Uncheck this to keep the access record without allowing day-to-day access."
-msgstr "Desmarca esta opción para conservar el acceso, pero sin permitir el uso diario."
+msgstr ""
+"Desmarca esta opción para conservar el acceso, pero sin permitir el uso "
+"diario."
 
 #: .\tenancy\models\tenant_membership_model.py:48
 msgid "Primary access"
@@ -586,33 +684,37 @@ msgstr "Acceso principal"
 msgid ""
 "Marks this as the default business access used as a fallback context for the "
 "account."
-msgstr "Marca este acceso como el predeterminado para usarlo como contexto de respaldo de la cuenta."
-
-#: .\tenancy\models\tenant_model.py:21
-msgid "Business name"
-msgstr "Acceso al negocio"
+msgstr ""
+"Marca este acceso como el predeterminado para usarlo como contexto de "
+"respaldo de la cuenta."
 
 #: .\tenancy\models\tenant_model.py:22
+msgid "Business name"
+msgstr "Nombre del negocio"
+
+#: .\tenancy\models\tenant_model.py:23
 msgid "Public name used to identify this business across the admin."
 msgstr "Nombre visible que identifica este negocio en toda la administración."
 
-#: .\tenancy\models\tenant_model.py:27
-msgid "Business slug"
-msgstr "Negocios"
-
 #: .\tenancy\models\tenant_model.py:28
+msgid "Business slug"
+msgstr "Slug del negocio"
+
+#: .\tenancy\models\tenant_model.py:29
 msgid "Stable URL-friendly identifier for this business."
 msgstr "Identificador estable y amigable para URLs de este negocio."
 
-#: .\tenancy\models\tenant_model.py:32
-msgid "Business active"
-msgstr "Acceso al negocio"
-
 #: .\tenancy\models\tenant_model.py:33
+msgid "Business active"
+msgstr "Negocio activo"
+
+#: .\tenancy\models\tenant_model.py:34
 msgid ""
 "Uncheck this to hide the business from active business selection and day-to-"
 "day use."
-msgstr "Desmarca esta opción para ocultar el negocio de la selección activa y del uso diario."
+msgstr ""
+"Desmarca esta opción para ocultar el negocio de la selección activa y del "
+"uso diario."
 
 #: .\tenancy\switching\active_tenant_switcher.py:35
 msgid "You do not have access to the requested business."

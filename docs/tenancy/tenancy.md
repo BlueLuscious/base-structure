@@ -18,6 +18,7 @@ See also:
 It currently defines:
 
 - the base tenant entity
+- tenant branding assets and display metadata
 - tenant-to-user memberships
 - tenant-to-group bindings
 - role choices for tenant memberships
@@ -25,6 +26,7 @@ It currently defines:
 - request-time active tenant resolution
 - explicit active-tenant switching
 - tenant-scoped access policies
+- owner-admin business settings helpers
 - master admin registrations for technical administration
 
 `tenancy/` owns both:
@@ -59,6 +61,8 @@ The current package groups two related concerns:
 - persistence and membership rules
 - request-time tenant context
 
+The app also contains owner-admin tenant settings helpers because those screens are tenant-domain behavior, even when they are mounted inside the shared owner admin site.
+
 ## Responsibilities
 
 The `tenancy/` app is responsible for:
@@ -69,6 +73,7 @@ The `tenancy/` app is responsible for:
 - exposing shared request-time tenant resolution helpers
 - exposing shared tenant access policies
 - owning the active-tenant request flow end to end
+- exposing owner-facing business settings flows for the active tenant
 - registering tenant infrastructure in the master admin site
 
 It is also the current home for tenant-aware request utilities because those utilities are tightly coupled to:
@@ -115,6 +120,26 @@ Current intent:
 - each user should have at most one primary tenant membership
 - tenant-specific roles should live on the membership rather than directly on the user model
 
+### `TenantBrandingModel`
+
+`TenantBrandingModel` stores reusable visual identity data for one tenant.
+
+Current fields cover:
+
+- relation to `TenantModel`
+- optional display name
+- light and dark logo variants
+- light and dark icon variants
+- light and dark favicon variants
+- audit timestamps
+
+Current intent:
+
+- keep branding out of `TenantModel`
+- reuse the same branding data across admin and future frontend surfaces
+- let tenant-aware media storage place branding uploads under the active tenant path when one exists
+- let the owner admin resolve light and dark favicon variants from branding, with final theme-specific selection handled by a small admin-side script
+
 ### `TenantGroupModel`
 
 `TenantGroupModel` links one Django auth group to one tenant.
@@ -143,7 +168,7 @@ Current values:
 
 - `master`
 - `owner`
-- `employee`
+- `operator`
 
 ## Active Tenant Resolution
 
@@ -198,10 +223,11 @@ Current concrete use cases:
 
 - attach users to one or more tenants
 - attach Django groups to one tenant
-- assign tenant roles such as `owner` and `employee` to support users
+- assign tenant roles such as `owner` and `operator` to support users
 - choose the active tenant during owner-admin work
 - display tenant-aware owner admin metadata such as title and header
 - switch tenant context explicitly from the owner admin dropdown
+- let active tenant owners update tenant branding from the owner admin business settings screen
 - prefix uploaded media under `tenants/<tenant-slug>/...`
 
 These are internal or admin-facing use cases.
