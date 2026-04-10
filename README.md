@@ -82,6 +82,8 @@ Follow these steps to get a development copy running locally:
   - `.env.example`
 - Storage configuration documentation lives at:
   - `docs/core/config/storage/storage.md`
+- Mail service documentation lives at:
+  - `docs/core/mail/mail.md`
 - Admin site infrastructure documentation lives at:
   - `docs/core/adminsites/adminsites.md`
 - Accounts app documentation lives at:
@@ -92,6 +94,13 @@ Follow these steps to get a development copy running locally:
   - `docs/env-examples/`
 
 If you are using local S3-compatible storage during development, make sure your `.env` is aligned with the MinIO credentials and bucket configured in `docker-compose.yml`.
+
+If you want the default mail service to deliver into MailHog locally, keep these values aligned with your `.env`:
+
+- `EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`
+- `EMAIL_HOST=127.0.0.1`
+- `EMAIL_PORT=1025`
+- `DEFAULT_FROM_EMAIL=noreply@localhost`
 
 ## Translations
 

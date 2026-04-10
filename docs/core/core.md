@@ -6,6 +6,7 @@ See also:
 
 - `docs/project.md`
 - `docs/core/config/config.md`
+- `docs/core/mail/mail.md`
 - `docs/core/adminsites/adminsites.md`
 - `docs/accounts/accounts.md`
 - `docs/tenancy/tenancy.md`
@@ -22,6 +23,7 @@ Current contents:
 - `wsgi.py`
 - `adminsites/`
 - `config/`
+- `mail/`
 - `testing/`
 - `tests/`
 
@@ -39,6 +41,7 @@ The `core/` package is responsible for:
 - exposing ASGI and WSGI entrypoints
 - hosting shared custom admin site infrastructure
 - hosting reusable project-wide configuration code
+- hosting reusable project-wide outbound mail infrastructure
 - hosting reusable testing infrastructure and project-level tests
 
 ## What Should Live Here
@@ -49,6 +52,7 @@ Examples:
 
 - environment-driven settings resolution
 - storage configuration shared by the whole project
+- outbound mail infrastructure shared by the whole project
 - shared admin site classes and site-level Unfold integration
 - reusable test utilities
 - project-level integration tests
@@ -81,6 +85,14 @@ See:
 
 - `docs/core/config/config.md`
 
+### `core/mail/`
+
+Contains the project-wide outbound mail service and its supporting DTO, backend, and factory layers.
+
+See:
+
+- `docs/core/mail/mail.md`
+
 ### `core/adminsites/`
 
 Contains the custom admin site infrastructure shared by the project.
@@ -106,6 +118,7 @@ Current examples:
 
 - storage adapter tests
 - storage integration tests
+- outbound mail service tests
 
 ## Maintenance Rule
 
