@@ -23,6 +23,54 @@
                 "djangojs"
             ],
             "default": "django"
+        },
+        {
+            "id": "djangoMigrationAppLabel",
+            "type": "promptString",
+            "description": "Enter the app label to migrate",
+            "default": "tenancy"
+        },
+        {
+            "id": "djangoMigrationTarget",
+            "type": "promptString",
+            "description": "Enter the migration target or zero",
+            "default": "zero"
+        },
+        {
+            "id": "djangoCollectStaticIgnorePattern",
+            "type": "promptString",
+            "description": "Enter one collectstatic ignore pattern",
+            "default": "*.map"
+        },
+        {
+            "id": "djangoSquashAppLabel",
+            "type": "promptString",
+            "description": "Enter the app label to squash migrations for",
+            "default": "tenancy"
+        },
+        {
+            "id": "djangoSquashMigrationStart",
+            "type": "promptString",
+            "description": "Enter the starting migration name",
+            "default": "0002"
+        },
+        {
+            "id": "djangoSquashMigrationTarget",
+            "type": "promptString",
+            "description": "Enter the final migration name",
+            "default": "0006"
+        },
+        {
+            "id": "djangoSquashedName",
+            "type": "promptString",
+            "description": "Enter the squashed migration name",
+            "default": "squashed_cleanup"
+        },
+        {
+            "id": "djangoTestTarget",
+            "type": "promptString",
+            "description": "Enter a Django test target such as app_name, app_name.tests, app_name.tests.MyTestCase, or app_name.tests.MyTestCase.test_method",
+            "default": "core.tests"
         }
     ],
     "configurations": [
@@ -87,11 +135,46 @@
             "envFile": "${workspaceFolder}\\.env"
         },
         {
-            "name": "Django: Shell",
+            "name": "Django: Migrate Target",
             "type": "debugpy",
             "request": "launch",
             "args": [
-                "shell"
+                "migrate",
+                "${input:djangoMigrationAppLabel}",
+                "${input:djangoMigrationTarget}"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
+            "name": "Django: Squash Migrations",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "squashmigrations",
+                "${input:djangoSquashAppLabel}",
+                "${input:djangoSquashMigrationTarget}",
+                "--squashed-name",
+                "${input:djangoSquashedName}"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
+            "name": "Django: Squash Migrations From Start",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "squashmigrations",
+                "${input:djangoSquashAppLabel}",
+                "${input:djangoSquashMigrationStart}",
+                "${input:djangoSquashMigrationTarget}",
+                "--squashed-name",
+                "${input:djangoSquashedName}"
             ],
             "django": true,
             "autoStartBrowser": false,
@@ -176,7 +259,49 @@
             "envFile": "${workspaceFolder}\\.env"
         },
         {
+            "name": "Django: Collect Static",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "collectstatic",
+                "--noinput",
+                "--ignore",
+                "${input:djangoCollectStaticIgnorePattern}",
+                "--dry-run",
+                "--clear"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
+            "name": "Django: Shell",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "shell"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
             "name": "Django: Test",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "test",
+                "${input:djangoTestTarget}"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py",
+            "envFile": "${workspaceFolder}\\.env"
+        },
+        {
+            "name": "Django: Test All",
             "type": "debugpy",
             "request": "launch",
             "args": [
