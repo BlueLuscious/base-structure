@@ -1,0 +1,4 @@
+---
+{% if product_name %}Sent via {{ product_name }}
+{% endif %}{% if support_email %}Support: {{ support_email }}
+{% endif %}

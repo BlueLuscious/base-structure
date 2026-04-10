@@ -23,6 +23,8 @@ It should:
 Current contents:
 
 - `mail_service.py`
+- `template_mail_service.py`
+- `template_renderer.py`
 - `dtos/`
 - `backends/`
 - `factories/`
@@ -35,6 +37,7 @@ The current mail implementation is intentionally:
 - synchronous
 - based on `django.core.mail`
 - built on top of `EmailMultiAlternatives`
+- able to build outbound messages either from raw DTO bodies or from Django templates
 
 This keeps the first runtime simple while preserving a clear boundary for future async delivery.
 
@@ -49,6 +52,16 @@ Current responsibilities:
 - send one mail message
 - send multiple mail messages
 - delegate actual delivery to the configured project backend
+
+### `TemplateMailService`
+
+`TemplateMailService` is the higher-level entrypoint for templated outbound mail.
+
+Current responsibilities:
+
+- render one plain-text and one HTML template
+- build one `MailMessageDTO`
+- delegate final delivery to `MailService`
 
 ### DTOs
 
@@ -79,8 +92,36 @@ This package owns translation from project DTOs into framework objects.
 Current factory:
 
 - `EmailMultiAlternativesFactory`
+- `TemplateMailMessageFactory`
 
-It converts one `MailMessageDTO` into one Django `EmailMultiAlternatives` instance.
+They convert:
+
+- one `MailMessageDTO` into one Django `EmailMultiAlternatives` instance
+- one template pair plus context into one `MailMessageDTO`
+
+## Templates
+
+Mail templates now live under:
+
+- `core/templates/mail/layouts/`
+- `core/templates/mail/partials/`
+- `core/templates/mail/messages/`
+
+Current structure:
+
+- one reusable HTML base layout
+- one reusable plain-text base layout
+- one mandatory footer partial in both formats
+- one reusable CTA button partial for HTML mails
+- one generic example message template pair
+
+The current layout direction is:
+
+- always render plain text and HTML together
+- keep the system footer structure mandatory
+- keep branding values optional until tenant-aware mail context is resolved
+- allow future template override by template name
+- avoid full layout replacement as the default extension path
 
 ### `tasks/`
 
@@ -144,6 +185,9 @@ Unit tests verify:
 - DTO normalization
 - `EmailMultiAlternatives` factory behavior
 - synchronous delivery through Django's local memory backend
+- template rendering
+- template-based message DTO creation
+- templated delivery through the local memory backend
 
 ### Integration Tests
 
@@ -158,6 +202,8 @@ Current integration coverage verifies:
 
 - sending one real message to MailHog
 - sending multiple real messages to MailHog
+- sending one real templated message to MailHog
+- sending multiple real templated messages to MailHog
 
 The integration suite inspects MailHog through its HTTP API after the SMTP delivery succeeds.
 

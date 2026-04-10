@@ -88,6 +88,7 @@ Check:
 - project-wide outbound mail service under `core/mail/`
 - synchronous delivery through Django's email stack
 - DTO, backend, and factory layers prepared for future async delivery
+- reusable template-based mail rendering with a shared base layout and mandatory system footer
 
 Check:
 
