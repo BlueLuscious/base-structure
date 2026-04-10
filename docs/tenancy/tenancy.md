@@ -276,6 +276,26 @@ Current responsibilities:
 
 This keeps the reusable tenant-role checks in the base policy while keeping tenant-scoped authorization inside `tenancy/`, even when the current consumer surface is `accounts/`.
 
+## Policy Direction For Future Apps
+
+The current policy split is intended to scale in two layers:
+
+- `TenantAccessPolicy` stays as the reusable tenant-membership and tenant-role base policy
+- app-specific policies should sit on top only when one domain needs stricter rules than the generic tenant-member flow
+
+Current architectural direction:
+
+- `accounts` and `tenancy` remain owner-only surfaces
+- future owner-managed apps may allow active tenant members such as `operator` to access the app when they both:
+  - belong to the active tenant
+  - hold the required Django permissions through tenant-scoped groups or direct user permissions
+
+This means `TenantAccessPolicy` remains the base reusable policy layer, while future app-specific policies should only appear when one domain needs stricter rules than the generic tenant-member plus Django-permission pattern.
+
+For the concrete owner-admin wiring checklist for future apps, see:
+
+- `docs/core/adminsites/adminsites.md`
+
 ## Relationship With `accounts/`
 
 `UserModel` keeps the authentication identity.

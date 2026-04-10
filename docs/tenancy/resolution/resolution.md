@@ -230,6 +230,31 @@ Tradeoffs:
 - DNS and environment setup matter more
 - less convenient for quick admin context switching
 
+## Future Path-Based Frontend Wiring Process
+
+When the first real tenant-aware frontend surface appears, the recommended process is:
+
+1. choose one stable route contract for tenant-aware pages
+2. activate `PathTenantResolutionStrategy` before adding page-specific tenant logic
+3. resolve the tenant from the route
+4. apply access policy checks after tenant resolution
+5. scope queries and service calls to the resolved tenant
+6. keep owner-admin session switching independent from frontend path-based routing
+
+This future flow should not replace the current admin resolver. It should add one new composed resolver for the frontend surface when that surface becomes real.
+
+## Future Non-Tenant-Aware Frontend Process
+
+Not every frontend page should become tenant-aware.
+
+For future frontend surfaces that are global or anonymous:
+
+- do not wire path-based tenant resolution
+- do not require an active tenant in the route
+- do not mix frontend-global pages with tenant-bound resolution rules
+
+This keeps tenant-aware routing explicit instead of gradually leaking into unrelated pages.
+
 ## Recommended Resolution Modes By Surface
 
 ### Owner Admin

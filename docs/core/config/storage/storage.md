@@ -32,6 +32,19 @@ Minimal examples for the supported scenarios live in `docs/env-examples/`:
 - `.env.r2.whitenoise.example`
 - `.env.r2.r2.example`
 
+## Current Storage Direction
+
+The current storage design intentionally supports multiple deployment shapes without forcing one provider choice across every environment.
+
+Current rules:
+
+- `media` may be local or remote
+- `staticfiles` may be local, WhiteNoise, or remote
+- media is tenant-aware when an active tenant exists at save time
+- static files remain global unless the project introduces a real tenant-specific static surface later
+
+This means storage should be wired per surface and per environment, not by one hardcoded deployment assumption.
+
 ## Main Variables
 
 ### Media
@@ -178,6 +191,31 @@ Current tenancy direction:
 
 - media is tenant-aware at runtime and stores uploaded objects under `tenants/<tenant-slug>/...` when one active tenant exists
 - static files remain global unless real per-tenant branding assets are introduced
+
+## Future Storage Adapter Wiring Process
+
+When a new environment or deployment target needs storage wiring, follow this process:
+
+1. decide whether `media` and `staticfiles` should be local, WhiteNoise-backed, or remote
+2. choose the provider per surface instead of assuming both must use the same backend
+3. configure the provider-specific environment variables
+4. keep media tenant-aware through the existing filename generation path instead of adding tenant prefixes in views or forms
+5. keep static files global unless the product introduces a real tenant-specific static requirement
+6. validate the selected combination with `manage.py check`
+7. run unit tests and real integration tests when the target uses an S3-compatible backend
+
+## Future Process For Adding One New Storage Adapter
+
+If the project eventually adds a new storage provider beyond `local`, `s3`, `r2`, or `whitenoise`, the expected process should be:
+
+1. create the adapter config and backend classes under `core/config/storage/`
+2. wire the provider into the corresponding resolver entrypoint
+3. keep the provider-specific settings isolated from app-level code
+4. add unit coverage for the resolver and backend behavior
+5. add opt-in integration coverage only when real provider access is available
+6. update this document and the environment examples
+
+This keeps provider changes inside the storage layer instead of leaking them into domain apps.
 
 ### 5. Local Media + WhiteNoise Staticfiles
 

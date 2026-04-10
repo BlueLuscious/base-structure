@@ -121,6 +121,16 @@ The current owner admin flow consumes tenant authorization through two policy la
 - `TenantAccessPolicy` for base tenant-membership and role checks
 - `TenantAccountsAccessPolicy` for `accounts`-specific visibility and management rules
 
+This stricter owner-only rule is intentional for `accounts`.
+
+Future tenant-aware apps should not copy the `accounts` flow by default.
+`accounts` stays stricter because it manages support users, memberships, and tenant-scoped permission groups.
+
+For the default wiring rules of future owner-managed apps, see:
+
+- `docs/core/adminsites/adminsites.md`
+- `docs/tenancy/tenancy.md`
+
 The shared site classes, namespace resolution, and Unfold integration are documented in:
 
 - `docs/core/adminsites/adminsites.md`
