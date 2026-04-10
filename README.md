@@ -9,7 +9,7 @@ logic and a translation workflow for managing products and related data.
 ## Requirements
 
 - Python 3.11+ (run in a virtual environment)
-- Docker (used to run the local PostgreSQL and MinIO services)
+- Docker (used to run the local PostgreSQL, MinIO, and MailHog services)
 - gettext tools for message catalog management (see [Translations](#translations) below)
 
 ## Development setup
@@ -48,6 +48,7 @@ Follow these steps to get a development copy running locally:
    - PostgreSQL for the development database
    - MinIO for local S3-compatible storage testing
    - MinIO Client bootstrap logic to create the configured bucket automatically
+   - MailHog for local SMTP capture and mail preview
 
    Bring up the local services before running migrations or the
    development server.
@@ -55,6 +56,11 @@ Follow these steps to get a development copy running locally:
    ```bash
    docker compose up -d
    ```
+
+   MailHog is available locally at:
+
+   - SMTP: `127.0.0.1:1025`
+   - Web UI: `http://127.0.0.1:8025`
 5. **Apply migrations**
 
    ```bash
