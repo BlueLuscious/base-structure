@@ -1,14 +1,35 @@
 """ Tests for project-wide asynchronous mail tasks. """
 
+from smtplib import SMTPException
 from unittest.mock import patch
 from uuid import uuid4
-from core.tasks.mail.tasks import send_mail_message_task, send_templated_mail_task
+from core.tasks.mail.tasks import (
+    MAIL_TASK_AUTORETRY_EXCEPTIONS,
+    MAIL_TASK_MAX_RETRIES,
+    MAIL_TASK_RETRY_BACKOFF_MAX_SECONDS,
+    send_mail_message_task,
+    send_templated_mail_task,
+)
 from core.testing import LoggedTestCase
 from tenancy.models import TenantModel
 
 
 class TestMailTasks(LoggedTestCase):
     """ Verify project-wide mail tasks rebuild payloads and delegate to mail services. """
+
+    def test_mail_tasks_configure_retry_for_transient_transport_errors(self) -> None:
+        """ Configure both mail tasks to retry transient transport failures with bounded backoff. """
+        self.assertEqual(MAIL_TASK_AUTORETRY_EXCEPTIONS, send_mail_message_task.autoretry_for)
+        self.assertEqual(MAIL_TASK_AUTORETRY_EXCEPTIONS, send_templated_mail_task.autoretry_for)
+        self.assertEqual((SMTPException, TimeoutError, ConnectionError), MAIL_TASK_AUTORETRY_EXCEPTIONS)
+        self.assertEqual(MAIL_TASK_MAX_RETRIES, send_mail_message_task.max_retries)
+        self.assertEqual(MAIL_TASK_MAX_RETRIES, send_templated_mail_task.max_retries)
+        self.assertTrue(send_mail_message_task.retry_backoff)
+        self.assertTrue(send_templated_mail_task.retry_backoff)
+        self.assertEqual(MAIL_TASK_RETRY_BACKOFF_MAX_SECONDS, send_mail_message_task.retry_backoff_max)
+        self.assertEqual(MAIL_TASK_RETRY_BACKOFF_MAX_SECONDS, send_templated_mail_task.retry_backoff_max)
+        self.assertTrue(send_mail_message_task.retry_jitter)
+        self.assertTrue(send_templated_mail_task.retry_jitter)
 
     def test_send_mail_message_task_rebuilds_the_payload_and_delegates_to_the_mail_service(self) -> None:
         """ Rebuild one raw mail payload inside the task before delegating to the mail service. """

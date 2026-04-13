@@ -151,6 +151,12 @@ Prefer:
 
 Only extract one shared task base class once real repetition appears across multiple tasks.
 
+Current mail-task direction:
+
+- retry only transient transport or connection failures
+- do not retry payload, template, or business-logic errors
+- keep retries explicit on each task until more shared repetition appears
+
 ## Testing Rule
 
 Prefer this order:

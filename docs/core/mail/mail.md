@@ -221,6 +221,18 @@ Current mail tasks:
 - `send_mail_message_task`
 - `send_templated_mail_task`
 
+Current retry direction for both tasks:
+
+- retry transient transport failures only
+- current retryable errors:
+  - `SMTPException`
+  - `TimeoutError`
+  - `ConnectionError`
+- current retry policy:
+  - `max_retries=3`
+  - exponential backoff enabled
+  - jitter enabled
+
 ## Current Settings Direction
 
 The current project mail service uses the standard Django email settings from `core/settings.py`.
