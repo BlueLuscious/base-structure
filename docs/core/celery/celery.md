@@ -6,6 +6,7 @@ See also:
 
 - `docs/project.md`
 - `docs/core/core.md`
+- `docs/core/celery/tasks/tasks.md`
 - `docs/core/mail/mail.md`
 
 ## Goal
@@ -86,10 +87,13 @@ Examples:
 - project-wide async infrastructure belongs in `core/`
 - app-owned business tasks should prefer living in the app that owns that workflow
 
+For shared task placement and payload conventions, see:
+
+- `docs/core/celery/tasks/tasks.md`
+
 ## Future Direction
 
 The next steps expected on top of this wiring are:
 
-1. define the shared task conventions
-2. wire async mail delivery as the first real use case
-3. document when tasks should pass serialized payloads instead of request-bound objects
+1. wire async mail delivery as the first real use case
+2. document the first real task implementations on top of the shared conventions

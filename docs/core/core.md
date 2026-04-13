@@ -6,6 +6,7 @@ See also:
 
 - `docs/project.md`
 - `docs/core/celery/celery.md`
+- `docs/core/celery/tasks/tasks.md`
 - `docs/core/config/config.md`
 - `docs/core/mail/mail.md`
 - `docs/core/mail/composers/composers.md`
