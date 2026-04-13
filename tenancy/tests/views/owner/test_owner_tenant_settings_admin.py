@@ -2,6 +2,7 @@
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
 from tenancy.choices import TenantRole
@@ -55,10 +56,10 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
 
         self.assertEqual(200, response.status_code)
         self.assertContains(response, "GEA Trader")
-        self.assertContains(response, "Business email")
-        self.assertContains(response, "Support email")
-        self.assertContains(response, "Phone number")
-        self.assertContains(response, "Website URL")
+        self.assertContains(response, _("Business email"))
+        self.assertContains(response, _("Support email"))
+        self.assertContains(response, _("Phone number"))
+        self.assertContains(response, _("Website"))
 
     def test_owner_tenant_changelist_redirects_to_active_tenant_change_screen(self) -> None:
         """ Verify the owner tenant changelist redirects to the active tenant change form. """

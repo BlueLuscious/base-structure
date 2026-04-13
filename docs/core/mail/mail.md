@@ -24,6 +24,7 @@ Current contents:
 
 - `dtos/`
 - `backends/`
+- `composers/`
 - `factories/`
 - `renderers/`
 - `resolvers/`
@@ -54,6 +55,20 @@ Current responsibilities:
 - send multiple mail messages
 - delegate actual delivery to the configured project backend
 
+### `TemplateMailComposer`
+
+`TemplateMailComposer` is the composition entrypoint for templated outbound mail.
+
+Current responsibilities:
+
+- accept one `TemplateMailRequestDTO`
+- resolve sender policy
+- bind one explicit tenant context when needed
+- render one plain-text and one HTML template
+- build one `MailMessageDTO`
+
+It does not send mail.
+
 ### `TemplateMailService`
 
 `TemplateMailService` is the higher-level entrypoint for templated outbound mail.
@@ -61,9 +76,7 @@ Current responsibilities:
 Current responsibilities:
 
 - accept one `TemplateMailRequestDTO`
-- resolve sender policy
-- render one plain-text and one HTML template
-- build one `MailMessageDTO`
+- delegate mail composition to `TemplateMailComposer`
 - delegate final delivery to `MailService`
 
 ### DTOs
@@ -367,6 +380,7 @@ The rule of thumb should be:
 
 - resolvers gather data
 - policies decide outbound mail behavior
+- composers assemble already-decided payloads
 - services send already-decided payloads
 
 That split keeps the mail stack composable once customer-facing and async flows begin to grow.
