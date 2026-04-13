@@ -104,3 +104,43 @@ The current direction on top of this wiring is:
 2. use thin tasks that delegate real work to services, composers, or app-level orchestration
 3. keep outbound mail as the first real async use case, not as the only one
 4. validate worker-backed flows through opt-in integration tests when one runtime crosses Redis, Celery, and external services
+
+## Deferred Base Improvements
+
+The current branch already covers the base Celery runtime needed for asynchronous mail.
+
+The next base-structure improvement for the shared Celery layer is:
+
+- add Celery Beat when the project needs scheduled or periodic asynchronous work
+
+Recommended first model:
+
+- keep Beat as one generic scheduler for the whole project, not as one mail-specific runtime detail
+- keep schedule definitions in `core/beat/`
+- keep periodic task implementations in `core/tasks/` or the app-owned `tasks/` package that owns the workflow
+- let Beat enqueue existing thin tasks instead of moving domain logic into the schedule layer
+
+Suggested initial layout:
+
+```text
+core/
+  celery.py
+  beat/
+    __init__.py
+    schedules.py
+```
+
+Suggested first direction:
+
+- keep schedule definitions in code
+- use the default Celery Beat scheduler first
+- add one local development command or launcher for Beat
+- avoid extra persistence or admin wiring until the project has a real periodic workload
+
+Future evolution:
+
+- move to `django-celery-beat` once the project needs database-backed periodic schedules
+- use that evolution only when schedule changes must happen through the admin or without code deploys
+- keep the current code-based model as the simpler default until that operational need becomes real
+
+This remains intentionally separate from the current async mail feature.

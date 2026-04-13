@@ -116,8 +116,14 @@ If you want local async infrastructure ready for Celery or future background tas
 If you want to run a local Celery worker after Redis is available, use:
 
 ```bash
-celery -A core.celery worker --loglevel=info
+# Windows
+.venv\Scripts\celery.exe -A core.celery worker --loglevel=info --pool=solo
+
+# Unix/macOS
+.venv/bin/celery -A core.celery worker --loglevel=info
 ```
+
+On Windows local development, prefer `--pool=solo` to avoid the `billiard` multiprocessing permission errors that commonly appear with the default worker pool.
 
 ## Translations
 
