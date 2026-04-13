@@ -106,6 +106,16 @@ Check:
 
 ## Implemented As Extension Point
 
+### Project-Wide Async Task Runtime
+
+- Redis-backed Celery wiring already exists in `core/`
+- the stack is prepared for any future asynchronous task, not only mail
+- no domain task flow is active on top of Celery yet
+
+Check:
+
+- `docs/core/celery/celery.md`
+
 ### Path-Based Tenant Resolution
 
 - `PathTenantResolutionStrategy` already exists as a dedicated strategy hook
@@ -184,8 +194,7 @@ Check:
 
 ### Asynchronous Mail Delivery
 
-- the project mail boundary is already prepared for async delivery
-- Celery plus Redis is the intended future stack
+- the project mail boundary is already prepared to use the project-wide Celery plus Redis stack
 - async execution is not wired yet
 
 Check:

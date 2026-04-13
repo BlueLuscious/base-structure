@@ -28,6 +28,8 @@ Current status of the other app folders:
 ## Core Docs
 
 - Project package overview: `docs/core/core.md`
+- Project-wide Celery runtime: `docs/core/celery/celery.md`
+- Celery task conventions: `docs/core/celery/tasks/tasks.md`
 - Project admin infrastructure: `docs/core/adminsites/adminsites.md`
 - Project configuration overview: `docs/core/config/config.md`
 - Project mail infrastructure: `docs/core/mail/mail.md`
@@ -46,6 +48,8 @@ Current status of the other app folders:
 To avoid repeating the same explanation in multiple places:
 
 - `docs/core/core.md` owns the explanation of what belongs in `core/`
+- `docs/core/celery/celery.md` owns the project-wide Celery runtime and async bootstrap
+- `docs/core/celery/tasks/tasks.md` owns shared task placement and payload conventions for Celery-based async work
 - `docs/core/adminsites/adminsites.md` owns admin site infrastructure details
 - `docs/core/config/config.md` owns the configuration-layer boundary
 - `docs/core/mail/mail.md` owns the project-wide outbound mail service

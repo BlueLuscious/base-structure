@@ -29,9 +29,9 @@ Current contents:
 - `factories/`
 - `renderers/`
 - `resolvers/`
+- `serializers/`
 - `policies/`
 - `services/`
-- `tasks/`
 
 ## Current Runtime Direction
 
@@ -41,6 +41,7 @@ The current mail implementation is intentionally:
 - based on `django.core.mail`
 - built on top of `EmailMultiAlternatives`
 - able to build outbound messages either from raw DTO bodies or from Django templates
+- already wired for asynchronous dispatch through the project-wide Celery runtime
 
 This keeps the first runtime simple while preserving a clear boundary for future async delivery.
 
@@ -54,6 +55,7 @@ Current responsibilities:
 
 - send one mail message
 - send multiple mail messages
+- enqueue one mail message for asynchronous delivery
 - delegate actual delivery to the configured project backend
 
 ### `TemplateMailComposer`
@@ -82,6 +84,7 @@ Current responsibilities:
 
 - accept one `TemplateMailRequestDTO`
 - delegate mail composition to `TemplateMailComposer`
+- enqueue one templated mail request for asynchronous delivery
 - delegate final delivery to `MailService`
 
 ### DTOs
@@ -121,6 +124,20 @@ They convert:
 - one `MailMessageDTO` into one Django `EmailMultiAlternatives` instance
 - one `TemplateMailRequestDTO` into one `MailMessageDTO`
 
+### `serializers/`
+
+This package owns conversion between mail DTOs and Celery-safe payload dictionaries.
+
+Current serializers:
+
+- `MailMessagePayloadSerializer`
+- `TemplateMailRequestPayloadSerializer`
+
+They convert:
+
+- one `MailMessageDTO` into one plain async payload and back
+- one `TemplateMailRequestDTO` into one plain async payload and back
+
 ### `renderers/`
 
 This package owns mail template rendering.
@@ -137,11 +154,13 @@ This package owns mail data lookups and assembly helpers.
 
 Current resolvers:
 
+- `MailTemplateBaseContextBuilder`
 - `TenantMailContextResolver`
 - `TenantMailRecipientResolver`
 
 They gather:
 
+- the effective base template context shared by synchronous rendering and asynchronous templated snapshotting
 - tenant-aware template context values
 - preferred tenant contact recipients
 
@@ -192,11 +211,27 @@ Current tenant-aware behavior:
 - `TemplateMailService` may use either the active runtime tenant context or one explicit tenant passed by the caller
 - when neither value exists, templates should degrade to a neutral layout instead of inventing unrelated branding
 
-### `tasks/`
+### Shared async task entrypoints
 
-This package is intentionally reserved for future async delivery.
+Mail async entrypoints now live under the shared Celery task layer in:
 
-It is not active yet.
+Current mail tasks:
+
+- `core/tasks/mail/tasks.py`
+- `send_mail_message_task`
+- `send_templated_mail_task`
+
+Current retry direction for both tasks:
+
+- retry transient transport failures only
+- current retryable errors:
+  - `SMTPException`
+  - `TimeoutError`
+  - `ConnectionError`
+- current retry policy:
+  - `max_retries=3`
+  - exponential backoff enabled
+  - jitter enabled
 
 ## Current Settings Direction
 
@@ -329,7 +364,10 @@ Mail integration tests are opt-in and target MailHog through real SMTP delivery.
 Enable them with:
 
 - `RUN_MAIL_INTEGRATION_TESTS=True`
+- `RUN_ASYNC_MAIL_INTEGRATION_TESTS=True` for the asynchronous worker-backed suite
 - optional override: `MAILHOG_MESSAGES_API_URL=http://127.0.0.1:8025/api/v2/messages`
+- optional override: `MAILHOG_WAIT_TIMEOUT_SECONDS=20`
+- optional override: `MAILHOG_POLL_INTERVAL_SECONDS=0.25`
 
 Current integration coverage verifies:
 
@@ -339,8 +377,18 @@ Current integration coverage verifies:
 - sending multiple real templated messages to MailHog
 - sending one real tenant-aware templated message to MailHog
 - sending multiple real tenant-aware templated messages to MailHog
+- sending one real raw mail message through Celery to MailHog
+- sending one real templated mail message through Celery to MailHog
+- sending one real tenant-aware templated mail message through Celery to MailHog
 
 The integration suite inspects MailHog through its HTTP API after the SMTP delivery succeeds.
+
+The asynchronous integration subset additionally expects:
+
+- Redis to be available
+- one Celery worker to be running
+- `CELERY_TASK_ALWAYS_EAGER=False`
+- on Windows local development, the worker should use `--pool=solo`
 
 Example command:
 
@@ -349,22 +397,31 @@ $env:RUN_MAIL_INTEGRATION_TESTS='True'
 .\.venv\Scripts\python.exe manage.py test core.tests.mail.integration
 ```
 
-## Future Direction
+Asynchronous example command:
 
-The service boundary is intentionally prepared for future asynchronous delivery.
+```powershell
+$env:RUN_MAIL_INTEGRATION_TESTS='True'
+$env:RUN_ASYNC_MAIL_INTEGRATION_TESTS='True'
+.\.venv\Scripts\python.exe manage.py test core.tests.mail.integration.test_mailhog_async_mail_service_integration core.tests.mail.integration.test_mailhog_async_template_mail_service_integration
+```
 
-Current expected next step:
+## Async Direction
 
-- keep `MailService` as the caller-facing contract
-- add async task execution under `core/mail/tasks/`
-- keep synchronous payload building and framework integration inside the existing DTO, backend, and factory layers
+The current mail stack now supports explicit asynchronous dispatch through the project-wide Celery runtime.
 
-The project already expects Celery plus Redis to become the async stack when async delivery is wired.
+Current direction:
+
+- keep `MailService` as the caller-facing contract for raw mail
+- keep `TemplateMailService` as the caller-facing contract for templated mail
+- serialize DTOs into plain Celery-safe payloads before enqueueing
+- snapshot templated mail context during enqueue through the same shared base-context builder used by synchronous rendering
+- rebuild DTOs inside thin Celery tasks before delegating back to the synchronous services
 
 Additional future direction:
 
-- keep the tenant-aware mail context resolver reusable when async delivery is wired later
+- keep the tenant-aware mail context resolver reusable when async delivery grows later
 - keep technical sender configuration separate from simple contact metadata until verified outbound sender rules are defined
+- add domain-specific async mail flows on top of the existing shared mail tasks and services when real business flows appear
 
 ## Refinement Direction
 
