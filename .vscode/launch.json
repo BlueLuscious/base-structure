@@ -321,7 +321,8 @@
                 "-A",
                 "core.celery",
                 "worker",
-                "--loglevel=info"
+                "--loglevel=info",
+                "--pool=solo"
             ],
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}\\.env"

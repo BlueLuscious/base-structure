@@ -14,3 +14,8 @@ class TestCeleryApp(LoggedSimpleTestCase):
         self.assertEqual(settings.CELERY_BROKER_URL, celery_app.conf.broker_url)
         self.assertEqual(settings.CELERY_RESULT_BACKEND, celery_app.conf.result_backend)
         self.assertTrue(celery_app.conf.broker_connection_retry_on_startup)
+
+    def test_celery_app_registers_the_shared_mail_tasks(self) -> None:
+        """ Verify the Celery app registers the shared project mail tasks. """
+        self.assertIn("core.tasks.mail.send_mail_message_task", celery_app.tasks)
+        self.assertIn("core.tasks.mail.send_templated_mail_task", celery_app.tasks)

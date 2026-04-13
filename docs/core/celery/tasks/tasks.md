@@ -29,13 +29,15 @@ Recommended placement:
 
 - `core/tasks/`
   - only for truly project-wide tasks
-- `<app>/tasks.py` or `<app>/tasks/`
-  - for app-owned business flows
+- `<app>/tasks/`
+  - preferred for app-owned business flows
+- `<app>/tasks.py`
+  - acceptable only for very small apps with one tiny task surface
 
 Examples:
 
 - project-wide mail infrastructure can live in `core/tasks/`
-- a quotation-specific follow-up task should live in `quotation/tasks.py` or `quotation/tasks/`
+- a quotation-specific follow-up task should prefer living in `quotation/tasks/`
 
 ## Payload Rule
 
@@ -85,6 +87,20 @@ Avoid vague names such as:
 - `handle_notification`
 - `run_job`
 
+Prefer `tasks.py` as the module name inside one task package or subpackage.
+
+Preferred examples:
+
+- `core/tasks/mail/tasks.py`
+- `quotation/tasks/email/tasks.py`
+- `quotation/tasks/reminders/tasks.py`
+
+Avoid file names such as:
+
+- `mail_tasks.py`
+- `email_tasks.py`
+- `reminder_tasks.py`
+
 ## Current Recommended Structure
 
 Current recommended layout:
@@ -93,16 +109,23 @@ Current recommended layout:
 core/
   tasks/
     __init__.py
-    mail_tasks.py
+    mail/
+      __init__.py
+      tasks.py
 
 quotation/
-  tasks.py
+  tasks/
+    __init__.py
+    email/
+      __init__.py
+      tasks.py
 ```
 
 This reflects the current direction:
 
 - project-wide async infrastructure in `core/`
 - app-owned business flows inside the app that owns them
+- `tasks.py` as the default Celery module name inside each task package
 
 ## Service Boundary Rule
 

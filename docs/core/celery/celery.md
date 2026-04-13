@@ -27,17 +27,18 @@ The current implementation provides:
 - one project Celery app in `core/celery.py`
 - Django-settings-based Celery configuration
 - Redis-backed broker and result backend settings
-- autodiscovery for future app-level `tasks.py` modules
+- autodiscovery for installed app `tasks.py` modules
+- one explicit shared task include for outbound mail through the project Celery app definition
+- one first shared task implementation for outbound mail under `core/tasks/mail/tasks.py`
 
-The current runtime does not yet include real Celery task usage.
-
-The first planned async use case is outbound mail, but the stack is intentionally general-purpose.
+The first real async use case is outbound mail, but the stack remains intentionally general-purpose.
 
 ## Project Files
 
 Current files:
 
 - `core/celery.py`
+- `core/tasks/`
 
 ## Current Settings Direction
 
@@ -73,8 +74,12 @@ Example local values:
 Example worker command:
 
 ```powershell
-.\.venv\Scripts\celery.exe -A core.celery worker --loglevel=info
+.\.venv\Scripts\celery.exe -A core.celery worker --loglevel=info --pool=solo
 ```
+
+On Windows local development, prefer `--pool=solo`.
+
+This avoids the `billiard` multiprocessing permission errors that commonly appear with the default worker pool on Windows.
 
 ## Ownership Rule
 
@@ -91,9 +96,11 @@ For shared task placement and payload conventions, see:
 
 - `docs/core/celery/tasks/tasks.md`
 
-## Future Direction
+## Current Direction
 
-The next steps expected on top of this wiring are:
+The current direction on top of this wiring is:
 
-1. wire async mail delivery as the first real use case
-2. document the first real task implementations on top of the shared conventions
+1. keep the Celery runtime reusable for project-wide and app-owned background work
+2. use thin tasks that delegate real work to services, composers, or app-level orchestration
+3. keep outbound mail as the first real async use case, not as the only one
+4. validate worker-backed flows through opt-in integration tests when one runtime crosses Redis, Celery, and external services

@@ -3,13 +3,13 @@
 from collections.abc import Mapping
 from typing import Any
 from django.template.loader import render_to_string
-from core.mail.resolvers import TenantMailContextResolver
+from core.mail.resolvers import MailTemplateBaseContextBuilder
 
 
 class MailTemplateRenderer:
     """ Render outbound mail templates into plain text or HTML strings. """
 
-    tenant_context_resolver_class = TenantMailContextResolver
+    base_context_builder_class = MailTemplateBaseContextBuilder
 
     @classmethod
     def render_html(cls, template_name: str, context: Mapping[str, Any]) -> str:
@@ -47,7 +47,4 @@ class MailTemplateRenderer:
         Returns:
             dict[str, Any]: Final mail template context.
         """
-        return {
-            **cls.tenant_context_resolver_class.resolve(),
-            **dict(context),
-        }
+        return cls.base_context_builder_class.build(context=context)
