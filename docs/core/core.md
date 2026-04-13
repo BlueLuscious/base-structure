@@ -7,6 +7,7 @@ See also:
 - `docs/project.md`
 - `docs/core/config/config.md`
 - `docs/core/mail/mail.md`
+- `docs/core/mail/composers/composers.md`
 - `docs/core/adminsites/adminsites.md`
 - `docs/accounts/accounts.md`
 - `docs/tenancy/tenancy.md`

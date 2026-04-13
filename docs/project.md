@@ -31,6 +31,7 @@ Current status of the other app folders:
 - Project admin infrastructure: `docs/core/adminsites/adminsites.md`
 - Project configuration overview: `docs/core/config/config.md`
 - Project mail infrastructure: `docs/core/mail/mail.md`
+- Mail composer guidance: `docs/core/mail/composers/composers.md`
 - Storage configuration details: `docs/core/config/storage/storage.md`
 
 ## App Docs
@@ -48,6 +49,7 @@ To avoid repeating the same explanation in multiple places:
 - `docs/core/adminsites/adminsites.md` owns admin site infrastructure details
 - `docs/core/config/config.md` owns the configuration-layer boundary
 - `docs/core/mail/mail.md` owns the project-wide outbound mail service
+- `docs/core/mail/composers/composers.md` owns composer usage and design guidance for the project mail stack
 - `docs/core/config/storage/storage.md` owns storage provider and env-var details
 - `docs/accounts/accounts.md` owns the `accounts/` domain structure
 - `docs/front/front.md` owns the frontend structure and future tenant-aware UI direction

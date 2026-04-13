@@ -6,6 +6,7 @@ See also:
 
 - `docs/project.md`
 - `docs/core/core.md`
+- `docs/core/mail/composers/composers.md`
 
 ## Goal
 
@@ -68,6 +69,10 @@ Current responsibilities:
 - build one `MailMessageDTO`
 
 It does not send mail.
+
+For composer usage and design rules, see:
+
+- `docs/core/mail/composers/composers.md`
 
 ### `TemplateMailService`
 
