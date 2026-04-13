@@ -5,6 +5,7 @@ This document describes the purpose of the `core/` package and how it is used in
 See also:
 
 - `docs/project.md`
+- `docs/core/celery/celery.md`
 - `docs/core/config/config.md`
 - `docs/core/mail/mail.md`
 - `docs/core/mail/composers/composers.md`
@@ -22,6 +23,7 @@ Current contents:
 - `urls.py`
 - `asgi.py`
 - `wsgi.py`
+- `celery.py`
 - `adminsites/`
 - `config/`
 - `mail/`
@@ -42,6 +44,7 @@ The `core/` package is responsible for:
 - exposing ASGI and WSGI entrypoints
 - hosting shared custom admin site infrastructure
 - hosting reusable project-wide configuration code
+- hosting reusable project-wide asynchronous task runtime wiring
 - hosting reusable project-wide outbound mail infrastructure
 - hosting reusable testing infrastructure and project-level tests
 
@@ -52,6 +55,7 @@ Code should live in `core/` when it is truly project-wide and does not belong to
 Examples:
 
 - environment-driven settings resolution
+- Celery bootstrap shared by the whole project
 - storage configuration shared by the whole project
 - outbound mail infrastructure shared by the whole project
 - shared admin site classes and site-level Unfold integration
@@ -85,6 +89,14 @@ Contains project-level configuration modules that are too large or too specific 
 See:
 
 - `docs/core/config/config.md`
+
+### `core/celery.py`
+
+Contains the project-wide Celery bootstrap used for reusable asynchronous task execution.
+
+See:
+
+- `docs/core/celery/celery.md`
 
 ### `core/mail/`
 

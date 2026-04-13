@@ -87,6 +87,8 @@ Follow these steps to get a development copy running locally:
   - `.env.example`
 - Storage configuration documentation lives at:
   - `docs/core/config/storage/storage.md`
+- Celery runtime documentation lives at:
+  - `docs/core/celery/celery.md`
 - Mail service documentation lives at:
   - `docs/core/mail/mail.md`
 - Admin site infrastructure documentation lives at:
@@ -110,6 +112,12 @@ If you want the default mail service to deliver into MailHog locally, keep these
 If you want local async infrastructure ready for Celery or future background tasks, keep this value aligned with your `.env`:
 
 - `REDIS_URL=redis://127.0.0.1:6379/0`
+
+If you want to run a local Celery worker after Redis is available, use:
+
+```bash
+celery -A core.celery worker --loglevel=info
+```
 
 ## Translations
 

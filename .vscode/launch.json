@@ -311,6 +311,20 @@
             "autoStartBrowser": false,
             "program": "${workspaceFolder}\\manage.py",
             "envFile": "${workspaceFolder}\\.env"
+        },
+        {
+            "name": "Celery: Worker",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "celery",
+            "args": [
+                "-A",
+                "core.celery",
+                "worker",
+                "--loglevel=info"
+            ],
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}\\.env"
         }
     ]
 }
