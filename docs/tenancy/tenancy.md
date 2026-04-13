@@ -313,6 +313,16 @@ Likely future additions when real business flows require them:
 
 Those fields remain future work because they require clearer product and deliverability rules than the current base structure needs.
 
+Current mail-contact rule:
+
+- `support_email` is the preferred tenant business contact channel
+- `business_email` is the fallback business contact channel
+- neither field should be treated as the authenticated technical mail sender by default
+
+The mail-layer sender and reply policy is owned by:
+
+- `docs/core/mail/mail.md`
+
 ## Policy Direction For Future Apps
 
 The current policy split is intended to scale in two layers:

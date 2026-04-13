@@ -111,3 +111,16 @@ class BaseMailIntegrationSimpleTestCase(LoggedSimpleTestCase):
                 matches += 1
 
         return matches
+
+    @classmethod
+    def mailhog_contains_text(cls, text: str) -> bool:
+        """ Return whether one raw MailHog payload currently contains a target text fragment.
+
+        Args:
+            text: Text fragment expected somewhere in the captured MailHog payload.
+
+        Returns:
+            bool: True when the fragment is found in one captured message payload.
+        """
+        payload = json.dumps(cls.fetch_mailhog_messages())
+        return text in payload
