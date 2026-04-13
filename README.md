@@ -9,7 +9,7 @@ logic and a translation workflow for managing products and related data.
 ## Requirements
 
 - Python 3.11+ (run in a virtual environment)
-- Docker (used to run the local PostgreSQL and MinIO services)
+- Docker (used to run the local PostgreSQL, MinIO, and MailHog services)
 - gettext tools for message catalog management (see [Translations](#translations) below)
 
 ## Development setup
@@ -48,6 +48,7 @@ Follow these steps to get a development copy running locally:
    - PostgreSQL for the development database
    - MinIO for local S3-compatible storage testing
    - MinIO Client bootstrap logic to create the configured bucket automatically
+   - MailHog for local SMTP capture and mail preview
 
    Bring up the local services before running migrations or the
    development server.
@@ -55,6 +56,11 @@ Follow these steps to get a development copy running locally:
    ```bash
    docker compose up -d
    ```
+
+   MailHog is available locally at:
+
+   - SMTP: `127.0.0.1:1025`
+   - Web UI: `http://127.0.0.1:8025`
 5. **Apply migrations**
 
    ```bash
@@ -76,6 +82,8 @@ Follow these steps to get a development copy running locally:
   - `.env.example`
 - Storage configuration documentation lives at:
   - `docs/core/config/storage/storage.md`
+- Mail service documentation lives at:
+  - `docs/core/mail/mail.md`
 - Admin site infrastructure documentation lives at:
   - `docs/core/adminsites/adminsites.md`
 - Accounts app documentation lives at:
@@ -86,6 +94,13 @@ Follow these steps to get a development copy running locally:
   - `docs/env-examples/`
 
 If you are using local S3-compatible storage during development, make sure your `.env` is aligned with the MinIO credentials and bucket configured in `docker-compose.yml`.
+
+If you want the default mail service to deliver into MailHog locally, keep these values aligned with your `.env`:
+
+- `EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`
+- `EMAIL_HOST=127.0.0.1`
+- `EMAIL_PORT=1025`
+- `DEFAULT_FROM_EMAIL=noreply@localhost`
 
 ## Translations
 

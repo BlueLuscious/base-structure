@@ -106,6 +106,8 @@ These variables are for `docker-compose.yml`. Django does not need them unless y
 - `MINIO_API_PORT`
 - `MINIO_CONSOLE_PORT`
 - `MINIO_BUCKET_NAME`
+- `MAILHOG_SMTP_PORT`
+- `MAILHOG_UI_PORT`
 
 ## Supported Combinations
 

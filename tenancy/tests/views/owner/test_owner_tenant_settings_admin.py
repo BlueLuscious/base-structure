@@ -2,6 +2,7 @@
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
 from tenancy.choices import TenantRole
@@ -55,6 +56,10 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
 
         self.assertEqual(200, response.status_code)
         self.assertContains(response, "GEA Trader")
+        self.assertContains(response, _("Business email"))
+        self.assertContains(response, _("Support email"))
+        self.assertContains(response, _("Phone number"))
+        self.assertContains(response, _("Website"))
 
     def test_owner_tenant_changelist_redirects_to_active_tenant_change_screen(self) -> None:
         """ Verify the owner tenant changelist redirects to the active tenant change form. """
@@ -194,3 +199,33 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         self.assertEqual(302, response.status_code)
         branding = TenantBrandingModel.objects.get(tenant=self.tenant)
         self.assertIn("logo-light", branding.logo_light.name)
+
+    def test_post_updates_operational_contact_fields_for_the_active_tenant(self) -> None:
+        """ Verify owner settings can update tenant business contact fields without touching branding. """
+        self.client.force_login(self.owner)
+        session = self.client.session
+        session["active_tenant_id"] = str(self.tenant.pk)
+        session.save()
+
+        response = self.client.post(
+            reverse("owner_admin:tenancy_tenantmodel_change", args=(str(self.tenant.pk),)),
+            {
+                "business_email": "hello@gea-trader.test",
+                "support_email": "support@gea-trader.test",
+                "phone_number": "+54 11 5555 4321",
+                "website_url": "https://gea-trader.test",
+                "branding-TOTAL_FORMS": "0",
+                "branding-INITIAL_FORMS": "0",
+                "branding-MIN_NUM_FORMS": "0",
+                "branding-MAX_NUM_FORMS": "1",
+                "_save": "Save",
+            },
+            follow=False,
+        )
+
+        self.assertEqual(302, response.status_code)
+        self.tenant.refresh_from_db()
+        self.assertEqual("hello@gea-trader.test", self.tenant.business_email)
+        self.assertEqual("support@gea-trader.test", self.tenant.support_email)
+        self.assertEqual("+54 11 5555 4321", self.tenant.phone_number)
+        self.assertEqual("https://gea-trader.test", self.tenant.website_url)

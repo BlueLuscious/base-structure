@@ -83,6 +83,17 @@ Check:
 
 - `docs/core/config/storage/storage.md`
 
+### Core Mail Service
+
+- project-wide outbound mail service under `core/mail/`
+- synchronous delivery through Django's email stack
+- DTO, backend, and factory layers prepared for future async delivery
+- reusable template-based mail rendering with a shared base layout and mandatory system footer
+
+Check:
+
+- `docs/core/mail/mail.md`
+
 ### Owner Favicon Theme Support
 
 - light and dark favicon variants resolved from tenant branding
@@ -170,6 +181,16 @@ Check:
 Check:
 
 - `docs/core/config/storage/storage.md`
+
+### Asynchronous Mail Delivery
+
+- the project mail boundary is already prepared for async delivery
+- Celery plus Redis is the intended future stack
+- async execution is not wired yet
+
+Check:
+
+- `docs/core/mail/mail.md`
 
 ## Process Families To Reuse Later
 

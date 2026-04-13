@@ -10,9 +10,9 @@ from tenancy.models import TenantModel
 class TenantModelAdmin(ModelAdmin):
     """ Unfold-compatible tenant admin for the master admin site. """
 
-    list_display = ("name", "slug", "is_active", "created_at", "updated_at")
+    list_display = ("name", "slug", "business_email", "support_email", "is_active", "created_at", "updated_at")
     list_filter = ("is_active", "created_at", "updated_at")
-    search_fields = ("name", "slug")
+    search_fields = ("name", "slug", "business_email", "support_email", "phone_number", "website_url")
     prepopulated_fields = {"slug": ("name",)}
     readonly_fields = ("created_at", "updated_at")
     ordering = ("name",)

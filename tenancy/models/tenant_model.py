@@ -28,6 +28,27 @@ class TenantModel(models.Model):
         verbose_name=_("Business slug"),
         help_text=_("Stable URL-friendly identifier for this business."),
     )
+    business_email = models.EmailField(
+        blank=True,
+        verbose_name=_("Business email"),
+        help_text=_("Main contact email for this business."),
+    )
+    support_email = models.EmailField(
+        blank=True,
+        verbose_name=_("Support email"),
+        help_text=_("Optional support email shown in emails and messages sent for this business."),
+    )
+    phone_number = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("Phone number"),
+        help_text=_("Optional public phone number for this business."),
+    )
+    website_url = models.URLField(
+        blank=True,
+        verbose_name=_("Website"),
+        help_text=_("Optional public website URL for this business."),
+    )
     is_active = models.BooleanField(
         default=True,
         verbose_name=_("Business active"),
