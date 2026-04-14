@@ -1,5 +1,6 @@
 """ Owner admin tests for tenant-scoped accounts flows. """
 
+from unittest.mock import patch
 from django.contrib.auth.models import Group, Permission
 from django.test import Client, RequestFactory
 from django.urls import reverse
@@ -135,27 +136,34 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         """ Verify the owner user admin exposes only tenant-scoped groups. """
         request = self.build_request()
 
-        form_field = self.user_admin.formfield_for_manytomany(UserModel._meta.get_field("groups"), request)
+        with patch("accounts.admin.owner.user_model_admin.logger.info") as logger_info_mock:
+            form_field = self.user_admin.formfield_for_manytomany(UserModel._meta.get_field("groups"), request)
 
         self.assertEqual([self.sales_group], list(form_field.queryset))
+        logger_info_mock.assert_called_once()
 
     def test_owner_group_admin_queryset_is_scoped_to_the_active_tenant(self) -> None:
         """ Verify the owner group admin lists only groups bound to the active tenant. """
         request = self.build_request()
 
-        self.assertEqual([self.sales_group], list(self.group_admin.get_queryset(request)))
+        with patch("accounts.admin.owner.group_admin.logger.info") as logger_info_mock:
+            self.assertEqual([self.sales_group], list(self.group_admin.get_queryset(request)))
+
+        logger_info_mock.assert_called_once()
 
     def test_owner_user_admin_queryset_is_scoped_to_the_active_tenant(self) -> None:
         """ Verify the owner user admin lists only users bound to the active tenant. """
         request = self.build_request()
 
-        visible_users = list(self.user_admin.get_queryset(request))
+        with patch("accounts.admin.owner.user_model_admin.logger.info") as logger_info_mock:
+            visible_users = list(self.user_admin.get_queryset(request))
 
         self.assertIn(self.owner, visible_users)
         self.assertIn(self.tenant_user, visible_users)
         self.assertIn(self.non_owner, visible_users)
         self.assertNotIn(self.other_tenant_user, visible_users)
         self.assertNotIn(self.platform_member, visible_users)
+        logger_info_mock.assert_called_once()
 
     def test_owner_group_admin_creates_a_tenant_binding_on_add(self) -> None:
         """ Verify creating a group from owner admin also creates the tenant binding. """
@@ -164,21 +172,25 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         form = OwnerGroupAdmin.form(data={"name": "Support"})
         self.assertTrue(form.is_valid())
 
-        self.group_admin.save_model(request, group, form, change=False)
+        with patch("accounts.admin.owner.group_admin.logger.info") as logger_info_mock:
+            self.group_admin.save_model(request, group, form, change=False)
 
         self.assertTrue(TenantGroupModel.objects.filter(tenant=self.tenant, group=group).exists())
+        logger_info_mock.assert_called_once()
 
     def test_owner_group_admin_filters_permissions_to_the_permissions_the_owner_holds(self) -> None:
         """ Verify the owner group admin exposes every permission already held by the owner. """
         request = self.build_request()
 
-        form_field = self.group_admin.formfield_for_manytomany(Group._meta.get_field("permissions"), request)
+        with patch("accounts.admin.owner.group_admin.logger.info") as group_logger_mock:
+            form_field = self.group_admin.formfield_for_manytomany(Group._meta.get_field("permissions"), request)
         visible_codenames = list(form_field.queryset.values_list("codename", flat=True))
 
         self.assertIn("view_usermodel", visible_codenames)
         self.assertIn("change_group", visible_codenames)
         self.assertIn("view_tenantgroupmodel", visible_codenames)
         self.assertIn("view_tenantmodel", visible_codenames)
+        group_logger_mock.assert_called_once()
 
     def test_owner_group_admin_translates_permission_option_labels(self) -> None:
         """ Verify the permission chooser uses translated, user-friendly labels. """
@@ -206,9 +218,11 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         """ Verify non-owner tenant members see no delegable group permissions. """
         request = self.build_non_owner_request()
 
-        form_field = self.group_admin.formfield_for_manytomany(Group._meta.get_field("permissions"), request)
+        with patch("accounts.admin.owner.group_admin.logger.info") as logger_info_mock:
+            form_field = self.group_admin.formfield_for_manytomany(Group._meta.get_field("permissions"), request)
 
         self.assertEqual([], list(form_field.queryset))
+        logger_info_mock.assert_called_once()
 
     def test_owner_membership_inline_limits_role_choices_to_owner_and_operator(self) -> None:
         """ Verify the owner membership inline exposes only owner-managed tenant roles. """
@@ -248,7 +262,8 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         )
 
         self.assertTrue(formset.is_valid(), formset.errors)
-        formset.save()
+        with patch("accounts.admin.owner.tenant_membership_inline_formset.logger.info") as logger_info_mock:
+            formset.save()
 
         self.assertTrue(
             TenantMembershipModel.objects.filter(
@@ -258,6 +273,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
                 is_active=True,
             ).exists()
         )
+        logger_info_mock.assert_called_once()
 
     def test_owner_admin_add_view_creates_active_tenant_membership(self) -> None:
         """ Verify the owner add view persists the tenant membership inline on user creation. """

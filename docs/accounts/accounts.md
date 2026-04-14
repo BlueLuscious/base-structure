@@ -35,6 +35,12 @@ The `accounts/` app is responsible for:
 
 It should remain focused on authentication and account-level concerns.
 
+Current logging direction inside this app:
+
+- prefer logging owner-admin account and group runtime boundaries
+- prefer logging permission-delegation resolution and tenant-scoped admin save flows
+- avoid logging pure queryset helpers, simple forms, or model accessors unless a concrete operational need appears
+
 ## Models
 
 ### `UserModel`
@@ -115,6 +121,13 @@ For the owner admin flow:
 - user group assignment is filtered to groups that belong to the active tenant
 - group permissions are filtered to the permissions already held by the current owner
 - non-owner tenant members do not gain access to owner `Users` or `Groups` only by receiving Django permissions
+
+Current logging direction for the owner flow:
+
+- log tenant-scoped queryset and formfield resolution at the admin boundary
+- log owner group binding creation for new tenant-scoped groups
+- log membership inline saves when the owner flow creates or updates one tenant membership
+- log delegable-permission resolution as one bounded service event rather than logging each permission option
 
 The current owner admin flow consumes tenant authorization through two policy layers owned by `tenancy/`:
 

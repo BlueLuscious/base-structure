@@ -1,5 +1,6 @@
 """ Group admin registration for the owner admin site. """
 
+import logging
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import Group, Permission
@@ -14,6 +15,8 @@ from accounts.services.owner_delegable_permission_resolver import OwnerDelegable
 from core.adminsites.site_instances import owner_admin_site
 from tenancy.models import TenantGroupModel
 from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+
+logger = logging.getLogger(__name__)
 
 
 @admin.register(Group, site=owner_admin_site)
@@ -65,9 +68,16 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         queryset = super().get_queryset(request)
 
         if tenant is None:
+            logger.info("Returned no owner-visible groups because no active tenant is bound to the request")
             return queryset.none()
 
-        return queryset.filter(tenant_binding__tenant=tenant)
+        tenant_queryset = queryset.filter(tenant_binding__tenant=tenant)
+        logger.info(
+            "Scoped owner group queryset tenant_id=%s group_count=%s",
+            tenant.pk,
+            tenant_queryset.count(),
+        )
+        return tenant_queryset
 
     def formfield_for_manytomany(self, db_field, request: HttpRequest, **kwargs):
         """ Filter delegated permissions to the current owner's effective permissions.
@@ -90,6 +100,11 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
 
         if db_field.name == "permissions":
             form_field.label_from_instance = self._build_permission_label
+            logger.info(
+                "Built owner group permission field tenant_id=%s permission_count=%s",
+                getattr(getattr(request, "tenant", None), "pk", None),
+                form_field.queryset.count(),
+            )
 
         return form_field
 
@@ -164,6 +179,11 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
             return
 
         TenantGroupModel.objects.get_or_create(tenant=tenant, group=obj)
+        logger.info(
+            "Created owner group tenant binding tenant_id=%s group_id=%s",
+            tenant.pk,
+            obj.pk,
+        )
 
     def has_module_permission(self, request: HttpRequest) -> bool:
         """ Require an active tenant before exposing the owner group module.
