@@ -1,11 +1,13 @@
 # Tenancy App
 
-This document explains the purpose and structure of the `tenancy/` app and the active-tenant flow it owns.
+This document explains the purpose and structure of the `tenancy/` app.
 
 See also:
 
 - `docs/project.md`
-- `docs/tenancy/resolution/resolution.md`
+- `docs/tenancy/runtime.md`
+- `docs/tenancy/access.md`
+- `docs/tenancy/resolution.md`
 - `docs/core/core.md`
 - `docs/core/adminsites/adminsites.md`
 - `docs/core/config/storage/storage.md`
@@ -23,18 +25,10 @@ It currently defines:
 - tenant-to-group bindings
 - role choices for tenant memberships
 - typed query infrastructure for tenant data
-- request-time active tenant resolution
-- explicit active-tenant switching
-- tenant-scoped access policies
 - owner-admin business settings helpers
 - master admin registrations for technical administration
 
-`tenancy/` owns both:
-
-- tenant persistence
-- active-tenant request behavior
-
-Tenant persistence and active-tenant runtime behavior are documented together here because they belong to the same app boundary.
+The request-time runtime flow, switching behavior, and access policies are now documented separately so the app structure doc can stay focused on the domain boundary itself.
 
 ## Current Structure
 
@@ -56,12 +50,16 @@ Current contents:
 - `migrations/`
 - `tests/`
 
-The current package groups two related concerns:
+The app still groups two families of concern inside one Django app:
 
-- persistence and membership rules
-- request-time tenant context
+- tenant persistence and membership rules
+- active-tenant runtime infrastructure
 
-The app also contains owner-admin tenant settings helpers because those screens are tenant-domain behavior, even when they are mounted inside the shared owner admin site.
+Those runtime pieces stay inside `tenancy/` because they are tightly coupled to:
+
+- `TenantModel`
+- `TenantMembershipModel`
+- tenant-scoped request resolution
 
 ## Responsibilities
 
@@ -70,9 +68,6 @@ The `tenancy/` app is responsible for:
 - defining the root tenant entity
 - defining how users belong to tenants
 - exposing reusable tenant query helpers
-- exposing shared request-time tenant resolution helpers
-- exposing shared tenant access policies
-- owning the active-tenant request flow end to end
 - exposing owner-facing business settings flows for the active tenant
 - registering tenant infrastructure in the master admin site
 
@@ -81,12 +76,6 @@ Current logging direction inside this app:
 - prefer logging request-time tenant resolution and switching boundaries
 - prefer logging owner-admin tenant runtime edges such as redirect or fallback behavior
 - avoid logging pure membership policies, query helpers, or simple model accessors unless a concrete operational need appears
-
-It is also the current home for tenant-aware request utilities because those utilities are tightly coupled to:
-
-- `TenantModel`
-- `TenantMembershipModel`
-- tenant-scoped request resolution
 
 ## Models
 
@@ -196,59 +185,6 @@ Current values:
 - `owner`
 - `operator`
 
-## Active Tenant Resolution
-
-The base structure now resolves an active tenant during the request cycle.
-
-Current behavior:
-
-- resolution happens through `ActiveTenantMiddleware`
-- middleware lives in `tenancy/middleware/`
-- resolution rules live in `tenancy/resolution/`
-- session persistence lives in `tenancy/session/`
-- runtime request context lives in `tenancy/runtime/`
-- the active tenant is stored in session
-- if the session does not define one, the request falls back to the user's primary active membership
-- if no primary membership exists, the first active membership is used
-- the active tenant is also exposed through a runtime context helper for request-bound infrastructure such as media storage
-
-Current request contract:
-
-- `request.tenant` contains the resolved tenant or `None`
-
-This keeps tenant-aware admin and future tenant-aware web flows grounded in one shared base mechanism.
-
-Request-aware storage behavior that consumes the runtime active tenant is documented in:
-
-- `docs/core/config/storage/storage.md`
-
-The detailed structure, strategy contract, and future path or host resolution options are documented in:
-
-- `docs/tenancy/resolution/resolution.md`
-
-## Explicit Tenant Switching
-
-The base structure now supports explicit tenant switching.
-
-Current behavior:
-
-- the app exposes `switch-active-tenant` through `tenancy/urls.py`
-- it stores the selected tenant in session
-- it validates that the authenticated user still has one active membership for the requested tenant
-- it redirects back to a safe `next` URL when provided
-
-Current intent:
-
-- session state controls the current tenant context
-- the primary membership remains the fallback default
-- switching the active tenant does not rewrite `is_primary`
-
-Current logging direction:
-
-- log successful active-tenant switches with the actor and tenant id
-- log rejected switch attempts when the requested tenant is not accessible
-- log whether the switch view returned to one safe `next` URL or fell back to the owner admin index
-
 ## Use Cases
 
 Current concrete use cases:
@@ -264,49 +200,6 @@ Current concrete use cases:
 
 These are internal or admin-facing use cases.
 The project does not yet expose a tenant-aware public frontend flow.
-
-## Future Direction
-
-The current implementation is intentionally centered on session-backed resolution because it fits the owner admin flow.
-
-Future frontend work may require path-based or host-based tenant resolution without changing the current admin URL shape.
-
-The detailed resolution roadmap, strategy breakdown, and future examples are documented in:
-
-- `docs/tenancy/resolution/resolution.md`
-
-## Access Policies
-
-`tenancy/access/` now separates tenant authorization into small policy objects.
-
-Current policy split:
-
-- `TenantAccessPolicy`
-- `TenantAccountsAccessPolicy`
-
-### `TenantAccessPolicy`
-
-This is the base policy for tenant membership and role checks.
-
-Current responsibilities:
-
-- verify whether a user belongs to one tenant
-- verify whether a user has one tenant role
-- verify whether a user may manage a tenant as an active `owner`
-
-This policy should stay generic and reusable across apps that need tenant membership checks.
-
-### `TenantAccountsAccessPolicy`
-
-This is the `accounts/`-specific tenant policy.
-
-Current responsibilities:
-
-- verify whether the current request may manage owner-scoped accounts
-- decide whether one user is visible inside owner `Users`
-- decide whether one group is visible inside owner `Groups`
-
-This keeps the reusable tenant-role checks in the base policy while keeping tenant-scoped authorization inside `tenancy/`, even when the current consumer surface is `accounts/`.
 
 ## Future Tenant Metadata Direction
 
@@ -333,27 +226,7 @@ Current mail-contact rule:
 
 The mail-layer sender and reply policy is owned by:
 
-- `docs/core/mail/mail.md`
-
-## Policy Direction For Future Apps
-
-The current policy split is intended to scale in two layers:
-
-- `TenantAccessPolicy` stays as the reusable tenant-membership and tenant-role base policy
-- app-specific policies should sit on top only when one domain needs stricter rules than the generic tenant-member flow
-
-Current architectural direction:
-
-- `accounts` and `tenancy` remain owner-only surfaces
-- future owner-managed apps may allow active tenant members such as `operator` to access the app when they both:
-  - belong to the active tenant
-  - hold the required Django permissions through tenant-scoped groups or direct user permissions
-
-This means `TenantAccessPolicy` remains the base reusable policy layer, while future app-specific policies should only appear when one domain needs stricter rules than the generic tenant-member plus Django-permission pattern.
-
-For the concrete owner-admin wiring checklist for future apps, see:
-
-- `docs/core/adminsites/adminsites.md`
+- `docs/core/mail/runtime.md`
 
 ## Relationship With `accounts/`
 
@@ -393,6 +266,17 @@ Current test areas:
 - `tenancy/tests/managers/`
 - `tenancy/tests/middleware/`
 - `tenancy/tests/views/`
+
+## Related Docs
+
+Use these documents together:
+
+- `docs/tenancy/runtime.md`
+  - request-time tenant context, switching, owner-admin runtime behavior
+- `docs/tenancy/access.md`
+  - tenant access policies and future policy direction for owner-managed apps
+- `docs/tenancy/resolution.md`
+  - detailed active-tenant strategy and resolver design
 
 ## What Should Live Here
 

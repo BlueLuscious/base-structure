@@ -8,6 +8,9 @@ See also:
 - `docs/core/core.md`
 - `docs/accounts/accounts.md`
 - `docs/tenancy/tenancy.md`
+- `docs/tenancy/runtime.md`
+- `docs/tenancy/access.md`
+- `docs/core/adminsites/owner-managed-apps.md`
 
 ## Goal
 
@@ -185,38 +188,6 @@ Characteristics:
 - owner sidebar entries are curated instead of mirroring the full Django app list
 - the current `Accounts` navigation is intentionally owner-only even inside the owner admin site
 
-## Future Owner-Managed Apps
-
-The current base structure already separates two categories of owner-admin surfaces:
-
-- owner-only surfaces such as `accounts` and `tenancy`
-- tenant-member surfaces that future apps may expose to active tenant members when Django permissions allow it
-
-The intended wiring rule for future owner-managed apps is:
-
-1. require active-tenant membership through `TenantAccessPolicy.can_access_tenant(...)`
-2. combine that tenant-membership check with standard Django permissions such as `view`, `change`, `add`, or `delete`
-3. scope querysets, forms, and group assignment to the active tenant
-4. keep `accounts` and `tenancy` owner-only unless their product scope changes explicitly
-
-This means future apps should not copy the `accounts` rule set blindly.
-
-`accounts` uses stricter owner-only policies because it manages support users, tenant memberships, and permission groups.
-Other owner-managed apps should default to the lighter tenant-member rule when their domain allows operators to work inside the tenant through Django permissions.
-
-### Wiring Checklist For New Owner-Managed Apps
-
-When a new tenant-aware app is added to the owner admin:
-
-- register the app in the owner admin site
-- filter all owner-admin querysets to the active tenant
-- use `TenantAccessPolicy.can_access_tenant(...)` as the base tenant-scope check for operator-capable apps
-- combine the base tenant-scope check with `request.user.has_perm(...)` for module, view, change, add, and delete access
-- keep owner-only apps on `TenantAccessPolicy.can_manage_tenant(...)`
-- add sidebar items only when the same access rule used by the admin surface passes
-
-This keeps future owner-managed apps aligned with the current base structure while minimizing per-app policy invention.
-
 ## Maintenance Rule
 
 If a concern is shared by all admin sites, place it in:
@@ -227,3 +198,7 @@ If a concern is shared by all admin sites, place it in:
 If a concern is specific to one domain app, keep it inside that app instead of growing `core/adminsites/`.
 
 App docs should describe only their own registrations and then link back here for shared site infrastructure.
+
+The future wiring pattern for new owner-managed apps is documented separately in:
+
+- `docs/core/adminsites/owner-managed-apps.md`

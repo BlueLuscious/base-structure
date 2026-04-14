@@ -87,18 +87,30 @@ Follow these steps to get a development copy running locally:
   - `.env.example`
 - Storage configuration documentation lives at:
   - `docs/core/config/storage/storage.md`
+- Storage testing documentation lives at:
+  - `docs/core/config/storage/testing.md`
 - Logging configuration documentation lives at:
   - `docs/core/config/logging/logging.md`
 - Celery runtime documentation lives at:
   - `docs/core/celery/celery.md`
 - Mail service documentation lives at:
   - `docs/core/mail/mail.md`
+- Mail runtime documentation lives at:
+  - `docs/core/mail/runtime.md`
+- Mail template documentation lives at:
+  - `docs/core/mail/templates.md`
 - Admin site infrastructure documentation lives at:
   - `docs/core/adminsites/adminsites.md`
+- Future owner-managed app wiring documentation lives at:
+  - `docs/core/adminsites/owner-managed-apps.md`
 - Accounts app documentation lives at:
   - `docs/accounts/accounts.md`
 - Tenancy app documentation lives at:
   - `docs/tenancy/tenancy.md`
+- Tenancy runtime documentation lives at:
+  - `docs/tenancy/runtime.md`
+- Tenancy access-policy documentation lives at:
+  - `docs/tenancy/access.md`
 - Ready-to-copy environment examples live under:
   - `docs/env-examples/`
 

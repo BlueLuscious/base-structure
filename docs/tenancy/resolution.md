@@ -6,6 +6,8 @@ See also:
 
 - `docs/project.md`
 - `docs/tenancy/tenancy.md`
+- `docs/tenancy/runtime.md`
+- `docs/tenancy/access.md`
 - `docs/core/adminsites/adminsites.md`
 
 ## Goal

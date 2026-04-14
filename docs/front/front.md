@@ -6,7 +6,8 @@ See also:
 
 - `docs/project.md`
 - `docs/tenancy/tenancy.md`
-- `docs/tenancy/resolution/resolution.md`
+- `docs/tenancy/runtime.md`
+- `docs/tenancy/resolution.md`
 
 ## Current Status
 
@@ -50,7 +51,7 @@ Recommended process:
 4. validate tenant membership or tenant visibility after resolution, not inside the path parser
 5. keep non-tenant-aware frontend routes outside that path contract
 
-The preferred backend support for this future flow is already described in `docs/tenancy/resolution/resolution.md` through the planned `PathTenantResolutionStrategy`.
+The preferred backend support for this future flow is already described in `docs/tenancy/resolution.md` through the planned `PathTenantResolutionStrategy`.
 
 ## Recommended Wiring For Future Tenant-Aware Frontend Pages
 

@@ -10,11 +10,18 @@ See also:
 - `docs/core/config/config.md`
 - `docs/core/config/logging/logging.md`
 - `docs/core/config/logging/usage.md`
+- `docs/core/config/storage/storage.md`
+- `docs/core/config/storage/testing.md`
 - `docs/core/mail/mail.md`
-- `docs/core/mail/composers/composers.md`
+- `docs/core/mail/runtime.md`
+- `docs/core/mail/templates.md`
+- `docs/core/mail/composers.md`
 - `docs/core/adminsites/adminsites.md`
+- `docs/core/adminsites/owner-managed-apps.md`
 - `docs/accounts/accounts.md`
 - `docs/tenancy/tenancy.md`
+- `docs/tenancy/runtime.md`
+- `docs/tenancy/access.md`
 
 ## What `core/` Contains
 
@@ -83,6 +90,8 @@ For app-owned boundaries, see:
 
 - `docs/accounts/accounts.md`
 - `docs/tenancy/tenancy.md`
+- `docs/tenancy/runtime.md`
+- `docs/tenancy/access.md`
 
 ## Internal Structure
 
@@ -93,6 +102,8 @@ Contains project-level configuration modules that are too large or too specific 
 See:
 
 - `docs/core/config/config.md`
+- `docs/core/config/storage/storage.md`
+- `docs/core/config/storage/testing.md`
 
 ### `core/celery.py`
 
@@ -109,6 +120,8 @@ Contains the project-wide outbound mail service and its supporting DTO, backend,
 See:
 
 - `docs/core/mail/mail.md`
+- `docs/core/mail/runtime.md`
+- `docs/core/mail/templates.md`
 
 ### `core/adminsites/`
 

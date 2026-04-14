@@ -1,6 +1,12 @@
 # Storage Configuration
 
-This document summarizes the supported `media` and `staticfiles` combinations, which environment variables are used in each case, and how to run the real integration tests.
+This document summarizes the supported `media` and `staticfiles` combinations and the environment variables used to wire them.
+
+See also:
+
+- `docs/project.md`
+- `docs/core/config/config.md`
+- `docs/core/config/storage/testing.md`
 
 ## Configuration Structure
 
@@ -207,31 +213,6 @@ Current tenancy direction:
 - media is tenant-aware at runtime and stores uploaded objects under `tenants/<tenant-slug>/...` when one active tenant exists
 - static files remain global unless real per-tenant branding assets are introduced
 
-## Future Storage Adapter Wiring Process
-
-When a new environment or deployment target needs storage wiring, follow this process:
-
-1. decide whether `media` and `staticfiles` should be local, WhiteNoise-backed, or remote
-2. choose the provider per surface instead of assuming both must use the same backend
-3. configure the provider-specific environment variables
-4. keep media tenant-aware through the existing filename generation path instead of adding tenant prefixes in views or forms
-5. keep static files global unless the product introduces a real tenant-specific static requirement
-6. validate the selected combination with `manage.py check`
-7. run unit tests and real integration tests when the target uses an S3-compatible backend
-
-## Future Process For Adding One New Storage Adapter
-
-If the project eventually adds a new storage provider beyond `local`, `s3`, `r2`, or `whitenoise`, the expected process should be:
-
-1. create the adapter config and backend classes under `core/config/storage/`
-2. wire the provider into the corresponding resolver entrypoint
-3. keep the provider-specific settings isolated from app-level code
-4. add unit coverage for the resolver and backend behavior
-5. add opt-in integration coverage only when real provider access is available
-6. update this document and the environment examples
-
-This keeps provider changes inside the storage layer instead of leaking them into domain apps.
-
 ### 5. Local Media + WhiteNoise Staticfiles
 
 - `MEDIAFILES_PROVIDER=local`
@@ -281,98 +262,27 @@ that name into `save()`.
 
 If no active tenant exists during the save operation, media keeps the original relative path unchanged.
 
-## Optional Integration Toggle
+## Future Storage Adapter Wiring Process
 
-- `RUN_STORAGE_INTEGRATION_TESTS=True`
+When a new environment or deployment target needs storage wiring, follow this process:
 
-This enables real tests against a configured S3-compatible backend.
+1. decide whether `media` and `staticfiles` should be local, WhiteNoise-backed, or remote
+2. choose the provider per surface instead of assuming both must use the same backend
+3. configure the provider-specific environment variables
+4. keep media tenant-aware through the existing filename generation path instead of adding tenant prefixes in views or forms
+5. keep static files global unless the product introduces a real tenant-specific static requirement
+6. validate the selected combination with `manage.py check`
+7. run unit tests and real integration tests when the target uses an S3-compatible backend
 
-Useful for:
+## Future Process For Adding One New Storage Adapter
 
-- local MinIO
-- S3
-- R2
+If the project eventually adds a new storage provider beyond `local`, `s3`, `r2`, or `whitenoise`, the expected process should be:
 
-## Real Integration Tests
+1. create the adapter config and backend classes under `core/config/storage/`
+2. wire the provider into the corresponding resolver entrypoint
+3. keep the provider-specific settings isolated from app-level code
+4. add unit coverage for the resolver and backend behavior
+5. add opt-in integration coverage only when real provider access is available
+6. update this document, the storage testing document, and the environment examples
 
-The real integration tests live in:
-
-- `core/tests/storage/integration/base.py`
-- `core/tests/storage/integration/mixins.py`
-- `core/tests/storage/integration/protocols.py`
-- `core/tests/storage/integration/test_s3_storage_integration.py`
-- `core/tests/storage/integration/test_r2_storage_integration.py`
-
-### How They Are Organized
-
-- `StorageIntegrationMixin` contains shared integration helpers
-- `BaseStorageIntegrationSimpleTestCase` defines the shared real test cases
-- `TestS3StorageIntegration` runs those cases when `MEDIAFILES_PROVIDER=s3`
-- `TestR2StorageIntegration` runs those cases when `MEDIAFILES_PROVIDER=r2`
-
-### What They Currently Cover
-
-With `boto3`:
-
-- list bucket contents
-- upload an object
-- delete an object
-
-With `django-storages`:
-
-- save an object
-- verify existence
-- build a URL
-- delete an object
-
-### How To Run Them
-
-#### Full Storage Suite
-
-```powershell
-.\.venv\Scripts\python.exe manage.py test core.tests.storage
-```
-
-This runs:
-
-- adapter unit tests
-- integration tests, which run or skip depending on the provider and `RUN_STORAGE_INTEGRATION_TESTS`
-
-#### R2 Integration Only
-
-```powershell
-.\.venv\Scripts\python.exe manage.py test core.tests.storage.integration.test_r2_storage_integration
-```
-
-Requirements:
-
-- `MEDIAFILES_PROVIDER=r2`
-- `RUN_STORAGE_INTEGRATION_TESTS=True`
-
-#### S3 Integration Only
-
-```powershell
-.\.venv\Scripts\python.exe manage.py test core.tests.storage.integration.test_s3_storage_integration
-```
-
-Requirements:
-
-- `MEDIAFILES_PROVIDER=s3`
-- `RUN_STORAGE_INTEGRATION_TESTS=True`
-
-### Proxy Note
-
-If the environment has `HTTP_PROXY`, `HTTPS_PROXY`, or `ALL_PROXY` configured, `boto3` may try to route through an invalid proxy and fail even when the adapter is correct.
-
-If that happens, clear those variables before running the suite:
-
-```powershell
-Remove-Item Env:HTTP_PROXY -ErrorAction SilentlyContinue
-Remove-Item Env:HTTPS_PROXY -ErrorAction SilentlyContinue
-Remove-Item Env:ALL_PROXY -ErrorAction SilentlyContinue
-Remove-Item Env:http_proxy -ErrorAction SilentlyContinue
-Remove-Item Env:https_proxy -ErrorAction SilentlyContinue
-Remove-Item Env:all_proxy -ErrorAction SilentlyContinue
-$env:NO_PROXY='*'
-$env:no_proxy='*'
-```
+This keeps provider changes inside the storage layer instead of leaking them into domain apps.

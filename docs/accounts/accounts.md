@@ -8,6 +8,7 @@ See also:
 - `docs/core/core.md`
 - `docs/core/adminsites/adminsites.md`
 - `docs/tenancy/tenancy.md`
+- `docs/tenancy/access.md`
 
 ## Goal
 
@@ -141,8 +142,8 @@ Future tenant-aware apps should not copy the `accounts` flow by default.
 
 For the default wiring rules of future owner-managed apps, see:
 
-- `docs/core/adminsites/adminsites.md`
-- `docs/tenancy/tenancy.md`
+- `docs/core/adminsites/owner-managed-apps.md`
+- `docs/tenancy/access.md`
 
 The shared site classes, namespace resolution, and Unfold integration are documented in:
 

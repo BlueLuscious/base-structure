@@ -47,6 +47,7 @@ Check:
 Check:
 
 - `docs/tenancy/tenancy.md`
+- `docs/tenancy/runtime.md`
 
 ### Active Tenant Resolution For Admin
 
@@ -57,8 +58,8 @@ Check:
 
 Check:
 
-- `docs/tenancy/tenancy.md`
-- `docs/tenancy/resolution/resolution.md`
+- `docs/tenancy/runtime.md`
+- `docs/tenancy/resolution.md`
 
 ### Owner Admin Base Structure
 
@@ -71,7 +72,7 @@ Check:
 Check:
 
 - `docs/core/adminsites/adminsites.md`
-- `docs/tenancy/tenancy.md`
+- `docs/tenancy/runtime.md`
 
 ### Tenant-Aware Media Storage
 
@@ -82,17 +83,21 @@ Check:
 Check:
 
 - `docs/core/config/storage/storage.md`
+- `docs/core/config/storage/testing.md`
 
 ### Core Mail Service
 
 - project-wide outbound mail service under `core/mail/`
 - synchronous delivery through Django's email stack
-- DTO, backend, and factory layers prepared for future async delivery
+- asynchronous delivery through the shared Celery runtime for raw and templated mail
+- DTO, backend, factory, serializer, and task layers wired for both sync and async delivery
 - reusable template-based mail rendering with a shared base layout and mandatory system footer
 
 Check:
 
 - `docs/core/mail/mail.md`
+- `docs/core/mail/runtime.md`
+- `docs/core/mail/templates.md`
 
 ### Owner Favicon Theme Support
 
@@ -110,11 +115,13 @@ Check:
 
 - Redis-backed Celery wiring already exists in `core/`
 - the stack is prepared for any future asynchronous task, not only mail
-- no domain task flow is active on top of Celery yet
+- outbound mail is already running on top of the shared runtime
+- future app-owned tasks can build on the same bootstrap and task conventions
 
 Check:
 
 - `docs/core/celery/celery.md`
+- `docs/core/mail/runtime.md`
 
 ### Path-Based Tenant Resolution
 
@@ -123,7 +130,7 @@ Check:
 
 Check:
 
-- `docs/tenancy/resolution/resolution.md`
+- `docs/tenancy/resolution.md`
 - `docs/front/front.md`
 
 ### Front App As Future UI Surface
@@ -135,7 +142,7 @@ Check:
 Check:
 
 - `docs/front/front.md`
-- `docs/tenancy/resolution/resolution.md`
+- `docs/tenancy/resolution.md`
 
 ### Future Owner-Managed App Pattern
 
@@ -145,8 +152,8 @@ Check:
 
 Check:
 
-- `docs/core/adminsites/adminsites.md`
-- `docs/tenancy/tenancy.md`
+- `docs/core/adminsites/owner-managed-apps.md`
+- `docs/tenancy/access.md`
 - `docs/accounts/accounts.md`
 
 ## Designed For Future
@@ -158,7 +165,7 @@ Check:
 
 Check:
 
-- `docs/tenancy/resolution/resolution.md`
+- `docs/tenancy/resolution.md`
 
 ### Path-Based Tenant-Aware Frontend Surface
 
@@ -168,7 +175,7 @@ Check:
 Check:
 
 - `docs/front/front.md`
-- `docs/tenancy/resolution/resolution.md`
+- `docs/tenancy/resolution.md`
 
 ### New Domain Apps
 
@@ -191,15 +198,7 @@ Check:
 Check:
 
 - `docs/core/config/storage/storage.md`
-
-### Asynchronous Mail Delivery
-
-- the project mail boundary is already prepared to use the project-wide Celery plus Redis stack
-- async execution is not wired yet
-
-Check:
-
-- `docs/core/mail/mail.md`
+- `docs/core/config/storage/testing.md`
 
 ## Process Families To Reuse Later
 

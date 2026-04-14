@@ -9,6 +9,7 @@ See also:
 - `docs/core/config/logging/logging.md`
 - `docs/core/config/logging/usage.md`
 - `docs/core/config/storage/storage.md`
+- `docs/core/config/storage/testing.md`
 
 ## Goal
 
@@ -43,6 +44,7 @@ The `storage/` package contains configuration logic for:
 See:
 
 - `docs/core/config/storage/storage.md`
+- `docs/core/config/storage/testing.md`
 
 This document owns the boundary of the configuration layer.
 Detailed provider behavior, environment variables, and storage combinations belong in the storage-specific document instead of being repeated here.

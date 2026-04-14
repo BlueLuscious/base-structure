@@ -31,19 +31,25 @@ Current status of the other app folders:
 - Project-wide Celery runtime: `docs/core/celery/celery.md`
 - Celery task conventions: `docs/core/celery/tasks/tasks.md`
 - Project admin infrastructure: `docs/core/adminsites/adminsites.md`
+- Future owner-managed app wiring: `docs/core/adminsites/owner-managed-apps.md`
 - Project configuration overview: `docs/core/config/config.md`
 - Project logging configuration: `docs/core/config/logging/logging.md`
 - Logging usage rules: `docs/core/config/logging/usage.md`
 - Project mail infrastructure: `docs/core/mail/mail.md`
-- Mail composer guidance: `docs/core/mail/composers/composers.md`
+- Mail runtime behavior: `docs/core/mail/runtime.md`
+- Mail template structure: `docs/core/mail/templates.md`
+- Mail composer guidance: `docs/core/mail/composers.md`
 - Storage configuration details: `docs/core/config/storage/storage.md`
+- Storage testing guidance: `docs/core/config/storage/testing.md`
 
 ## App Docs
 
 - Accounts app: `docs/accounts/accounts.md`
 - Front app and future tenant-aware UI direction: `docs/front/front.md`
 - Tenancy app: `docs/tenancy/tenancy.md`
-- Tenancy resolution layer: `docs/tenancy/resolution/resolution.md`
+- Tenancy runtime behavior: `docs/tenancy/runtime.md`
+- Tenancy access policies: `docs/tenancy/access.md`
+- Tenancy resolution layer: `docs/tenancy/resolution.md`
 
 ## Ownership Rule
 
@@ -56,12 +62,17 @@ To avoid repeating the same explanation in multiple places:
 - `docs/core/config/config.md` owns the configuration-layer boundary
 - `docs/core/config/logging/logging.md` owns the shared logging configuration layer
 - `docs/core/config/logging/usage.md` owns the shared logging usage rules for runtime code
-- `docs/core/mail/mail.md` owns the project-wide outbound mail service
-- `docs/core/mail/composers/composers.md` owns composer usage and design guidance for the project mail stack
+- `docs/core/mail/mail.md` owns the project-wide outbound mail boundary and package structure
+- `docs/core/mail/runtime.md` owns the current mail runtime behavior, async delivery direction, settings, and test guidance
+- `docs/core/mail/templates.md` owns the shared mail template structure and tenant-aware template context rules
+- `docs/core/mail/composers.md` owns composer usage and design guidance for the project mail stack
 - `docs/core/config/storage/storage.md` owns storage provider and env-var details
+- `docs/core/config/storage/testing.md` owns storage integration-test structure and execution guidance
 - `docs/accounts/accounts.md` owns the `accounts/` domain structure
 - `docs/front/front.md` owns the frontend structure and future tenant-aware UI direction
-- `docs/tenancy/tenancy.md` owns the `tenancy/` domain structure
-- `docs/tenancy/resolution/resolution.md` owns the active-tenant resolution design and strategy layer
+- `docs/tenancy/tenancy.md` owns the `tenancy/` domain structure and persistence-oriented app boundary
+- `docs/tenancy/runtime.md` owns request-time tenant runtime behavior and switching
+- `docs/tenancy/access.md` owns tenant access-policy guidance
+- `docs/tenancy/resolution.md` owns the active-tenant resolution design and strategy layer
 
 When one topic depends on another, the app or subsystem doc should link to the owning document instead of duplicating the full explanation.
