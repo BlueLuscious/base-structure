@@ -1,6 +1,6 @@
 """ Object-oriented resolver for static storage adapters and configuration. """
 
-import os
+import logging, os
 from pathlib import Path
 from core.config.storage.static_storage.adapters import (
     BaseStaticStorageAdapter,
@@ -10,6 +10,8 @@ from core.config.storage.static_storage.adapters import (
     StaticStorageConfig,
     WhiteNoiseStaticStorageAdapter,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class StaticStorageAdapterResolver:
@@ -50,4 +52,12 @@ class StaticStorageAdapterResolver:
             StaticStorageConfig: Resolved static storage configuration for the active provider.
         """
         provider = os.environ.get("STATICFILES_PROVIDER", "local").lower()
-        return cls.get_adapter(provider).build(base_dir)
+        storage_config = cls.get_adapter(provider).build(base_dir)
+        logger.info(
+            "Resolved static storage provider=%s backend=%s extra_apps=%s extra_middleware=%s",
+            storage_config.provider,
+            storage_config.storages["staticfiles"]["BACKEND"],
+            storage_config.extra_apps,
+            storage_config.extra_middleware,
+        )
+        return storage_config

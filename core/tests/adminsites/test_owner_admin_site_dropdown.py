@@ -4,6 +4,7 @@ from urllib.parse import parse_qs, urlparse
 from django.urls import resolve, reverse
 from django.test import RequestFactory
 from django.utils.translation import gettext as _
+from unittest.mock import patch
 from core.adminsites.site_instances import owner_admin_site
 from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
@@ -41,7 +42,8 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         request.user = self.user
         request.tenant = self.primary_tenant
 
-        dropdown_items = owner_admin_site.get_site_dropdown(request)
+        with patch("core.adminsites.services.owner_tenant_dropdown_builder.logger.info") as logger_info_mock:
+            dropdown_items = owner_admin_site.get_site_dropdown(request)
 
         self.assertEqual(2, len(dropdown_items))
         self.assertEqual(f"GEA Center ({_('Current')})", dropdown_items[0]["title"])
@@ -50,6 +52,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         self.assertEqual("North Center", dropdown_items[1]["title"])
         self.assertIn(str(self.secondary_tenant.pk), dropdown_items[1]["link"])
         self.assertEqual("domain", dropdown_items[1]["icon"])
+        logger_info_mock.assert_called_once()
 
     def test_get_site_dropdown_returns_empty_list_for_anonymous_like_users(self) -> None:
         """ Verify the owner admin dropdown stays empty when the user is not authenticated. """
@@ -57,7 +60,10 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         request.user = type("AnonymousUserLike", (), {"is_authenticated": False})()
         request.tenant = None
 
-        self.assertEqual([], owner_admin_site.get_site_dropdown(request))
+        with patch("core.adminsites.services.owner_tenant_dropdown_builder.logger.info") as logger_info_mock:
+            self.assertEqual([], owner_admin_site.get_site_dropdown(request))
+
+        logger_info_mock.assert_called_once()
 
     def test_get_site_dropdown_rebuilds_tenant_change_next_for_target_tenant(self) -> None:
         """ Verify tenant settings links keep the business settings screen for the target tenant. """

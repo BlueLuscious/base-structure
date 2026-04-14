@@ -2,6 +2,7 @@
 
 from django.core import mail
 from django.test import override_settings
+from unittest.mock import patch
 from core.mail import MailMessageDTO, MailRecipientDTO, MailService
 from core.testing import LoggedSimpleTestCase
 
@@ -31,13 +32,15 @@ class TestMailService(LoggedSimpleTestCase):
             html_body="<p>HTML body</p>",
         )
 
-        delivered_count = MailService.send(message)
+        with patch("core.mail.services.mail_service.logger.info") as logger_info_mock:
+            delivered_count = MailService.send(message)
 
         self.assertEqual(1, delivered_count)
         self.assertEqual(1, len(mail.outbox))
         self.assertEqual("Single message", mail.outbox[0].subject)
         self.assertEqual(["Owner User <owner@example.com>"], mail.outbox[0].to)
         self.assertEqual([("<p>HTML body</p>", "text/html")], mail.outbox[0].alternatives)
+        logger_info_mock.assert_called_once()
 
     def test_send_many_reuses_one_backend_connection_for_multiple_messages(self) -> None:
         """ Deliver multiple outbound messages through one shared service call. """
@@ -52,12 +55,14 @@ class TestMailService(LoggedSimpleTestCase):
             text_body="Second body",
         )
 
-        delivered_count = MailService.send_many([first_message, second_message])
+        with patch("core.mail.services.mail_service.logger.info") as logger_info_mock:
+            delivered_count = MailService.send_many([first_message, second_message])
 
         self.assertEqual(2, delivered_count)
         self.assertEqual(2, len(mail.outbox))
         self.assertEqual(["first@example.com"], mail.outbox[0].to)
         self.assertEqual(["second@example.com"], mail.outbox[1].to)
+        logger_info_mock.assert_called_once()
 
     def test_send_many_returns_zero_when_the_message_list_is_empty(self) -> None:
         """ Return zero instead of opening one backend flow for an empty batch. """

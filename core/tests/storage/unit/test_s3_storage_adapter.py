@@ -50,7 +50,10 @@ class TestS3StorageAdapter(LoggedSimpleTestCase):
 
     def test_s3_storage_adapter__resolver_build_config_keeps_explicit_endpoint(self) -> None:
         """ Verify the S3 adapter keeps the configured endpoint inside media storage options. """
-        with patch.dict(os.environ, self.build_environment(), clear=False):
+        with (
+            patch.dict(os.environ, self.build_environment(), clear=False),
+            patch("core.config.storage.media_storage.media_storage_adapter_resolver.logger.info") as logger_info_mock,
+        ):
             storage_config = MediaStorageAdapterResolver.build_config(self.base_dir)
 
         self.assertEqual(storage_config.provider, "s3")
@@ -62,6 +65,7 @@ class TestS3StorageAdapter(LoggedSimpleTestCase):
             storage_config.storages["default"]["OPTIONS"]["endpoint_url"],
             "https://s3.amazonaws.com",
         )
+        logger_info_mock.assert_called_once()
 
     def test_s3_storage_adapter__custom_domain_builds_media_url_with_media_location(self) -> None:
         """ Verify the S3 adapter builds a public media URL from the custom domain and media location. """

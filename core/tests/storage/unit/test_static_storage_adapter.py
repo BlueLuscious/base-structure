@@ -50,7 +50,10 @@ class TestStaticStorageAdapter(LoggedSimpleTestCase):
 
     def test_static_storage_adapter__resolver_build_config_uses_local_backend(self) -> None:
         """ Verify the local static adapter builds Django staticfiles storage without extra middleware. """
-        with patch.dict(os.environ, self.build_environment(), clear=False):
+        with (
+            patch.dict(os.environ, self.build_environment(), clear=False),
+            patch("core.config.storage.static_storage.static_storage_adapter_resolver.logger.info") as logger_info_mock,
+        ):
             static_storage_config = StaticStorageAdapterResolver.build_config(self.base_dir)
 
         self.assertEqual(static_storage_config.provider, "local")
@@ -59,6 +62,7 @@ class TestStaticStorageAdapter(LoggedSimpleTestCase):
             "django.contrib.staticfiles.storage.StaticFilesStorage",
         )
         self.assertEqual(static_storage_config.extra_middleware, [])
+        logger_info_mock.assert_called_once()
 
     def test_static_storage_adapter__whitenoise_adds_expected_middleware(self) -> None:
         """ Verify the WhiteNoise adapter adds the expected middleware and backend. """

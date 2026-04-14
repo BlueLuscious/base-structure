@@ -1,6 +1,7 @@
 """ Tests for owner-tenant branding resolution helpers. """
 
 from django.test import RequestFactory
+from unittest.mock import patch
 from tenancy.models import TenantModel
 from core.adminsites.services import OwnerTenantBrandingResolver
 from core.testing.base import LoggedSimpleTestCase
@@ -39,6 +40,17 @@ class TestOwnerTenantBrandingResolver(LoggedSimpleTestCase):
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
 
         self.assertEqual("GEA Lubricantes", OwnerTenantBrandingResolver.get_display_name(request))
+
+    def test_get_branding_logs_when_the_request_has_no_active_tenant(self) -> None:
+        """ Verify the branding resolver logs when the request has no active tenant context. """
+        request = self.request_factory.get("/owner-admin/")
+        request.tenant = None
+
+        with patch("core.adminsites.services.owner_tenant_branding_resolver.logger.info") as logger_info_mock:
+            branding = OwnerTenantBrandingResolver.get_branding(request)
+
+        self.assertIsNone(branding)
+        logger_info_mock.assert_called_once()
 
     def test_get_logo_and_icon_build_the_expected_themed_payload(self) -> None:
         """ Verify the branding resolver builds themed asset payloads for logos and icons. """

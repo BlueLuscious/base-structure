@@ -22,8 +22,12 @@ class TestTemplateMailServiceAsync(LoggedTestCase):
             tenant=tenant,
         )
         async_result = MagicMock()
+        async_result.id = "task-456"
 
-        with patch("core.tasks.mail.tasks.send_templated_mail_task.delay", return_value=async_result) as delay_mock:
+        with (
+            patch("core.tasks.mail.tasks.send_templated_mail_task.delay", return_value=async_result) as delay_mock,
+            patch("core.mail.services.template_mail_service.logger.info") as logger_info_mock,
+        ):
             returned_result = TemplateMailService.send_async(request, fail_silently=True)
 
         self.assertIs(async_result, returned_result)
@@ -31,3 +35,4 @@ class TestTemplateMailServiceAsync(LoggedTestCase):
         self.assertEqual("GEA Trader", delay_mock.call_args.kwargs["payload"]["context"]["product_name"])
         self.assertNotIn("tenant_id", delay_mock.call_args.kwargs["payload"])
         self.assertTrue(delay_mock.call_args.kwargs["fail_silently"])
+        logger_info_mock.assert_called_once()
