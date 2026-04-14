@@ -6,6 +6,7 @@ from django_components import ComponentsSettings
 from django.utils.translation import gettext_lazy as _
 from core.adminsites.admin_namespace import AdminNamespace
 from core.adminsites.unfold import AdminSiteUnfoldSettings
+from core.config.logging import LoggingConfigBuilder
 from core.config.storage import MediaStorageAdapterResolver, StaticStorageAdapterResolver
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,6 +43,14 @@ CSRF_TRUSTED_ORIGINS = [
 MEDIA_STORAGE_CONFIG = MediaStorageAdapterResolver.build_config(BASE_DIR)
 STATIC_STORAGE_CONFIG = StaticStorageAdapterResolver.build_config(BASE_DIR)
 
+PROJECT_APPS = [
+    'core',
+    'accounts',
+    'tenancy',
+]
+
+PROJECT_EXTRA_APPS = list(dict.fromkeys(MEDIA_STORAGE_CONFIG.extra_apps + STATIC_STORAGE_CONFIG.extra_apps))
+
 INSTALLED_APPS = [
     'unfold',
     'django.contrib.admin',
@@ -51,11 +60,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_components',
-    'core',
-    'accounts',
-    'tenancy',
+    *PROJECT_APPS,
+    *PROJECT_EXTRA_APPS,
 ]
-INSTALLED_APPS += list(dict.fromkeys(MEDIA_STORAGE_CONFIG.extra_apps + STATIC_STORAGE_CONFIG.extra_apps))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -212,15 +219,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.UserModel'
 
 
+# Logging Config
+
+LOGGING = LoggingConfigBuilder.build(debug=DEBUG, project_apps=PROJECT_APPS)
+
+
+# Unfold Settings
+
+MASTER_ADMIN_UNFOLD = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.MASTER).build()
+OWNER_ADMIN_UNFOLD = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.OWNER).build()
+
+
 # Django Components
+
 COMPONENTS = ComponentsSettings(
     dirs=[],
     app_dirs=[
         'components',
     ],
 )
-
-
-# Unfold Settings
-MASTER_ADMIN_UNFOLD = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.MASTER).build()
-OWNER_ADMIN_UNFOLD = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.OWNER).build()

@@ -32,6 +32,7 @@ Current status of the other app folders:
 - Celery task conventions: `docs/core/celery/tasks/tasks.md`
 - Project admin infrastructure: `docs/core/adminsites/adminsites.md`
 - Project configuration overview: `docs/core/config/config.md`
+- Project logging configuration: `docs/core/config/logging/logging.md`
 - Project mail infrastructure: `docs/core/mail/mail.md`
 - Mail composer guidance: `docs/core/mail/composers/composers.md`
 - Storage configuration details: `docs/core/config/storage/storage.md`
@@ -52,6 +53,7 @@ To avoid repeating the same explanation in multiple places:
 - `docs/core/celery/tasks/tasks.md` owns shared task placement and payload conventions for Celery-based async work
 - `docs/core/adminsites/adminsites.md` owns admin site infrastructure details
 - `docs/core/config/config.md` owns the configuration-layer boundary
+- `docs/core/config/logging/logging.md` owns the shared logging configuration layer
 - `docs/core/mail/mail.md` owns the project-wide outbound mail service
 - `docs/core/mail/composers/composers.md` owns composer usage and design guidance for the project mail stack
 - `docs/core/config/storage/storage.md` owns storage provider and env-var details

@@ -28,7 +28,6 @@ The current implementation provides:
 - Django-settings-based Celery configuration
 - Redis-backed broker and result backend settings
 - autodiscovery for installed app `tasks.py` modules
-- one explicit shared task include for outbound mail through the project Celery app definition
 - one first shared task implementation for outbound mail under `core/tasks/mail/tasks.py`
 
 The first real async use case is outbound mail, but the stack remains intentionally general-purpose.

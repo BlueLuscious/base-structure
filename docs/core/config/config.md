@@ -6,6 +6,7 @@ See also:
 
 - `docs/project.md`
 - `docs/core/core.md`
+- `docs/core/config/logging/logging.md`
 - `docs/core/config/storage/storage.md`
 
 ## Goal
@@ -23,7 +24,14 @@ Use this package for configuration that is:
 
 Current contents:
 
+- `logging/`
 - `storage/`
+
+The `logging/` package contains configuration logic for:
+
+- project-wide logger settings
+- environment-driven log levels
+- shared Django and Celery logging defaults
 
 The `storage/` package contains configuration logic for:
 
