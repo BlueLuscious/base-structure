@@ -23,7 +23,7 @@ class LoggedTestCase(LoggedTestMixin, TestCase):
         after = self.capture_result_counts(active_result)
 
         if self.did_test_pass(before, after):
-            print(self.build_success_log_message())
+            print(f"\n{self.build_success_log_message()}")
 
         return final_result
 
@@ -46,7 +46,7 @@ class LoggedSimpleTestCase(LoggedTestMixin, SimpleTestCase):
         after = self.capture_result_counts(active_result)
 
         if self.did_test_pass(before, after):
-            print(self.build_success_log_message())
+            print(f"\n{self.build_success_log_message()}")
 
         return final_result
 
@@ -69,6 +69,6 @@ class LoggedTransactionTestCase(LoggedTestMixin, TransactionTestCase):
         after = self.capture_result_counts(active_result)
 
         if self.did_test_pass(before, after):
-            print(self.build_success_log_message())
+            print(f"\n{self.build_success_log_message()}")
 
         return final_result
