@@ -9,6 +9,7 @@ See also:
 - `docs/core/celery/tasks/tasks.md`
 - `docs/core/config/config.md`
 - `docs/core/config/logging/logging.md`
+- `docs/core/config/logging/usage.md`
 - `docs/core/mail/mail.md`
 - `docs/core/mail/composers/composers.md`
 - `docs/core/adminsites/adminsites.md`

@@ -7,6 +7,7 @@ See also:
 - `docs/project.md`
 - `docs/core/core.md`
 - `docs/core/config/config.md`
+- `docs/core/config/logging/usage.md`
 - `docs/core/celery/celery.md`
 
 ## Goal

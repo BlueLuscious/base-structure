@@ -7,6 +7,7 @@ See also:
 - `docs/project.md`
 - `docs/core/core.md`
 - `docs/core/config/logging/logging.md`
+- `docs/core/config/logging/usage.md`
 - `docs/core/config/storage/storage.md`
 
 ## Goal
