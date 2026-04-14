@@ -113,13 +113,17 @@ class TestTenantMediaStorage(LoggedSimpleTestCase):
             "MEDIA_ROOT": "media",
         }
 
-        with patch.dict(os.environ, environment, clear=False):
+        with (
+            patch.dict(os.environ, environment, clear=False),
+            patch("core.config.storage.media_storage.media_storage_adapter_resolver.logger.info") as logger_info_mock,
+        ):
             storage_config = MediaStorageAdapterResolver.build_config(self.base_dir)
 
         self.assertEqual(
             "core.config.storage.media_storage.backends.tenant_file_system_storage.TenantFileSystemStorage",
             storage_config.storages["default"]["BACKEND"],
         )
+        logger_info_mock.assert_called_once()
 
     def test_remote_generate_filename_applies_tenant_prefix_behind_location_once(self) -> None:
         """ Verify remote generated names keep one tenant prefix behind the storage location. """

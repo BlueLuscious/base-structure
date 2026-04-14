@@ -2,6 +2,7 @@
 
 from django.core import mail
 from django.test import override_settings
+from unittest.mock import patch
 from core.mail import MailRecipientDTO, TemplateMailRequestDTO, TemplateMailService
 from core.testing import LoggedSimpleTestCase
 from tenancy.models import TenantBrandingModel, TenantModel
@@ -26,22 +27,23 @@ class TestTemplateMailService(LoggedSimpleTestCase):
 
     def test_send_delivers_one_rendered_template_message(self) -> None:
         """ Deliver one templated message through the configured backend. """
-        delivered_count = TemplateMailService.send(
-            TemplateMailRequestDTO(
-                subject="Template mail service",
-                to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],
-                context={
-                    "mail_title": "Template mail service",
-                    "mail_intro": "Hello there.",
-                    "mail_body": "This message comes from one Django template.",
-                    "mail_outro": "See you soon.",
-                    "cta_label": "Open dashboard",
-                    "cta_url": "https://example.com/dashboard",
-                },
-                html_template_name="mail/messages/test_message.html",
-                text_template_name="mail/messages/test_message.txt",
-            ),
-        )
+        with patch("core.mail.services.template_mail_service.logger.info") as logger_info_mock:
+            delivered_count = TemplateMailService.send(
+                TemplateMailRequestDTO(
+                    subject="Template mail service",
+                    to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],
+                    context={
+                        "mail_title": "Template mail service",
+                        "mail_intro": "Hello there.",
+                        "mail_body": "This message comes from one Django template.",
+                        "mail_outro": "See you soon.",
+                        "cta_label": "Open dashboard",
+                        "cta_url": "https://example.com/dashboard",
+                    },
+                    html_template_name="mail/messages/test_message.html",
+                    text_template_name="mail/messages/test_message.txt",
+                ),
+            )
 
         self.assertEqual(1, delivered_count)
         self.assertEqual(1, len(mail.outbox))
@@ -50,6 +52,7 @@ class TestTemplateMailService(LoggedSimpleTestCase):
         self.assertNotIn("Sent via", mail.outbox[0].body)
         self.assertEqual(1, len(mail.outbox[0].alternatives))
         self.assertIn("Open dashboard", mail.outbox[0].alternatives[0][0])
+        logger_info_mock.assert_called_once()
 
     def test_send_includes_active_tenant_business_context_when_available(self) -> None:
         """ Deliver one templated message with tenant-aware branding and contact values. """

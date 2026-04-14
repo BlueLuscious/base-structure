@@ -307,6 +307,22 @@ When adding a new composed resolver:
 - keep the strategy order explicit
 - document its expected precedence
 
+## Current Logging Direction
+
+The resolution layer now logs only the runtime boundaries that help explain how one request obtained its active tenant.
+
+Current examples:
+
+- which strategy resolved the tenant inside the composite resolver
+- when an anonymous-like request clears the active-tenant session marker
+- when a stale session-selected tenant is discarded
+- when membership fallback chooses and persists one tenant
+
+Current rule:
+
+- keep logs at resolver and strategy boundaries
+- do not add noisy logs to every membership or queryset helper that participates indirectly in resolution
+
 ## Current Status
 
 Implemented now:

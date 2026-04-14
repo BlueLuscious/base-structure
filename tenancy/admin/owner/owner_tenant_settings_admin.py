@@ -1,5 +1,6 @@
 """ Owner-admin tenant settings registration scoped to the active business. """
 
+import logging
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
@@ -12,6 +13,8 @@ from tenancy.access.tenant_access_policy import TenantAccessPolicy
 from tenancy.admin.owner.owner_tenant_settings_form import OwnerTenantSettingsForm
 from tenancy.admin.owner.tenant_branding_inline import TenantBrandingInline
 from tenancy.models import TenantModel
+
+logger = logging.getLogger(__name__)
 
 
 @admin.register(TenantModel, site=owner_admin_site)
@@ -164,6 +167,10 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         if tenant is None:
             raise PermissionDenied
 
+        logger.info(
+            "Redirected owner tenant changelist to active tenant settings tenant_id=%s",
+            tenant.pk,
+        )
         return redirect(
             reverse(
                 "owner_admin:tenancy_tenantmodel_change",

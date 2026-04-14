@@ -1,10 +1,14 @@
 """ Project-level outbound templated mail service. """
 
+import logging
 from celery.result import AsyncResult
 from core.mail.composers import TemplateMailComposer
 from core.mail.dtos import TemplateMailRequestDTO
 from core.mail.serializers import TemplateMailRequestPayloadSerializer
 from core.mail.services.mail_service import MailService
+
+
+logger = logging.getLogger(__name__)
 
 
 class TemplateMailService:
@@ -26,7 +30,16 @@ class TemplateMailService:
             int: Number of successfully delivered messages.
         """
         message = cls.composer_class.compose(request)
-        return cls.mail_service_class.send(message, fail_silently=fail_silently)
+        delivered_count = cls.mail_service_class.send(message, fail_silently=fail_silently)
+        logger.info(
+            "Delivered templated mail subject=%r recipients=%s explicit_tenant=%s delivered_count=%s fail_silently=%s",
+            request.subject,
+            len(request.to),
+            request.tenant is not None,
+            delivered_count,
+            fail_silently,
+        )
+        return delivered_count
 
     @classmethod
     def send_async(cls, request: TemplateMailRequestDTO, fail_silently: bool = False) -> AsyncResult:
@@ -42,4 +55,13 @@ class TemplateMailService:
         from core.tasks.mail.tasks import send_templated_mail_task
 
         payload = cls.payload_serializer_class.serialize(request)
-        return send_templated_mail_task.delay(payload=payload, fail_silently=fail_silently)
+        async_result = send_templated_mail_task.delay(payload=payload, fail_silently=fail_silently)
+        logger.info(
+            "Enqueued templated mail task_id=%s subject=%r recipients=%s explicit_tenant=%s fail_silently=%s",
+            async_result.id,
+            request.subject,
+            len(request.to),
+            request.tenant is not None,
+            fail_silently,
+        )
+        return async_result

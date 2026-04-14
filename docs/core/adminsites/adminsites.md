@@ -95,6 +95,7 @@ Rules:
 - keep request-aware helper logic here when it does not belong in the ORM model itself
 - avoid pushing Unfold-specific payload shaping into unrelated domain models
 - keep site classes focused on metadata hooks and admin behavior orchestration
+- prefer logging request-aware fallback and builder boundaries here instead of inside trivial site metadata getters
 
 ### `unfold/`
 

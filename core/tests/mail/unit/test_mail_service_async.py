@@ -17,10 +17,15 @@ class TestMailServiceAsync(LoggedSimpleTestCase):
             html_body="<p>Plain body</p>",
         )
         async_result = MagicMock()
+        async_result.id = "task-123"
 
-        with patch("core.tasks.mail.tasks.send_mail_message_task.delay", return_value=async_result) as delay_mock:
+        with (
+            patch("core.tasks.mail.tasks.send_mail_message_task.delay", return_value=async_result) as delay_mock,
+            patch("core.mail.services.mail_service.logger.info") as logger_info_mock,
+        ):
             returned_result = MailService.send_async(message, fail_silently=True)
 
         self.assertIs(async_result, returned_result)
         self.assertEqual("Async test", delay_mock.call_args.kwargs["payload"]["subject"])
         self.assertTrue(delay_mock.call_args.kwargs["fail_silently"])
+        logger_info_mock.assert_called_once()

@@ -8,6 +8,8 @@ See also:
 - `docs/core/celery/celery.md`
 - `docs/core/celery/tasks/tasks.md`
 - `docs/core/config/config.md`
+- `docs/core/config/logging/logging.md`
+- `docs/core/config/logging/usage.md`
 - `docs/core/mail/mail.md`
 - `docs/core/mail/composers/composers.md`
 - `docs/core/adminsites/adminsites.md`
@@ -45,6 +47,7 @@ The `core/` package is responsible for:
 - exposing ASGI and WSGI entrypoints
 - hosting shared custom admin site infrastructure
 - hosting reusable project-wide configuration code
+- hosting reusable project-wide logging configuration code
 - hosting reusable project-wide asynchronous task runtime wiring
 - hosting reusable project-wide outbound mail infrastructure
 - hosting reusable testing infrastructure and project-level tests

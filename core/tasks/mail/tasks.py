@@ -1,10 +1,12 @@
 """ Project-wide Celery tasks for outbound mail delivery. """
 
+import logging
 from smtplib import SMTPException
 from celery import shared_task
 from core.mail.serializers import MailMessagePayloadSerializer, TemplateMailRequestPayloadSerializer
 from core.mail.services import MailService, TemplateMailService
 
+logger = logging.getLogger(__name__)
 
 MAIL_TASK_AUTORETRY_EXCEPTIONS: tuple[type[BaseException], ...] = (
     SMTPException,
@@ -33,6 +35,12 @@ def send_mail_message_task(payload: dict, fail_silently: bool = False) -> int:
     Returns:
         int: Number of successfully delivered messages.
     """
+    logger.info(
+        "Executing raw mail task subject=%r recipients=%s fail_silently=%s",
+        payload.get("subject"),
+        len(payload.get("to", [])),
+        fail_silently,
+    )
     message = MailMessagePayloadSerializer.deserialize(payload)
     return MailService.send(message, fail_silently=fail_silently)
 
@@ -55,5 +63,11 @@ def send_templated_mail_task(payload: dict, fail_silently: bool = False) -> int:
     Returns:
         int: Number of successfully delivered messages.
     """
+    logger.info(
+        "Executing templated mail task subject=%r recipients=%s fail_silently=%s",
+        payload.get("subject"),
+        len(payload.get("to", [])),
+        fail_silently,
+    )
     request = TemplateMailRequestPayloadSerializer.deserialize(payload)
     return TemplateMailService.send(request, fail_silently=fail_silently)

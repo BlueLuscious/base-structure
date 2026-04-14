@@ -1,5 +1,6 @@
 """ User admin registration for the owner admin site. """
 
+import logging
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
@@ -14,6 +15,8 @@ from accounts.models import UserModel
 from core.adminsites.site_instances import owner_admin_site
 from tenancy.choices import TenantRole
 from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+
+logger = logging.getLogger(__name__)
 
 
 @admin.register(UserModel, site=owner_admin_site)
@@ -103,12 +106,22 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         tenant = getattr(request, "tenant", None)
 
         if not TenantAccountsAccessPolicy.can_manage_accounts(request) or tenant is None:
+            logger.info(
+                "Returned no owner-visible users because the request cannot manage accounts tenant_id=%s",
+                getattr(tenant, "pk", None),
+            )
             return queryset.none()
 
-        return queryset.filter(
+        tenant_queryset = queryset.filter(
             tenant_memberships__tenant=tenant,
             tenant_memberships__role__in=(TenantRole.OWNER, TenantRole.OPERATOR),
         ).distinct()
+        logger.info(
+            "Scoped owner user queryset tenant_id=%s user_count=%s",
+            tenant.pk,
+            tenant_queryset.count(),
+        )
+        return tenant_queryset
 
     def get_readonly_fields(self, request: HttpRequest, obj: UserModel | None = None) -> tuple[str, ...]:
         """ Prevent owners from removing their own admin access by mistake.
@@ -145,7 +158,16 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
             else:
                 kwargs["queryset"] = Group.objects.filter(tenant_binding__tenant=tenant).order_by("name")
 
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
+        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
+
+        if db_field.name == "groups":
+            logger.info(
+                "Built owner user group field tenant_id=%s group_count=%s",
+                getattr(getattr(request, "tenant", None), "pk", None),
+                form_field.queryset.count(),
+            )
+
+        return form_field
 
     def get_formset_kwargs(self, request: HttpRequest, obj, inline, prefix: str) -> dict:
         """ Inject the current request into the tenant membership inline formset.

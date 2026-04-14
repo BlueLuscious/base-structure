@@ -33,7 +33,10 @@ class TestMailTasks(LoggedTestCase):
 
     def test_send_mail_message_task_rebuilds_the_payload_and_delegates_to_the_mail_service(self) -> None:
         """ Rebuild one raw mail payload inside the task before delegating to the mail service. """
-        with patch("core.tasks.mail.tasks.MailService.send", return_value=1) as send_mock:
+        with (
+            patch("core.tasks.mail.tasks.MailService.send", return_value=1) as send_mock,
+            patch("core.tasks.mail.tasks.logger.info") as logger_info_mock,
+        ):
             delivered_count = send_mail_message_task(
                 payload={
                     "subject": "Task test",
@@ -53,6 +56,7 @@ class TestMailTasks(LoggedTestCase):
         self.assertEqual(1, delivered_count)
         self.assertEqual("Task test", send_mock.call_args.args[0].subject)
         self.assertTrue(send_mock.call_args.kwargs["fail_silently"])
+        logger_info_mock.assert_called_once()
 
     def test_send_templated_mail_task_rebuilds_the_payload_and_delegates_to_the_templated_service(self) -> None:
         """ Rebuild one templated mail payload inside the task before delegating to the templated mail service. """
@@ -62,7 +66,10 @@ class TestMailTasks(LoggedTestCase):
             business_email="hello@gea-trader.test",
         )
 
-        with patch("core.tasks.mail.tasks.TemplateMailService.send", return_value=1) as send_mock:
+        with (
+            patch("core.tasks.mail.tasks.TemplateMailService.send", return_value=1) as send_mock,
+            patch("core.tasks.mail.tasks.logger.info") as logger_info_mock,
+        ):
             delivered_count = send_templated_mail_task(
                 payload={
                     "subject": "Task test",
@@ -90,3 +97,4 @@ class TestMailTasks(LoggedTestCase):
         self.assertIsNone(send_mock.call_args.args[0].tenant)
         self.assertEqual("GEA Trader", send_mock.call_args.args[0].context["product_name"])
         self.assertTrue(send_mock.call_args.kwargs["fail_silently"])
+        logger_info_mock.assert_called_once()

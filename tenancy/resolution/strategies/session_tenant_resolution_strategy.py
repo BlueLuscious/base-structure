@@ -1,9 +1,12 @@
 """ Session-backed strategy for active-tenant resolution. """
 
+import logging
 from django.http import HttpRequest
 from tenancy.models import TenantMembershipModel, TenantModel
 from tenancy.resolution.strategies.tenant_resolution_strategy import TenantResolutionStrategy
 from tenancy.session import ActiveTenantSessionStore
+
+logger = logging.getLogger(__name__)
 
 
 class SessionTenantResolutionStrategy(TenantResolutionStrategy):
@@ -35,6 +38,14 @@ class SessionTenantResolutionStrategy(TenantResolutionStrategy):
 
         if membership is None:
             cls.session_store_class.clear(request)
+            logger.info(
+                "Cleared stale active tenant session selection tenant_id=%s",
+                session_tenant_id,
+            )
             return None
 
+        logger.info(
+            "Resolved active tenant from session tenant_id=%s",
+            membership.tenant.pk,
+        )
         return membership.tenant

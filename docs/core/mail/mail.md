@@ -57,6 +57,7 @@ Current responsibilities:
 - send multiple mail messages
 - enqueue one mail message for asynchronous delivery
 - delegate actual delivery to the configured project backend
+- log meaningful delivery and enqueue boundaries without logging full message bodies
 
 ### `TemplateMailComposer`
 
@@ -86,6 +87,7 @@ Current responsibilities:
 - delegate mail composition to `TemplateMailComposer`
 - enqueue one templated mail request for asynchronous delivery
 - delegate final delivery to `MailService`
+- log meaningful templated delivery and enqueue boundaries without duplicating low-level renderer details
 
 ### DTOs
 
@@ -220,6 +222,11 @@ Current mail tasks:
 - `core/tasks/mail/tasks.py`
 - `send_mail_message_task`
 - `send_templated_mail_task`
+
+Current task logging direction:
+
+- log task execution boundaries with compact operational context
+- let the task and service layers log different boundaries instead of duplicating the same full event narrative
 
 Current retry direction for both tasks:
 

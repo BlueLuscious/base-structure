@@ -1,9 +1,12 @@
 """ Middleware for request-time active tenant resolution. """
 
 from collections.abc import Callable
+import logging
 from django.http import HttpRequest, HttpResponse
 from tenancy.runtime import ActiveTenantContext
 from tenancy.resolution.active_tenant_resolver import ActiveTenantResolver
+
+logger = logging.getLogger(__name__)
 
 
 class ActiveTenantMiddleware:
@@ -30,6 +33,11 @@ class ActiveTenantMiddleware:
             HttpResponse: Response produced by the remaining stack.
         """
         request.tenant = self.resolver_class.resolve(request)
+        logger.info(
+            "Attached active tenant to request path=%r tenant_id=%s",
+            request.path,
+            getattr(request.tenant, "pk", None),
+        )
         tenant_token = self.context_class.set(request.tenant)
 
         try:

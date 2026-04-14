@@ -1,5 +1,6 @@
 """ Tenant-branding resolver used by the owner admin site. """
 
+import logging
 from typing import TYPE_CHECKING
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
@@ -7,6 +8,8 @@ from django.http import HttpRequest
 if TYPE_CHECKING:
     from django.db.models.fields.files import ImageFieldFile
     from tenancy.models import TenantBrandingModel, TenantModel
+
+logger = logging.getLogger(__name__)
 
 
 class OwnerTenantBrandingResolver:
@@ -24,6 +27,7 @@ class OwnerTenantBrandingResolver:
         """
         tenant: "TenantModel | None" = getattr(request, "tenant", None)
         if tenant is None:
+            logger.info("Skipped owner tenant branding resolution because no active tenant is bound to the request")
             return None
 
         cached_branding: "TenantBrandingModel | None" = tenant._state.fields_cache.get("branding")
@@ -31,11 +35,13 @@ class OwnerTenantBrandingResolver:
             return cached_branding
 
         if getattr(tenant._state, "adding", False):
+            logger.info("Skipped owner tenant branding resolution because the active tenant is not persisted yet")
             return None
 
         try:
             return getattr(tenant, "branding", None)
         except ObjectDoesNotExist:
+            logger.info("Owner tenant branding was not configured for tenant_id=%s", tenant.pk)
             return None
 
     @classmethod

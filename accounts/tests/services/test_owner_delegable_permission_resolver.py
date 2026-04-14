@@ -1,5 +1,6 @@
 """ Tests for owner-delegable permission resolution. """
 
+from unittest.mock import patch
 from django.contrib.auth.models import Permission
 from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
@@ -38,14 +39,16 @@ class TestOwnerDelegablePermissionResolver(LoggedTestCase):
             )
         )
 
-        visible_codenames = list(
-            OwnerDelegablePermissionResolver.get_queryset(owner, tenant).values_list("codename", flat=True)
-        )
+        with patch("accounts.services.owner_delegable_permission_resolver.logger.info") as logger_info_mock:
+            visible_codenames = list(
+                OwnerDelegablePermissionResolver.get_queryset(owner, tenant).values_list("codename", flat=True)
+            )
 
         self.assertIn("view_usermodel", visible_codenames)
         self.assertIn("change_group", visible_codenames)
         self.assertIn("view_tenantgroupmodel", visible_codenames)
         self.assertIn("view_tenantmodel", visible_codenames)
+        logger_info_mock.assert_called_once()
 
     def test_get_queryset_returns_none_for_non_owner_membership(self) -> None:
         """ Verify non-owner tenant members cannot delegate any permissions. """
@@ -65,4 +68,7 @@ class TestOwnerDelegablePermissionResolver(LoggedTestCase):
         )
         user.user_permissions.set(Permission.objects.filter(codename__in=("view_usermodel", "change_group")))
 
-        self.assertEqual([], list(OwnerDelegablePermissionResolver.get_queryset(user, tenant)))
+        with patch("accounts.services.owner_delegable_permission_resolver.logger.info") as logger_info_mock:
+            self.assertEqual([], list(OwnerDelegablePermissionResolver.get_queryset(user, tenant)))
+
+        logger_info_mock.assert_called_once()

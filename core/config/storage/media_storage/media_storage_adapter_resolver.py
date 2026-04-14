@@ -1,6 +1,6 @@
 """ Object-oriented resolver for media storage adapters and configuration. """
 
-import os
+import logging, os
 from pathlib import Path
 from core.config.storage.media_storage.adapters import (
     BaseMediaStorageAdapter,
@@ -9,6 +9,8 @@ from core.config.storage.media_storage.adapters import (
     R2MediaStorageAdapter,
     S3MediaStorageAdapter,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class MediaStorageAdapterResolver:
@@ -48,4 +50,11 @@ class MediaStorageAdapterResolver:
             MediaStorageConfig: Resolved media storage configuration for the active provider.
         """
         provider = os.environ.get("MEDIAFILES_PROVIDER", "local").lower()
-        return cls.get_adapter(provider).build(base_dir)
+        storage_config = cls.get_adapter(provider).build(base_dir)
+        logger.info(
+            "Resolved media storage provider=%s backend=%s extra_apps=%s",
+            storage_config.provider,
+            storage_config.storages["default"]["BACKEND"],
+            storage_config.extra_apps,
+        )
+        return storage_config

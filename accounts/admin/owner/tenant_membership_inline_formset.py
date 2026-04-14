@@ -1,6 +1,7 @@
 """ Formset used by the owner user admin tenant membership inline. """
 
 from typing import TYPE_CHECKING
+import logging
 from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
@@ -11,6 +12,8 @@ from tenancy.models import TenantMembershipModel
 if TYPE_CHECKING:
     from accounts.admin.owner.tenant_membership_inline_form import TenantMembershipInlineForm
     from tenancy.models.querysets.tenant_membership_model_queryset import TenantMembershipModelQuerySet
+
+logger = logging.getLogger(__name__)
 
 
 class TenantMembershipInlineFormSet(BaseInlineFormSet):
@@ -104,6 +107,13 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
         if commit:
             membership.save()
             form.save_m2m()
+            logger.info(
+                "Created tenant membership through owner inline tenant_id=%s user_id=%s role=%s is_active=%s",
+                membership.tenant_id,
+                membership.user_id,
+                membership.role,
+                membership.is_active,
+            )
 
         return membership
 
@@ -124,6 +134,13 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
         if commit:
             membership.save()
             form.save_m2m()
+            logger.info(
+                "Updated tenant membership through owner inline tenant_id=%s user_id=%s role=%s is_active=%s",
+                membership.tenant_id,
+                membership.user_id,
+                membership.role,
+                membership.is_active,
+            )
 
         return membership
 

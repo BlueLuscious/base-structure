@@ -1,10 +1,13 @@
 """ Policy object for owner-delegable Django permissions. """
 
+import logging
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import PermissionsMixin
 from django.db.models import Q, QuerySet
 from tenancy.models import TenantModel
 from tenancy.access.tenant_access_policy import TenantAccessPolicy
+
+logger = logging.getLogger(__name__)
 
 
 class OwnerDelegablePermissionResolver:
@@ -22,6 +25,11 @@ class OwnerDelegablePermissionResolver:
             QuerySet[Permission]: Permissions already held by the owner inside the active tenant context.
         """
         if not TenantAccessPolicy.can_manage_tenant(user, tenant):
+            logger.info(
+                "Returned no delegable permissions because the actor cannot manage the active tenant user_id=%s tenant_id=%s",
+                getattr(user, "pk", None),
+                getattr(tenant, "pk", None),
+            )
             return Permission.objects.none()
 
         user_permission_keys = user.get_all_permissions()
@@ -39,10 +47,22 @@ class OwnerDelegablePermissionResolver:
             )
 
         if not permission_filter:
+            logger.info(
+                "Returned no delegable permissions because the actor has no effective permission keys user_id=%s tenant_id=%s",
+                getattr(user, "pk", None),
+                getattr(tenant, "pk", None),
+            )
             return Permission.objects.none()
 
-        return Permission.objects.filter(permission_filter).select_related("content_type").order_by(
+        permission_queryset = Permission.objects.filter(permission_filter).select_related("content_type").order_by(
             "content_type__app_label",
             "content_type__model",
             "codename",
         )
+        logger.info(
+            "Resolved delegable permissions user_id=%s tenant_id=%s permission_count=%s",
+            getattr(user, "pk", None),
+            getattr(tenant, "pk", None),
+            permission_queryset.count(),
+        )
+        return permission_queryset

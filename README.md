@@ -87,6 +87,8 @@ Follow these steps to get a development copy running locally:
   - `.env.example`
 - Storage configuration documentation lives at:
   - `docs/core/config/storage/storage.md`
+- Logging configuration documentation lives at:
+  - `docs/core/config/logging/logging.md`
 - Celery runtime documentation lives at:
   - `docs/core/celery/celery.md`
 - Mail service documentation lives at:

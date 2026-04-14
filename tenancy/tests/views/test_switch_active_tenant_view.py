@@ -1,5 +1,6 @@
 """ Tests for explicit active-tenant switching. """
 
+from unittest.mock import patch
 from django.urls import reverse
 from accounts.models import UserModel
 from core.testing.base import LoggedTestCase
@@ -31,28 +32,34 @@ class TestSwitchActiveTenantView(LoggedTestCase):
 
     def test_switch_active_tenant_view_updates_the_session_for_valid_memberships(self) -> None:
         """ Verify the switch view stores the selected tenant in session for valid memberships. """
-        response = self.client.get(
-            reverse("switch-active-tenant", kwargs={"tenant_id": self.secondary_tenant.pk})
-        )
+        with patch("tenancy.switching.active_tenant_switcher.logger.info") as switcher_logger_mock:
+            response = self.client.get(
+                reverse("switch-active-tenant", kwargs={"tenant_id": self.secondary_tenant.pk})
+            )
 
         self.assertEqual(302, response.status_code)
         self.assertEqual("/owner-admin/", response.url)
         self.assertEqual(str(self.secondary_tenant.pk), self.client.session["active_tenant_id"])
+        switcher_logger_mock.assert_called_once()
 
     def test_switch_active_tenant_view_redirects_to_safe_next_url(self) -> None:
         """ Verify the switch view honors one safe next URL after updating the session. """
-        response = self.client.get(
-            reverse("switch-active-tenant", kwargs={"tenant_id": self.secondary_tenant.pk}),
-            {"next": "/owner-admin/"},
-        )
+        with patch("tenancy.views.switch_active_tenant_view.logger.info") as view_logger_mock:
+            response = self.client.get(
+                reverse("switch-active-tenant", kwargs={"tenant_id": self.secondary_tenant.pk}),
+                {"next": "/owner-admin/"},
+            )
 
         self.assertEqual(302, response.status_code)
         self.assertEqual("/owner-admin/", response.url)
+        view_logger_mock.assert_called_once()
 
     def test_switch_active_tenant_view_rejects_tenants_without_membership(self) -> None:
         """ Verify the switch view returns forbidden when the user does not belong to the tenant. """
-        response = self.client.get(
-            reverse("switch-active-tenant", kwargs={"tenant_id": self.foreign_tenant.pk})
-        )
+        with patch("tenancy.switching.active_tenant_switcher.logger.warning") as switcher_logger_mock:
+            response = self.client.get(
+                reverse("switch-active-tenant", kwargs={"tenant_id": self.foreign_tenant.pk})
+            )
 
         self.assertEqual(403, response.status_code)
+        switcher_logger_mock.assert_called_once()

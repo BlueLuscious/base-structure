@@ -15,6 +15,8 @@ Both storage domains expose a resolver entrypoint:
 - `MediaStorageAdapterResolver.build_config(...)`
 - `StaticStorageAdapterResolver.build_config(...)`
 
+These resolver boundaries are also the preferred place for operational storage logging.
+
 `media` and `staticfiles` share the same storage namespace, but they keep separate contracts:
 
 - `MediaStorageConfig`
@@ -44,6 +46,17 @@ Current rules:
 - static files remain global unless the project introduces a real tenant-specific static surface later
 
 This means storage should be wired per surface and per environment, not by one hardcoded deployment assumption.
+
+## Current Logging Direction
+
+The storage layer should log at configuration and provider-resolution boundaries.
+
+Current direction:
+
+- log which media provider was resolved
+- log which staticfiles provider was resolved
+- log the selected backend class and any extra apps or middleware added by the configuration
+- avoid logging every low-level helper or every derived storage option individually
 
 ## Main Variables
 

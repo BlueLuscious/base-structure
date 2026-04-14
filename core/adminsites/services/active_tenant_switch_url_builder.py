@@ -1,5 +1,6 @@
 """ Service for building active-tenant switch URLs. """
 
+import logging
 from typing import TYPE_CHECKING
 from django.http import HttpRequest
 from django.urls import NoReverseMatch, ResolverMatch, reverse
@@ -7,6 +8,8 @@ from django.utils.http import urlencode
 
 if TYPE_CHECKING:
     from tenancy.models import TenantModel
+
+logger = logging.getLogger(__name__)
 
 
 class ActiveTenantSwitchUrlBuilder:
@@ -24,10 +27,16 @@ class ActiveTenantSwitchUrlBuilder:
             str: Absolute application URL for the active-tenant switch flow.
         """
         next_path = cls._build_next_path(request, tenant)
-        return (
+        switch_url = (
             f"{reverse('switch-active-tenant', kwargs={'tenant_id': tenant.pk})}"
             f"?{urlencode({'next': next_path})}"
         )
+        logger.info(
+            "Built active-tenant switch url target_tenant_id=%s next_path=%r",
+            tenant.pk,
+            next_path,
+        )
+        return switch_url
 
     @classmethod
     def _build_next_path(cls, request: HttpRequest, tenant: "TenantModel") -> str:
@@ -42,6 +51,7 @@ class ActiveTenantSwitchUrlBuilder:
         """
         resolver_match: ResolverMatch | None = getattr(request, "resolver_match", None)
         if resolver_match is None:
+            logger.info("Fell back to current request path for tenant switch because resolver_match is missing")
             return request.get_full_path()
 
         tenant_change_path = cls._build_tenant_change_path(request, resolver_match, tenant)
@@ -52,6 +62,10 @@ class ActiveTenantSwitchUrlBuilder:
         if change_fallback_path is not None:
             return change_fallback_path
 
+        logger.info(
+            "Kept current request path for tenant switch because no portable fallback matched view=%r",
+            getattr(resolver_match, "view_name", None),
+        )
         return request.get_full_path()
 
     @classmethod
@@ -105,6 +119,13 @@ class ActiveTenantSwitchUrlBuilder:
             return reverse(view_name)
         except NoReverseMatch:
             if resolver_match.namespace:
+                logger.warning(
+                    "Fell back to namespace index for tenant switch because changelist reverse failed view_name=%r",
+                    view_name,
+                )
                 return reverse(f"{resolver_match.namespace}:index")
 
+        logger.warning(
+            "Fell back to owner admin index for tenant switch because namespace index reverse was unavailable"
+        )
         return reverse("owner_admin:index")

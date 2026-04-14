@@ -1,5 +1,6 @@
 """ Service for building the owner admin tenant switcher dropdown. """
 
+import logging
 from typing import TYPE_CHECKING, Any, cast
 from django.apps import apps
 from django.http import HttpRequest
@@ -8,6 +9,8 @@ from core.adminsites.services.active_tenant_switch_url_builder import ActiveTena
 
 if TYPE_CHECKING:
     from tenancy.models import TenantMembershipModel
+
+logger = logging.getLogger(__name__)
 
 
 class OwnerTenantDropdownBuilder:
@@ -38,6 +41,7 @@ class OwnerTenantDropdownBuilder:
             list[dict[str, Any]]: Dropdown items for active tenant memberships.
         """
         if not getattr(request.user, "is_authenticated", False):
+            logger.info("Skipped owner tenant dropdown build because the request user is not authenticated")
             return []
 
         memberships = (
@@ -61,4 +65,9 @@ class OwnerTenantDropdownBuilder:
                 }
             )
 
+        logger.info(
+            "Built owner tenant dropdown current_tenant_id=%s memberships=%s",
+            current_tenant_id or None,
+            len(dropdown_items),
+        )
         return dropdown_items

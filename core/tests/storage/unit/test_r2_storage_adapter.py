@@ -51,7 +51,10 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
 
     def test_r2_storage_adapter__resolver_build_config_derives_endpoint_from_account_id(self) -> None:
         """ Verify the R2 adapter derives the endpoint when no explicit endpoint is configured. """
-        with patch.dict(os.environ, self.build_environment(), clear=False):
+        with (
+            patch.dict(os.environ, self.build_environment(), clear=False),
+            patch("core.config.storage.media_storage.media_storage_adapter_resolver.logger.info") as logger_info_mock,
+        ):
             storage_config = MediaStorageAdapterResolver.build_config(self.base_dir)
 
         self.assertEqual(storage_config.provider, "r2")
@@ -63,6 +66,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
             storage_config.storages["default"]["OPTIONS"]["endpoint_url"],
             "https://account-123.r2.cloudflarestorage.com",
         )
+        logger_info_mock.assert_called_once()
 
     def test_r2_storage_adapter__explicit_endpoint_takes_precedence_over_account_id(self) -> None:
         """ Verify the R2 adapter preserves an explicit endpoint instead of deriving one. """
