@@ -76,6 +76,12 @@ The `tenancy/` app is responsible for:
 - exposing owner-facing business settings flows for the active tenant
 - registering tenant infrastructure in the master admin site
 
+Current logging direction inside this app:
+
+- prefer logging request-time tenant resolution and switching boundaries
+- prefer logging owner-admin tenant runtime edges such as redirect or fallback behavior
+- avoid logging pure membership policies, query helpers, or simple model accessors unless a concrete operational need appears
+
 It is also the current home for tenant-aware request utilities because those utilities are tightly coupled to:
 
 - `TenantModel`
@@ -236,6 +242,12 @@ Current intent:
 - session state controls the current tenant context
 - the primary membership remains the fallback default
 - switching the active tenant does not rewrite `is_primary`
+
+Current logging direction:
+
+- log successful active-tenant switches with the actor and tenant id
+- log rejected switch attempts when the requested tenant is not accessible
+- log whether the switch view returned to one safe `next` URL or fell back to the owner admin index
 
 ## Use Cases
 

@@ -1,5 +1,6 @@
 """ Tests for request-time active tenant resolution. """
 
+from unittest.mock import patch
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpRequest, HttpResponse
 from accounts.models import UserModel
@@ -45,10 +46,12 @@ class TestActiveTenantMiddleware(LoggedTestCase):
         request = self._build_request()
         request.user = self.user
 
-        self.middleware(request)
+        with patch("tenancy.middleware.active_tenant_middleware.logger.info") as logger_info_mock:
+            self.middleware(request)
 
         self.assertEqual(self.primary_tenant, request.tenant)
         self.assertEqual(str(self.primary_tenant.pk), request.session["active_tenant_id"])
+        logger_info_mock.assert_called_once()
 
     def test_middleware_keeps_session_tenant_when_membership_is_valid(self) -> None:
         """ Verify the middleware preserves a session-selected tenant when the user still belongs to it. """
@@ -66,10 +69,12 @@ class TestActiveTenantMiddleware(LoggedTestCase):
         request.user = type("AnonymousUserLike", (), {"is_authenticated": False})()
         request.session["active_tenant_id"] = str(self.primary_tenant.pk)
 
-        self.middleware(request)
+        with patch("tenancy.middleware.active_tenant_middleware.logger.info") as logger_info_mock:
+            self.middleware(request)
 
         self.assertIsNone(request.tenant)
         self.assertNotIn("active_tenant_id", request.session)
+        logger_info_mock.assert_called_once()
 
     def test_middleware_exposes_current_tenant_during_request_and_clears_it_afterwards(self) -> None:
         """ Verify the middleware sets the runtime tenant context only for the active request. """

@@ -1,5 +1,6 @@
 """ Tests for the owner tenant settings native change flow. """
 
+from unittest.mock import patch
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -68,16 +69,18 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         session["active_tenant_id"] = str(self.tenant.pk)
         session.save()
 
-        response = self.client.get(
-            reverse("owner_admin:tenancy_tenantmodel_changelist"),
-            follow=False,
-        )
+        with patch("tenancy.admin.owner.owner_tenant_settings_admin.logger.info") as logger_info_mock:
+            response = self.client.get(
+                reverse("owner_admin:tenancy_tenantmodel_changelist"),
+                follow=False,
+            )
 
         self.assertEqual(302, response.status_code)
         self.assertEqual(
             reverse("owner_admin:tenancy_tenantmodel_change", args=(str(self.tenant.pk),)),
             response.headers["Location"],
         )
+        logger_info_mock.assert_called_once()
 
     def test_operator_cannot_open_native_change_screen(self) -> None:
         """ Verify operators are forbidden from the owner native tenant change screen. """
