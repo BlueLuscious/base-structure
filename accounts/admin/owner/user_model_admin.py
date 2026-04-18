@@ -15,7 +15,6 @@ from accounts.admin.owner.user_model_admin_form import OwnerUserModelAdminForm
 from accounts.models import UserModel
 from core.adminsites.site_instances import owner_admin_site
 from tenancy.choices import TenantRole
-from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
 
 logger = logging.getLogger(__name__)
 
