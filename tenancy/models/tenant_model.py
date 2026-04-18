@@ -7,10 +7,10 @@ from django.utils.translation import gettext_lazy as _
 from tenancy.models.managers.tenant_model_manager import TenantModelManager
 
 if TYPE_CHECKING:
-    from accounts.models.managers.user_model_manager import UserModelManager
+    from django.db.models.manager import RelatedManager
+    from accounts.models import UserModel
     from tenancy.models import TenantBrandingModel
-    from tenancy.models.managers.tenant_group_model_manager import TenantGroupModelManager
-    from tenancy.models.managers.tenant_membership_model_manager import TenantMembershipModelManager
+    from tenancy.models import TenantGroupModel, TenantMembershipModel
 
 
 class TenantModel(models.Model):
@@ -59,10 +59,10 @@ class TenantModel(models.Model):
 
     objects: TenantModelManager = TenantModelManager()
 
-    memberships: "TenantMembershipModelManager"
+    memberships: "RelatedManager[TenantMembershipModel]"
     branding: "TenantBrandingModel"
-    tenant_groups: "TenantGroupModelManager"
-    users: "UserModelManager"
+    tenant_groups: "RelatedManager[TenantGroupModel]"
+    users: "RelatedManager[UserModel]"
 
     class Meta:
         ordering = ("name",)
