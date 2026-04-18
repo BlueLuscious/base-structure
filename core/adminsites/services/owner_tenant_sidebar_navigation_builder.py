@@ -4,7 +4,7 @@ from typing import Any, TYPE_CHECKING
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from tenancy.access.tenant_accounts_access_policy import TenantAccountsAccessPolicy
+from accounts.access import AccountsAccessPolicy
 from tenancy.access.tenant_access_policy import TenantAccessPolicy
 
 if TYPE_CHECKING:
@@ -67,19 +67,13 @@ class OwnerTenantSidebarNavigationBuilder:
                         "title": _("Users"),
                         "icon": "group",
                         "link": reverse("owner_admin:accounts_usermodel_changelist"),
-                        "permission": lambda req: (
-                            TenantAccountsAccessPolicy.can_manage_accounts(req)
-                            and req.user.has_perm("accounts.view_usermodel")
-                        ),
+                        "permission": lambda req: AccountsAccessPolicy.can_access_users(req),
                     },
                     {
                         "title": _("Groups"),
                         "icon": "admin_panel_settings",
                         "link": reverse("owner_admin:auth_group_changelist"),
-                        "permission": lambda req: (
-                            TenantAccountsAccessPolicy.can_manage_accounts(req)
-                            and req.user.has_perm("auth.view_group")
-                        ),
+                        "permission": lambda req: AccountsAccessPolicy.can_access_groups(req),
                     },
                 ],
             },
