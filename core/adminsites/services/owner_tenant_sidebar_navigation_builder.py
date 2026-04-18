@@ -8,7 +8,7 @@ from accounts.access import AccountsAccessPolicy
 from tenancy.access.tenant_access_policy import TenantAccessPolicy
 
 if TYPE_CHECKING:
-    from tenancy.models.tenant_membership_model import TenantModel
+    from tenancy.models.tenant_model import TenantModel
 
 
 class OwnerTenantSidebarNavigationBuilder:
@@ -38,7 +38,7 @@ class OwnerTenantSidebarNavigationBuilder:
 
     @classmethod
     def build(cls, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Build owner sidebar navigation for account administration.
+        """ Build owner sidebar navigation for the active tenant scope.
 
         Args:
             request: Current admin request.
