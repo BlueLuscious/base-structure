@@ -580,11 +580,30 @@ msgstr "Seleccionar acción"
 msgid "Run"
 msgstr "Ejecutar"
 
-#: .\core\settings.py:153
+#: .\core\i18n\translation_anchors.py:70
+msgid "Select value"
+msgstr "Seleccionar valor"
+
+#: .\core\i18n\translation_anchors.py:71
+msgid "No results found"
+msgstr "No se encontraron resultados"
+
+#: .\core\i18n\translation_anchors.py:72
+msgid ""
+"This page yielded into no results. Create a new item or reset your filters."
+msgstr ""
+"Esta página no arrojó resultados. Crea un nuevo elemento o restablece tus "
+"filtros."
+
+#: .\core\i18n\translation_anchors.py:73
+msgid "Reset filters"
+msgstr "Restablecer filtros"
+
+#: .\core\settings.py:160
 msgid "Spanish"
 msgstr "Español"
 
-#: .\core\settings.py:154
+#: .\core\settings.py:161
 msgid "English"
 msgstr "Inglés"
 
