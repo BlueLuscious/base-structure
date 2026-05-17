@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gea-trader-core\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-10 19:32-0300\n"
+"POT-Creation-Date: 2026-05-17 02:17-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -274,6 +274,35 @@ msgstr "Admin del negocio"
 #: .\core\adminsites\sites\owner_admin_site.py:23
 msgid "Business operations"
 msgstr "Operaciones del negocio"
+
+#: .\core\forms\json_key_value_field.py:15
+msgid "Enter a valid list of variant attributes."
+msgstr "Ingresa una lista válida de atributos de variante."
+
+#: .\core\forms\json_key_value_field.py:16
+msgid "Attribute keys are required when a value is provided."
+msgstr ""
+"Las claves de los atributos son obligatorias cuando se proporciona un valor."
+
+#: .\core\forms\json_key_value_field.py:17
+msgid "Attribute keys must be unique."
+msgstr "Las claves de los atributos deben ser únicas."
+
+#: .\core\forms\json_key_value_widget.py:41
+msgid "Attribute key"
+msgstr "Clave del atributo"
+
+#: .\core\forms\json_key_value_widget.py:42
+msgid "Attribute value"
+msgstr "Valor del atributo"
+
+#: .\core\forms\json_key_value_widget.py:43
+msgid "Add attribute"
+msgstr "Agregar atributo"
+
+#: .\core\forms\json_key_value_widget.py:44
+msgid "Remove attribute"
+msgstr "Eliminar atributo"
 
 #: .\core\i18n\translation_anchors.py:6
 msgid "Welcome back to"

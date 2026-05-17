@@ -12,6 +12,7 @@ See also:
 - `docs/core/config/logging/usage.md`
 - `docs/core/config/storage/storage.md`
 - `docs/core/config/storage/testing.md`
+- `docs/core/forms/forms.md`
 - `docs/core/mail/mail.md`
 - `docs/core/mail/runtime.md`
 - `docs/core/mail/templates.md`
@@ -37,6 +38,7 @@ Current contents:
 - `adminsites/`
 - `config/`
 - `mail/`
+- `forms/`
 - `testing/`
 - `tests/`
 
@@ -57,6 +59,7 @@ The `core/` package is responsible for:
 - hosting reusable project-wide logging configuration code
 - hosting reusable project-wide asynchronous task runtime wiring
 - hosting reusable project-wide outbound mail infrastructure
+- hosting reusable project-wide form fields and widgets
 - hosting reusable testing infrastructure and project-level tests
 
 ## What Should Live Here
@@ -69,6 +72,7 @@ Examples:
 - Celery bootstrap shared by the whole project
 - storage configuration shared by the whole project
 - outbound mail infrastructure shared by the whole project
+- reusable form fields or widgets that are not owned by one domain app
 - shared admin site classes and site-level Unfold integration
 - reusable test utilities
 - project-level integration tests
@@ -122,6 +126,14 @@ See:
 - `docs/core/mail/mail.md`
 - `docs/core/mail/runtime.md`
 - `docs/core/mail/templates.md`
+
+### `core/forms/`
+
+Contains reusable form fields and widgets that are shared across project apps.
+
+See:
+
+- `docs/core/forms/forms.md`
 
 ### `core/adminsites/`
 
