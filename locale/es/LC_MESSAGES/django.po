@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gea-trader-core\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-17 05:35-0300\n"
+"POT-Creation-Date: 2026-06-05 01:25-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -12,39 +12,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\accounts\admin\owner\group_admin.py:38
+#: .\accounts\admin\owner\group_admin.py:41
 msgid "Team group"
 msgstr "Grupo del equipo"
 
-#: .\accounts\admin\owner\group_admin.py:41
+#: .\accounts\admin\owner\group_admin.py:44
 msgid "Create permission groups for people working in this business."
 msgstr ""
 "Crea grupos de permisos para las personas que trabajan en este negocio."
 
-#: .\accounts\admin\owner\group_admin.py:46
+#: .\accounts\admin\owner\group_admin.py:49
 msgid "Access permissions"
 msgstr "Permisos de acceso"
 
-#: .\accounts\admin\owner\group_admin.py:49
+#: .\accounts\admin\owner\group_admin.py:52
 msgid "This group can include any permissions you already have."
 msgstr "Este grupo puede incluir cualquiera de los permisos que ya tienes."
 
-#: .\accounts\admin\owner\group_admin.py:136
+#: .\accounts\admin\owner\group_admin.py:151
 #, python-format
 msgid "Can add %(name)s"
 msgstr "Puede agregar %(name)s"
 
-#: .\accounts\admin\owner\group_admin.py:137
+#: .\accounts\admin\owner\group_admin.py:152
 #, python-format
 msgid "Can change %(name)s"
 msgstr "Puede cambiar %(name)s"
 
-#: .\accounts\admin\owner\group_admin.py:138
+#: .\accounts\admin\owner\group_admin.py:153
 #, python-format
 msgid "Can delete %(name)s"
 msgstr "Puede eliminar %(name)s"
 
-#: .\accounts\admin\owner\group_admin.py:139
+#: .\accounts\admin\owner\group_admin.py:154
 #, python-format
 msgid "Can view %(name)s"
 msgstr "Puede ver %(name)s"
@@ -67,8 +67,8 @@ msgstr "Las personas de este grupo recibirán los permisos seleccionados aquí."
 
 #: .\accounts\admin\owner\tenant_membership_inline.py:28
 #: .\accounts\admin\owner\tenant_membership_inline.py:29 .\tenancy\apps.py:12
-#: .\tenancy\models\tenant_membership_model.py:73
-#: .\tenancy\models\tenant_membership_model.py:74
+#: .\tenancy\models\tenant_membership_model.py:75
+#: .\tenancy\models\tenant_membership_model.py:76
 msgid "Business access"
 msgstr "Acceso al negocio"
 
@@ -90,47 +90,47 @@ msgstr "Elige si esta persona administra este negocio o trabaja en el equipo."
 msgid "Turn off access to this business without deleting the user."
 msgstr "Desactiva el acceso a este negocio sin eliminar el usuario."
 
-#: .\accounts\admin\owner\tenant_membership_inline_formset.py:63
+#: .\accounts\admin\owner\tenant_membership_inline_formset.py:66
 msgid "This screen requires an active business in context."
 msgstr "Esta pantalla requiere un negocio activo en contexto."
 
-#: .\accounts\admin\owner\tenant_membership_inline_formset.py:72
+#: .\accounts\admin\owner\tenant_membership_inline_formset.py:75
 msgid "Add one business access entry before saving this user."
 msgstr "Agrega un acceso al negocio antes de guardar este usuario."
 
-#: .\accounts\admin\owner\tenant_membership_inline_formset.py:87
+#: .\accounts\admin\owner\tenant_membership_inline_formset.py:90
 msgid "Each business must keep at least one active owner account."
 msgstr "Cada negocio debe conservar al menos una cuenta propietaria activa."
 
-#: .\accounts\admin\owner\user_model_admin.py:43
-#: .\accounts\admin\owner\user_model_admin.py:65
+#: .\accounts\admin\owner\user_model_admin.py:46
+#: .\accounts\admin\owner\user_model_admin.py:68
 msgid "Profile"
 msgstr "Perfil"
 
-#: .\accounts\admin\owner\user_model_admin.py:46
+#: .\accounts\admin\owner\user_model_admin.py:49
 msgid "Create a team account your staff can recognize easily."
 msgstr "Crea una cuenta de equipo que tu personal pueda reconocer fácilmente."
 
-#: .\accounts\admin\owner\user_model_admin.py:55
-#: .\accounts\admin\owner\user_model_admin.py:76
+#: .\accounts\admin\owner\user_model_admin.py:58
+#: .\accounts\admin\owner\user_model_admin.py:79
 msgid "Access"
 msgstr "Acceso"
 
-#: .\accounts\admin\owner\user_model_admin.py:58
-#: .\accounts\admin\owner\user_model_admin.py:79
+#: .\accounts\admin\owner\user_model_admin.py:61
+#: .\accounts\admin\owner\user_model_admin.py:82
 msgid "Control whether this account can sign in and open the business admin."
 msgstr ""
 "Controla si esta cuenta puede iniciar sesión y abrir el admin del negocio."
 
-#: .\accounts\admin\owner\user_model_admin.py:68
+#: .\accounts\admin\owner\user_model_admin.py:71
 msgid "Keep this team member's profile and contact details up to date."
 msgstr "Mantén actualizados el perfil y los datos de contacto de esta persona."
 
-#: .\accounts\admin\owner\user_model_admin.py:84
+#: .\accounts\admin\owner\user_model_admin.py:87
 msgid "Activity"
 msgstr "Actividad"
 
-#: .\accounts\admin\owner\user_model_admin.py:87
+#: .\accounts\admin\owner\user_model_admin.py:90
 msgid "Recent sign-in details for support and auditing."
 msgstr "Detalles recientes de acceso para soporte y auditoría."
 
@@ -182,7 +182,7 @@ msgstr "Puede abrir el admin del negocio"
 
 #: .\accounts\admin\owner\user_model_admin_creation_form.py:37
 #: .\accounts\admin\owner\user_model_admin_form.py:23
-#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:76
+#: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:73
 #: .\core\tests\adminsites\test_adminsites.py:72
 msgid "Groups"
 msgstr "Grupos"
@@ -214,7 +214,7 @@ msgstr "Aquí solo se pueden asignar grupos de permisos del negocio actual."
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: .\accounts\models\user_model.py:22 .\tenancy\models\tenant_model.py:70
+#: .\accounts\models\user_model.py:22 .\tenancy\models\tenant_model.py:72
 msgid "Businesses"
 msgstr "Negocios"
 
@@ -234,27 +234,27 @@ msgstr "Usuario"
 msgid "Users"
 msgstr "Usuarios"
 
-#: .\accounts\tests\admin\test_owner_accounts_admin.py:218
+#: .\accounts\tests\admin\test_owner_accounts_admin.py:232
 #: .\tenancy\choices\tenant_role.py:11
 msgid "Owner"
 msgstr "Propietario"
 
-#: .\accounts\tests\admin\test_owner_accounts_admin.py:218
+#: .\accounts\tests\admin\test_owner_accounts_admin.py:232
 #: .\tenancy\choices\tenant_role.py:12
 msgid "Operator"
 msgstr "Operador"
 
-#: .\core\adminsites\services\owner_tenant_dropdown_builder.py:54
-#: .\core\tests\adminsites\test_owner_admin_site_dropdown.py:47
+#: .\core\adminsites\services\owner_tenant_dropdown_builder.py:58
+#: .\core\tests\adminsites\test_owner_admin_site_dropdown.py:49
 msgid "Current"
 msgstr "Actual"
 
 #: .\core\adminsites\services\owner_tenant_sidebar_navigation_builder.py:51
-#: .\tenancy\admin\owner\owner_tenant_settings_admin.py:34
+#: .\tenancy\admin\owner\owner_tenant_settings_admin.py:37
 #: .\tenancy\models\tenant_branding_model.py:19
 #: .\tenancy\models\tenant_group_model.py:20
 #: .\tenancy\models\tenant_membership_model.py:24
-#: .\tenancy\models\tenant_model.py:69
+#: .\tenancy\models\tenant_model.py:71
 msgid "Business"
 msgstr "Negocio"
 
@@ -275,15 +275,15 @@ msgstr "Admin del negocio"
 msgid "Business operations"
 msgstr "Operaciones del negocio"
 
-#: .\core\forms\json_key_value_field.py:15
+#: .\core\forms\fields\json_key_value_field.py:15
 msgid "Enter a valid key-value list."
 msgstr "Ingresa una lista clave-valor válida."
 
-#: .\core\forms\json_key_value_field.py:16
+#: .\core\forms\fields\json_key_value_field.py:16
 msgid "Keys are required when a value is provided."
 msgstr "Las claves son obligatorias cuando se proporciona un valor."
 
-#: .\core\forms\json_key_value_field.py:17
+#: .\core\forms\fields\json_key_value_field.py:17
 msgid "Keys must be unique."
 msgstr "Las claves deben ser únicas."
 
@@ -312,54 +312,27 @@ msgstr "Las filas clave-valor anidadas superan la profundidad permitida."
 msgid "A key cannot have both a value and child rows."
 msgstr "Una clave no puede tener un valor y filas hijas al mismo tiempo."
 
-#: .\core\forms\widgets\action_input_widget.py:47
+#: .\core\forms\widgets\action_input_widget.py:49
 msgid "Run action"
 msgstr "Ejecutar acción"
 
-#: .\core\forms\widgets\base_json_key_value_widget.py:38
+#: .\core\forms\widgets\base_json_key_value_widget.py:39
 msgid "Key"
 msgstr "Clave"
 
-#: .\core\forms\json_key_value_widget.py:42
-#: .\core\forms\nested_json_key_value_widget.py:49
+#: .\core\forms\widgets\base_json_key_value_widget.py:40
 msgid "Value"
 msgstr "Valor"
 
-#: .\core\forms\json_key_value_widget.py:43
-#: .\core\forms\nested_json_key_value_widget.py:50
+#: .\core\forms\widgets\base_json_key_value_widget.py:41
 msgid "Add row"
 msgstr "Agregar fila"
 
-#: .\core\forms\json_key_value_widget.py:44
-#: .\core\forms\nested_json_key_value_widget.py:52
+#: .\core\forms\widgets\base_json_key_value_widget.py:42
 msgid "Remove row"
 msgstr "Eliminar fila"
 
-#: .\core\forms\nested_json_key_value_field.py:18
-msgid "Enter a valid nested key-value list."
-msgstr "Ingresa una lista clave-valor anidada válida."
-
-#: .\core\forms\nested_json_key_value_field.py:19
-msgid "Nested key-value depth is not valid."
-msgstr "La profundidad de clave-valor anidada no es válida."
-
-#: .\core\forms\nested_json_key_value_field.py:20
-msgid "Keys are required when a value or child rows are provided."
-msgstr "Las claves son obligatorias cuando se proporciona un valor o filas hijas."
-
-#: .\core\forms\nested_json_key_value_field.py:21
-msgid "Keys must be unique within the same level."
-msgstr "Las claves deben ser únicas dentro del mismo nivel."
-
-#: .\core\forms\nested_json_key_value_field.py:22
-msgid "Nested key-value rows exceed the allowed depth."
-msgstr "Las filas clave-valor anidadas superan la profundidad permitida."
-
-#: .\core\forms\nested_json_key_value_field.py:23
-msgid "A key cannot have both a value and child rows."
-msgstr "Una clave no puede tener un valor y filas hijas al mismo tiempo."
-
-#: .\core\forms\nested_json_key_value_widget.py:51
+#: .\core\forms\widgets\nested_json_key_value_widget.py:53
 msgid "Add child row"
 msgstr "Agregar fila hija"
 
@@ -668,21 +641,25 @@ msgstr "Inglés"
 
 #: .\tenancy\admin\owner\owner_tenant_settings_form.py:22
 #: .\tenancy\models\tenant_model.py:33
+#: .\tenancy\tests\views\owner\test_owner_tenant_settings_admin.py:60
 msgid "Business email"
 msgstr "Correo del negocio"
 
 #: .\tenancy\admin\owner\owner_tenant_settings_form.py:23
 #: .\tenancy\models\tenant_model.py:38
+#: .\tenancy\tests\views\owner\test_owner_tenant_settings_admin.py:61
 msgid "Support email"
 msgstr "Correo de soporte"
 
 #: .\tenancy\admin\owner\owner_tenant_settings_form.py:24
 #: .\tenancy\models\tenant_model.py:44
+#: .\tenancy\tests\views\owner\test_owner_tenant_settings_admin.py:62
 msgid "Phone number"
 msgstr "Teléfono"
 
 #: .\tenancy\admin\owner\owner_tenant_settings_form.py:25
 #: .\tenancy\models\tenant_model.py:49
+#: .\tenancy\tests\views\owner\test_owner_tenant_settings_admin.py:63
 msgid "Website"
 msgstr "Sitio web"
 
@@ -799,11 +776,11 @@ msgstr "Grupo de permisos"
 msgid "Django auth group scoped to the selected business."
 msgstr "Grupo de autenticación de Django asociado al negocio seleccionado."
 
-#: .\tenancy\models\tenant_group_model.py:40
+#: .\tenancy\models\tenant_group_model.py:42
 msgid "Business group"
 msgstr "Grupo del negocio"
 
-#: .\tenancy\models\tenant_group_model.py:41
+#: .\tenancy\models\tenant_group_model.py:43
 msgid "Business groups"
 msgstr "Grupos del negocio"
 
@@ -866,6 +843,6 @@ msgstr ""
 "Desmarca esta opción para ocultar el negocio de la selección activa y del "
 "uso diario."
 
-#: .\tenancy\switching\active_tenant_switcher.py:35
+#: .\tenancy\switching\active_tenant_switcher.py:43
 msgid "You do not have access to the requested business."
 msgstr "No tienes acceso al negocio solicitado."
