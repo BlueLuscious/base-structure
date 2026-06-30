@@ -88,7 +88,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
             "Branding",
             (),
             {
-                "display_name": "GEA Trader",
+                "display_name": "Example Company",
                 "logo_light": self.build_file("/media/logo-light.png"),
                 "logo_dark": self.build_file("/media/logo-dark.png"),
                 "icon_light": self.build_file("/media/icon-light.png"),
@@ -156,10 +156,10 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         """ Verify owner admin title and header prefer tenant branding display names. """
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
-        request.tenant._state.fields_cache["branding"] = type("Branding", (), {"display_name": "GEA Trader"})()
+        request.tenant._state.fields_cache["branding"] = type("Branding", (), {"display_name": "Example Company"})()
 
-        self.assertEqual("GEA Trader", owner_admin_site.get_site_title(request))
-        self.assertEqual("GEA Trader", owner_admin_site.get_site_header(request))
+        self.assertEqual("Example Company", owner_admin_site.get_site_title(request))
+        self.assertEqual("Example Company", owner_admin_site.get_site_header(request))
 
     def test_owner_admin_branding_builds_logo_icon_and_favicons(self) -> None:
         """ Verify owner admin exposes tenant branding assets in the shapes expected by Unfold. """

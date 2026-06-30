@@ -118,5 +118,4 @@ class TestActionInputWidget(LoggedSimpleTestCase):
         """ Verify the fallback button label uses the translation workflow. """
         with override("es"):
             context = ActionInputWidget().get_context("slug", "", {})
-
-        self.assertEqual("Ejecutar acción", str(context["widget"]["action_label"]))
+            self.assertEqual("Ejecutar acción", str(context["widget"]["action_label"]))

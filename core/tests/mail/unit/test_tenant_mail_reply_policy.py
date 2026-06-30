@@ -18,13 +18,13 @@ class TestTenantMailReplyPolicy(LoggedSimpleTestCase):
     def test_resolve_tenant_contact_reply_to_uses_support_email_first(self) -> None:
         """ Resolve the preferred tenant contact reply target from support email before business email. """
         tenant = TenantModel(
-            name="GEA Trader",
-            slug="gea-trader",
-            business_email="hello@gea-trader.test",
-            support_email="support@gea-trader.test",
+            name="Example Company",
+            slug="example-company",
+            business_email="hello@example.test",
+            support_email="support@example.test",
         )
 
         self.assertEqual(
-            ("support@gea-trader.test",),
+            ("support@example.test",),
             TenantMailReplyPolicy.resolve_tenant_contact_reply_to(tenant),
         )

@@ -1,4 +1,4 @@
-﻿""" Tests for custom admin site permissions. """
+""" Tests for custom admin site permissions. """
 
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, override_settings
@@ -90,36 +90,36 @@ class TestAdminSites(LoggedSimpleTestCase):
 
         with override("es"):
             languages = AdminSiteUnfoldCallbacks.languages_navigation(request)
-            self.assertEqual("Español", languages[0]["name_local"])
-            self.assertEqual("Inglés", languages[1]["name_local"])
+            self.assertEqual("Inglés", languages[0]["name_local"])
+            self.assertEqual("Español", languages[1]["name_local"])
 
         with override("en"):
             languages = AdminSiteUnfoldCallbacks.languages_navigation(request)
-            self.assertEqual("Spanish", languages[0]["name_local"])
-            self.assertEqual("English", languages[1]["name_local"])
+            self.assertEqual("English", languages[0]["name_local"])
+            self.assertEqual("Spanish", languages[1]["name_local"])
 
     @override_settings(ALLOWED_HOSTS=["testserver", "localhost", "127.0.0.1"])
-    def test_admin_language_switcher_strips_english_prefix_when_returning_to_spanish(self) -> None:
+    def test_admin_language_switcher_strips_spanish_prefix_when_returning_to_english(self) -> None:
         """ Verify the custom language view returns to the unprefixed default admin URL. """
         response = self.client.post(
             "/i18n/admin-setlang/",
-            {"language": "es", "next": "/en/owner-admin/"},
+            {"language": "en", "next": "/es/owner-admin/"},
             follow=False,
         )
 
         self.assertEqual(302, response.status_code)
         self.assertEqual("/owner-admin/", response.headers["Location"])
-        self.assertEqual("es", response.cookies["django_language"].value)
+        self.assertEqual("en", response.cookies["django_language"].value)
 
     @override_settings(ALLOWED_HOSTS=["testserver", "localhost", "127.0.0.1"])
-    def test_admin_language_switcher_adds_english_prefix_when_switching_from_spanish(self) -> None:
-        """ Verify the custom language view adds the /en/ prefix for English admin URLs. """
+    def test_admin_language_switcher_adds_spanish_prefix_when_switching_from_english(self) -> None:
+        """ Verify the custom language view adds the /es/ prefix for Spanish admin URLs. """
         response = self.client.post(
             "/i18n/admin-setlang/",
-            {"language": "en", "next": "/owner-admin/"},
+            {"language": "es", "next": "/owner-admin/"},
             follow=False,
         )
 
         self.assertEqual(302, response.status_code)
-        self.assertEqual("/en/owner-admin/", response.headers["Location"])
-        self.assertEqual("en", response.cookies["django_language"].value)
+        self.assertEqual("/es/owner-admin/", response.headers["Location"])
+        self.assertEqual("es", response.cookies["django_language"].value)

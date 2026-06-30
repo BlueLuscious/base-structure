@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:16
-    container_name: db
     restart: unless-stopped
 
     environment:
@@ -24,7 +23,6 @@ services:
 
   minio:
     image: quay.io/minio/minio:latest
-    container_name: minio
     restart: unless-stopped
 
     environment:
@@ -48,7 +46,6 @@ services:
 
   minio-mc:
     image: quay.io/minio/mc:latest
-    container_name: minio_mc
     restart: no
 
     depends_on:
@@ -66,7 +63,6 @@ services:
 
   mailhog:
     image: mailhog/mailhog:latest
-    container_name: mailhog
     restart: unless-stopped
 
     ports:
@@ -75,7 +71,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: redis
     restart: unless-stopped
 
     ports:

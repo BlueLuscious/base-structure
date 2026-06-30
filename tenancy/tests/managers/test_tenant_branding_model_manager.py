@@ -13,7 +13,7 @@ class TestTenantBrandingModelManager(LoggedTestCase):
         self.other_tenant = TenantModel.objects.create(name="Quinoto", slug="quinoto")
         self.configured_branding = TenantBrandingModel.objects.create(
             tenant=self.tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         TenantBrandingModel.objects.create(tenant=self.other_tenant)
 

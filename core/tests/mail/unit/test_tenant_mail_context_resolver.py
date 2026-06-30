@@ -24,16 +24,16 @@ class TestTenantMailContextResolver(LoggedSimpleTestCase):
     def test_resolve_prefers_branding_display_name_and_support_email(self) -> None:
         """ Verify branding display data and tenant support channels become the preferred mail context. """
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug="gea-trader-legal",
-            business_email="hello@gea-trader.test",
-            support_email="support@gea-trader.test",
+            name="Example Company Legal",
+            slug="example-company-legal",
+            business_email="hello@example.test",
+            support_email="support@example.test",
             phone_number="+54 11 5555 1234",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
         tenant_token = ActiveTenantContext.set(tenant)
@@ -41,10 +41,10 @@ class TestTenantMailContextResolver(LoggedSimpleTestCase):
         try:
             self.assertEqual(
                 {
-                    "product_name": "GEA Trader",
-                    "support_email": "support@gea-trader.test",
+                    "product_name": "Example Company",
+                    "support_email": "support@example.test",
                     "phone_number": "+54 11 5555 1234",
-                    "website_url": "https://gea-trader.test",
+                    "website_url": "https://example.test",
                 },
                 TenantMailContextResolver.resolve(),
             )
@@ -54,17 +54,17 @@ class TestTenantMailContextResolver(LoggedSimpleTestCase):
     def test_resolve_falls_back_to_tenant_name_and_business_email(self) -> None:
         """ Verify mail context falls back to tenant name and business email when branding or support email are absent. """
         tenant = TenantModel(
-            name="GEA Trader",
-            slug="gea-trader",
-            business_email="hello@gea-trader.test",
+            name="Example Company",
+            slug="example-company",
+            business_email="hello@example.test",
         )
         tenant_token = ActiveTenantContext.set(tenant)
 
         try:
             self.assertEqual(
                 {
-                    "product_name": "GEA Trader",
-                    "support_email": "hello@gea-trader.test",
+                    "product_name": "Example Company",
+                    "support_email": "hello@example.test",
                     "phone_number": None,
                     "website_url": None,
                 },

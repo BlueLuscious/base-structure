@@ -61,9 +61,9 @@ class TestMailTasks(LoggedTestCase):
     def test_send_templated_mail_task_rebuilds_the_payload_and_delegates_to_the_templated_service(self) -> None:
         """ Rebuild one templated mail payload inside the task before delegating to the templated mail service. """
         tenant = TenantModel.objects.create(
-            name="GEA Trader",
-            slug=f"gea-trader-{uuid4()}",
-            business_email="hello@gea-trader.test",
+            name="Example Company",
+            slug=f"example-company-{uuid4()}",
+            business_email="hello@example.test",
         )
 
         with (
@@ -75,8 +75,8 @@ class TestMailTasks(LoggedTestCase):
                     "subject": "Task test",
                     "to": [{"email": "owner@example.com", "name": "Owner User"}],
                     "context": {
-                        "product_name": "GEA Trader",
-                        "support_email": "hello@gea-trader.test",
+                        "product_name": "Example Company",
+                        "support_email": "hello@example.test",
                         "mail_title": "Task test",
                         "mail_body": "Template body",
                     },
@@ -95,6 +95,6 @@ class TestMailTasks(LoggedTestCase):
         self.assertEqual(1, delivered_count)
         self.assertEqual("Task test", send_mock.call_args.args[0].subject)
         self.assertIsNone(send_mock.call_args.args[0].tenant)
-        self.assertEqual("GEA Trader", send_mock.call_args.args[0].context["product_name"])
+        self.assertEqual("Example Company", send_mock.call_args.args[0].context["product_name"])
         self.assertTrue(send_mock.call_args.kwargs["fail_silently"])
         logger_info_mock.assert_called_once()

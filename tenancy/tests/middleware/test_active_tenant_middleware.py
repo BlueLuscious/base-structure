@@ -111,7 +111,7 @@ class TestActiveTenantMiddleware(LoggedTestCase):
 
     def test_middleware_resolves_for_localized_owner_admin_paths(self) -> None:
         """ Verify localized owner-admin URLs remain tenant-aware. """
-        request = self._build_request("/en/owner-admin/")
+        request = self._build_request("/es/owner-admin/")
         request.user = self.user
 
         self.middleware(request)

@@ -115,11 +115,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DB_SCHEMA = os.environ.get('DB_SCHEMA', 'gea')
+DB_SCHEMA = os.environ.get('DB_SCHEMA', 'app')
 
 DATABASES = {
     'default': dj_database_url.parse(
-        os.environ.get('DATABASE_URL', 'postgres://luscious:blue@localhost:5432/gea_trader_db'),
+        os.environ.get('DATABASE_URL', 'postgres://django:django@localhost:5432/django_base'),
         conn_max_age=600,
     )
 }
@@ -151,7 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
@@ -160,8 +160,8 @@ USE_I18N = True
 USE_TZ = True
 
 LANGUAGES = [
-    ('es', _('Spanish')),
     ('en', _('English')),
+    ('es', _('Spanish')),
 ]
 
 LOCALE_PATHS = [

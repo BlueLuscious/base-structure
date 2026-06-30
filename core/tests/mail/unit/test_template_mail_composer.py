@@ -31,15 +31,15 @@ class TestTemplateMailComposer(LoggedSimpleTestCase):
     def test_compose_uses_an_explicit_tenant_without_leaking_runtime_context(self) -> None:
         """ Compose one templated request using one explicit tenant and restore runtime context afterwards. """
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug="gea-trader-legal",
-            business_email="hello@gea-trader.test",
+            name="Example Company Legal",
+            slug="example-company-legal",
+            business_email="hello@example.test",
             phone_number="+54 11 5555 1234",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
 
@@ -57,6 +57,6 @@ class TestTemplateMailComposer(LoggedSimpleTestCase):
             ),
         )
 
-        self.assertIn("Sent via GEA Trader", message.text_body)
-        self.assertIn("Support: hello@gea-trader.test", message.text_body)
+        self.assertIn("Sent via Example Company", message.text_body)
+        self.assertIn("Support: hello@example.test", message.text_body)
         self.assertIsNone(ActiveTenantContext.get())

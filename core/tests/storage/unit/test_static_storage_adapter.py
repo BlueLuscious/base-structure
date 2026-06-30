@@ -33,7 +33,7 @@ class TestStaticStorageAdapter(LoggedSimpleTestCase):
             "STATIC_URL": "/static/",
             "STATIC_ROOT": "staticfiles",
             "STATICFILES_LOCATION": "static",
-            "AWS_STORAGE_BUCKET_NAME": "gea-trader",
+            "AWS_STORAGE_BUCKET_NAME": "django-base-media",
             "AWS_ACCESS_KEY_ID": "access-key",
             "AWS_SECRET_ACCESS_KEY": "secret-key",
             "AWS_S3_REGION_NAME": "us-east-1",

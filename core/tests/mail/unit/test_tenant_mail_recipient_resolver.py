@@ -11,32 +11,32 @@ class TestTenantMailRecipientResolver(LoggedSimpleTestCase):
     def test_resolve_contact_email_prefers_support_email(self) -> None:
         """ Resolve the preferred contact email from support email before business email. """
         tenant = TenantModel(
-            name="GEA Trader",
-            slug="gea-trader",
-            business_email="hello@gea-trader.test",
-            support_email="support@gea-trader.test",
+            name="Example Company",
+            slug="example-company",
+            business_email="hello@example.test",
+            support_email="support@example.test",
         )
 
         self.assertEqual(
-            "support@gea-trader.test",
+            "support@example.test",
             TenantMailRecipientResolver.resolve_contact_email(tenant),
         )
 
     def test_resolve_contact_recipient_uses_display_name_when_branding_exists(self) -> None:
         """ Build one tenant-facing recipient with the preferred business display name. """
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug="gea-trader-legal",
-            business_email="hello@gea-trader.test",
+            name="Example Company Legal",
+            slug="example-company-legal",
+            business_email="hello@example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
 
         recipient = TenantMailRecipientResolver.resolve_contact_recipient(tenant)
 
         self.assertIsNotNone(recipient)
-        self.assertEqual("hello@gea-trader.test", recipient.email)
-        self.assertEqual("GEA Trader", recipient.name)
+        self.assertEqual("hello@example.test", recipient.email)
+        self.assertEqual("Example Company", recipient.name)

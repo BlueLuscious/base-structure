@@ -33,7 +33,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
             "MEDIAFILES_LOCATION": "media",
             "MEDIA_URL": "/media/",
             "MEDIA_ROOT": "media",
-            "AWS_STORAGE_BUCKET_NAME": "gea-trader",
+            "AWS_STORAGE_BUCKET_NAME": "django-base-media",
             "AWS_ACCESS_KEY_ID": "access-key",
             "AWS_SECRET_ACCESS_KEY": "secret-key",
             "AWS_S3_REGION_NAME": "auto",
@@ -103,7 +103,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
             adapter = R2MediaStorageAdapter()
             options = adapter.build_storage_options()
 
-        self.assertEqual(options["bucket_name"], "gea-trader")
+        self.assertEqual(options["bucket_name"], "django-base-media")
         self.assertEqual(options["region_name"], "auto")
         self.assertEqual(options["signature_version"], "s3v4")
         self.assertEqual(options["addressing_style"], "path")

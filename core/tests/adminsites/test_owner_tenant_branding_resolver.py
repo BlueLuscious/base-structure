@@ -30,9 +30,9 @@ class TestOwnerTenantBrandingResolver(LoggedSimpleTestCase):
         """ Verify the branding resolver prefers the branding display name over the tenant name. """
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
-        request.tenant._state.fields_cache["branding"] = type("Branding", (), {"display_name": "GEA Trader"})()
+        request.tenant._state.fields_cache["branding"] = type("Branding", (), {"display_name": "Example Company"})()
 
-        self.assertEqual("GEA Trader", OwnerTenantBrandingResolver.get_display_name(request))
+        self.assertEqual("Example Company", OwnerTenantBrandingResolver.get_display_name(request))
 
     def test_get_display_name_falls_back_to_tenant_name(self) -> None:
         """ Verify the branding resolver falls back to the tenant name when no display name exists. """

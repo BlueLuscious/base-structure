@@ -16,9 +16,9 @@ class TestTemplateMailRequestPayloadSerializer(LoggedTestCase):
     def test_roundtrip_preserves_templates_context_and_tenant_snapshot(self) -> None:
         """ Serialize and deserialize one templated mail request while snapshotting one explicit tenant context. """
         tenant = TenantModel.objects.create(
-            name="GEA Trader",
-            slug=f"gea-trader-{uuid4()}",
-            business_email="hello@gea-trader.test",
+            name="Example Company",
+            slug=f"example-company-{uuid4()}",
+            business_email="hello@example.test",
         )
         request = TemplateMailRequestDTO(
             subject="Serializer test",
@@ -36,8 +36,8 @@ class TestTemplateMailRequestPayloadSerializer(LoggedTestCase):
         self.assertEqual(request.subject, rebuilt_request.subject)
         self.assertEqual(request.html_template_name, rebuilt_request.html_template_name)
         self.assertIsNone(rebuilt_request.tenant)
-        self.assertEqual("GEA Trader", rebuilt_request.context["product_name"])
-        self.assertEqual("hello@gea-trader.test", rebuilt_request.context["support_email"])
+        self.assertEqual("Example Company", rebuilt_request.context["product_name"])
+        self.assertEqual("hello@example.test", rebuilt_request.context["support_email"])
         self.assertEqual("Serializer test", rebuilt_request.context["mail_title"])
         self.assertEqual(request.reply_to, rebuilt_request.reply_to)
 
@@ -49,10 +49,10 @@ class TestTemplateMailRequestPayloadSerializer(LoggedTestCase):
             context={"mail_title": "Serializer test", "mail_body": "Template body"},
             html_template_name="core/mail/messages/test_message.html",
             text_template_name="core/mail/messages/test_message.txt",
-            tenant=TenantModel(name="GEA Trader", slug="gea-trader"),
+            tenant=TenantModel(name="Example Company", slug="example-company"),
         )
 
         payload = TemplateMailRequestPayloadSerializer.serialize(request)
 
-        self.assertEqual("GEA Trader", payload["context"]["product_name"])
+        self.assertEqual("Example Company", payload["context"]["product_name"])
         self.assertNotIn("tenant_id", payload)

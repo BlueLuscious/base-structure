@@ -40,15 +40,15 @@ class TestTemplateMailMessageFactory(LoggedSimpleTestCase):
     def test_build_uses_active_tenant_context_when_no_explicit_branding_values_exist(self) -> None:
         """ Build one outbound DTO using the active tenant mail context as the base layer. """
         tenant = TenantModel(
-            name="GEA Trader",
-            slug="gea-trader",
-            business_email="hello@gea-trader.test",
+            name="Example Company",
+            slug="example-company",
+            business_email="hello@example.test",
             phone_number="+54 11 5555 9999",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader Pro",
+            display_name="Example Company Pro",
         )
         tenant._state.fields_cache["branding"] = branding
         tenant_token = ActiveTenantContext.set(tenant)
@@ -69,7 +69,7 @@ class TestTemplateMailMessageFactory(LoggedSimpleTestCase):
         finally:
             ActiveTenantContext.reset(tenant_token)
 
-        self.assertIn("Sent via GEA Trader Pro", message.text_body)
-        self.assertIn("Support: hello@gea-trader.test", message.text_body)
+        self.assertIn("Sent via Example Company Pro", message.text_body)
+        self.assertIn("Support: hello@example.test", message.text_body)
         self.assertIn("Phone: +54 11 5555 9999", message.text_body)
-        self.assertIn("Website: https://gea-trader.test", message.text_body)
+        self.assertIn("Website: https://example.test", message.text_body)

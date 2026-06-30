@@ -57,15 +57,15 @@ class TestTemplateMailService(LoggedSimpleTestCase):
     def test_send_includes_active_tenant_business_context_when_available(self) -> None:
         """ Deliver one templated message with tenant-aware branding and contact values. """
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug="gea-trader-legal",
-            support_email="support@gea-trader.test",
+            name="Example Company Legal",
+            slug="example-company-legal",
+            support_email="support@example.test",
             phone_number="+54 11 5555 1234",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
         tenant_token = ActiveTenantContext.set(tenant)
@@ -88,23 +88,23 @@ class TestTemplateMailService(LoggedSimpleTestCase):
 
         self.assertEqual(1, delivered_count)
         self.assertEqual(1, len(mail.outbox))
-        self.assertIn("Sent via GEA Trader", mail.outbox[0].body)
-        self.assertIn("Support: support@gea-trader.test", mail.outbox[0].body)
+        self.assertIn("Sent via Example Company", mail.outbox[0].body)
+        self.assertIn("Support: support@example.test", mail.outbox[0].body)
         self.assertIn("Phone: +54 11 5555 1234", mail.outbox[0].body)
-        self.assertIn("Website: https://gea-trader.test", mail.outbox[0].body)
+        self.assertIn("Website: https://example.test", mail.outbox[0].body)
 
     def test_send_accepts_an_explicit_tenant_without_relying_on_runtime_context(self) -> None:
         """ Deliver one templated message using an explicit tenant snapshot instead of ambient runtime state. """
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug="gea-trader-legal",
-            business_email="hello@gea-trader.test",
+            name="Example Company Legal",
+            slug="example-company-legal",
+            business_email="hello@example.test",
             phone_number="+54 11 5555 1234",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
 
@@ -124,7 +124,7 @@ class TestTemplateMailService(LoggedSimpleTestCase):
 
         self.assertEqual(1, delivered_count)
         self.assertEqual(1, len(mail.outbox))
-        self.assertIn("Sent via GEA Trader", mail.outbox[0].body)
-        self.assertIn("Support: hello@gea-trader.test", mail.outbox[0].body)
+        self.assertIn("Sent via Example Company", mail.outbox[0].body)
+        self.assertIn("Support: hello@example.test", mail.outbox[0].body)
         self.assertIn("Phone: +54 11 5555 1234", mail.outbox[0].body)
-        self.assertIn("Website: https://gea-trader.test", mail.outbox[0].body)
+        self.assertIn("Website: https://example.test", mail.outbox[0].body)

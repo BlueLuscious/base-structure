@@ -127,7 +127,7 @@ class TestTenantMediaStorage(LoggedSimpleTestCase):
 
     def test_remote_generate_filename_applies_tenant_prefix_behind_location_once(self) -> None:
         """ Verify remote generated names keep one tenant prefix behind the storage location. """
-        tenant = TenantModel(name="GEA Trader", slug="gea-trader")
+        tenant = TenantModel(name="Example Company", slug="example-company")
         tenant_token = ActiveTenantContext.set(tenant)
 
         try:
@@ -136,11 +136,11 @@ class TestTenantMediaStorage(LoggedSimpleTestCase):
             saved_name = storage.save(generated_name, ContentFile(b"logo"))
 
             self.assertEqual(
-                "media/tenants/gea-trader/branding/logos/logo.png",
+                "media/tenants/example-company/branding/logos/logo.png",
                 generated_name,
             )
             self.assertEqual(
-                "media/tenants/gea-trader/branding/logos/logo.png",
+                "media/tenants/example-company/branding/logos/logo.png",
                 saved_name,
             )
         finally:

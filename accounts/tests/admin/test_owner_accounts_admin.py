@@ -200,8 +200,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         with override("es"):
             form_field = self.group_admin.formfield_for_manytomany(Group._meta.get_field("permissions"), request)
             label = form_field.label_from_instance(permission)
-
-        self.assertEqual("Acceso al negocio | Grupo del negocio | Puede ver grupo del negocio", label)
+            self.assertEqual("Acceso al negocio | Grupo del negocio | Puede ver grupo del negocio", label)
 
     def test_non_owner_tenant_member_cannot_manage_owner_users_or_groups(self) -> None:
         """ Verify non-owner tenant members cannot administer owner accounts surfaces. """

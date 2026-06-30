@@ -12,7 +12,7 @@ class TestTemplateMailServiceAsync(LoggedTestCase):
 
     def test_send_async_serializes_the_request_and_dispatches_the_templated_mail_task(self) -> None:
         """ Serialize one templated mail request and enqueue the shared templated mail task. """
-        tenant = TenantModel.objects.create(name="GEA Trader", slug=f"gea-trader-{uuid4()}")
+        tenant = TenantModel.objects.create(name="Example Company", slug=f"example-company-{uuid4()}")
         request = TemplateMailRequestDTO(
             subject="Async test",
             to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],
@@ -32,7 +32,7 @@ class TestTemplateMailServiceAsync(LoggedTestCase):
 
         self.assertIs(async_result, returned_result)
         self.assertEqual("Async test", delay_mock.call_args.kwargs["payload"]["subject"])
-        self.assertEqual("GEA Trader", delay_mock.call_args.kwargs["payload"]["context"]["product_name"])
+        self.assertEqual("Example Company", delay_mock.call_args.kwargs["payload"]["context"]["product_name"])
         self.assertNotIn("tenant_id", delay_mock.call_args.kwargs["payload"])
         self.assertTrue(delay_mock.call_args.kwargs["fail_silently"])
         logger_info_mock.assert_called_once()

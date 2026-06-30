@@ -61,16 +61,16 @@ class TestMailTemplateRenderer(LoggedSimpleTestCase):
     def test_render_text_includes_active_tenant_business_context(self) -> None:
         """ Render the text template using the active tenant context when the caller does not override it. """
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug="gea-trader-legal",
-            business_email="hello@gea-trader.test",
-            support_email="support@gea-trader.test",
+            name="Example Company Legal",
+            slug="example-company-legal",
+            business_email="hello@example.test",
+            support_email="support@example.test",
             phone_number="+54 11 5555 1234",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
         tenant_token = ActiveTenantContext.set(tenant)
@@ -86,21 +86,21 @@ class TestMailTemplateRenderer(LoggedSimpleTestCase):
         finally:
             ActiveTenantContext.reset(tenant_token)
 
-        self.assertIn("Sent via GEA Trader", rendered_text)
-        self.assertIn("Support: support@gea-trader.test", rendered_text)
+        self.assertIn("Sent via Example Company", rendered_text)
+        self.assertIn("Support: support@example.test", rendered_text)
         self.assertIn("Phone: +54 11 5555 1234", rendered_text)
-        self.assertIn("Website: https://gea-trader.test", rendered_text)
+        self.assertIn("Website: https://example.test", rendered_text)
 
     def test_render_html_allows_explicit_context_to_override_active_tenant_values(self) -> None:
         """ Render the HTML template with explicit values taking precedence over the active tenant context. """
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug="gea-trader-legal",
-            support_email="support@gea-trader.test",
+            name="Example Company Legal",
+            slug="example-company-legal",
+            support_email="support@example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
         tenant_token = ActiveTenantContext.set(tenant)
@@ -120,4 +120,4 @@ class TestMailTemplateRenderer(LoggedSimpleTestCase):
 
         self.assertIn("Override Brand", rendered_html)
         self.assertIn("override@example.com", rendered_html)
-        self.assertNotIn("support@gea-trader.test", rendered_html)
+        self.assertNotIn("support@example.test", rendered_html)

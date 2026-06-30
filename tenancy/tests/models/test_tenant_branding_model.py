@@ -10,9 +10,9 @@ class TestTenantBrandingModel(LoggedTestCase):
     def test_string_representation_prefers_display_name(self) -> None:
         """ Verify the branding string representation uses the configured display name when available. """
         tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
-        branding = TenantBrandingModel.objects.create(tenant=tenant, display_name="GEA Trader")
+        branding = TenantBrandingModel.objects.create(tenant=tenant, display_name="Example Company")
 
-        self.assertEqual("GEA Trader", str(branding))
+        self.assertEqual("Example Company", str(branding))
 
     def test_string_representation_falls_back_to_tenant_name(self) -> None:
         """ Verify the branding string representation falls back to the tenant when no display name exists. """

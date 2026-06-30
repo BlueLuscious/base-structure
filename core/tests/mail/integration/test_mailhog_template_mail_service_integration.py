@@ -72,15 +72,15 @@ class TestMailhogTemplateMailServiceIntegration(BaseMailIntegrationSimpleTestCas
         """ Deliver one real templated message using an explicit tenant context and confirm MailHog captures its tenant-aware content. """
         subject = f"MailHog templated tenant aware {uuid4()}"
         tenant = TenantModel(
-            name="GEA Trader Legal",
-            slug=f"gea-trader-legal-{uuid4()}",
-            support_email="support@gea-trader.test",
+            name="Example Company Legal",
+            slug=f"example-company-legal-{uuid4()}",
+            support_email="support@example.test",
             phone_number="+54 11 5555 1234",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         branding = TenantBrandingModel(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
         tenant._state.fields_cache["branding"] = branding
 
@@ -100,8 +100,8 @@ class TestMailhogTemplateMailServiceIntegration(BaseMailIntegrationSimpleTestCas
 
         self.assertEqual(1, delivered_count)
         self.assertTrue(self.mailhog_contains_subject(subject))
-        self.assertTrue(self.mailhog_contains_text("GEA Trader"))
-        self.assertTrue(self.mailhog_contains_text("support@gea-trader.test"))
+        self.assertTrue(self.mailhog_contains_text("Example Company"))
+        self.assertTrue(self.mailhog_contains_text("support@example.test"))
 
     def test_send_delivers_multiple_real_tenant_aware_templated_messages_to_mailhog(self) -> None:
         """ Deliver multiple real templated messages with different explicit tenants and confirm MailHog captures both business contexts. """

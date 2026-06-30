@@ -36,15 +36,15 @@ class TestMailhogAsyncTemplateMailServiceIntegration(BaseAsyncMailIntegrationTra
         """ Deliver one tenant-aware templated message asynchronously and confirm MailHog captures its business context. """
         subject = f"MailHog async tenant aware {uuid4()}"
         tenant = TenantModel.objects.create(
-            name="GEA Trader Legal",
-            slug=f"gea-trader-legal-{uuid4()}",
-            support_email="support@gea-trader.test",
+            name="Example Company Legal",
+            slug=f"example-company-legal-{uuid4()}",
+            support_email="support@example.test",
             phone_number="+54 11 5555 1234",
-            website_url="https://gea-trader.test",
+            website_url="https://example.test",
         )
         TenantBrandingModel.objects.create(
             tenant=tenant,
-            display_name="GEA Trader",
+            display_name="Example Company",
         )
 
         async_result = TemplateMailService.send_async(
@@ -64,5 +64,5 @@ class TestMailhogAsyncTemplateMailServiceIntegration(BaseAsyncMailIntegrationTra
 
         self.assertEqual(1, delivered_count)
         self.wait_for_mailhog_subject(subject)
-        self.wait_for_mailhog_text("GEA Trader")
-        self.wait_for_mailhog_text("support@gea-trader.test")
+        self.wait_for_mailhog_text("Example Company")
+        self.wait_for_mailhog_text("support@example.test")

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: gea-trader-core\n"
+"Project-Id-Version: django-base\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-03 02:42-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
