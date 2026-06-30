@@ -96,6 +96,11 @@ Default endpoints from `.env.example`:
 Host ports are configurable, allowing independently named clones to use
 different ports when they run simultaneously.
 
+Compose generates container, network, and volume names from each project name
+instead of using global fixed container names. Service discovery inside each
+Compose network still uses the stable service names `db`, `minio`, `mailhog`,
+and `redis`.
+
 ## Celery
 
 Start a worker after Redis is available.
@@ -131,9 +136,13 @@ Start with [docs/project.md](docs/project.md). Detailed documentation covers:
 - Celery and scheduled tasks
 - mail composition, templates, and runtime behavior
 - logging and reusable form infrastructure
+- optional Discord repository notifications
 
 Ready-to-copy storage environment combinations live under
 `docs/env-examples/`.
+
+Discord notification setup and lifecycle behavior are documented in
+[docs/github/workflows/discord.md](docs/github/workflows/discord.md).
 
 ## Translations
 

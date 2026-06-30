@@ -154,6 +154,11 @@ jobs:
           AUTHOR: ${{ github.actor }}
           MERGED: ${{ github.event.pull_request.merged }}
         run: |
+          if [ -z "$DISCORD_WEBHOOK" ]; then
+            echo "DISCORD_WEBHOOK is not configured; skipping notification."
+            exit 0
+          fi
+
           if [ "$ACTION" = "closed" ] && [ "$MERGED" = "true" ]; then
             TITLE="🟣 Pull Request #$NUMBER Merged"
             COLOUR=10181046

@@ -24,6 +24,7 @@ Current status of the other app folders:
 
 - Repository setup and development workflow: `README.md`
 - Capability status by implementation stage: `docs/capability-status.md`
+- Optional Discord repository notifications: `docs/github/workflows/discord.md`
 
 ## Core Docs
 
