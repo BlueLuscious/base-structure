@@ -179,6 +179,20 @@ This keeps:
 
 ## Current Behavior
 
+### Initial Access
+
+The technical admin at `/admin/` requires an active superuser.
+
+The tenant-aware owner admin at `/owner-admin/` requires this minimum setup:
+
+1. create an active tenant through the technical admin
+2. create an active staff user
+3. create an active owner membership linking the user to the tenant
+4. mark the membership as primary when it should be the automatic fallback
+
+Standard Django permissions continue to control access to owner-managed model
+sections. The owner role alone does not grant every model permission.
+
 ### `MasterAdminSite`
 
 Intended for technical platform administrators.

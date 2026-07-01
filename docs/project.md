@@ -58,11 +58,55 @@ part of the current tree. They may appear only as clearly labeled examples.
 - Tenancy access policies: `docs/tenancy/access.md`
 - Tenancy resolution layer: `docs/tenancy/resolution.md`
 
+## Local Development Infrastructure
+
+Docker Compose provides PostgreSQL, MinIO, MailHog, and Redis. Django, Celery
+Worker, and Celery Beat run from the host development environment.
+
+Default endpoints from `.env.example`:
+
+- PostgreSQL: `127.0.0.1:5432`
+- MinIO API: `http://127.0.0.1:9000`
+- MinIO console: `http://127.0.0.1:9001`
+- MailHog SMTP: `127.0.0.1:1025`
+- MailHog web UI: `http://127.0.0.1:8025`
+- Redis: `127.0.0.1:6379`
+
+Compose generates container, network, and volume names from the project name.
+Inside each Compose network, services retain the stable names `db`, `minio`,
+`mailhog`, and `redis`.
+
+Host ports remain configurable so multiple clones can run simultaneously.
+
+Stop services without removing data:
+
+```bash
+docker compose stop
+```
+
+Remove containers and networks while retaining the PostgreSQL volume:
+
+```bash
+docker compose down
+```
+
+Reset the named PostgreSQL volume only when losing local database data is
+acceptable:
+
+```bash
+docker compose down -v
+```
+
+The `minio-data/` bind-mounted directory is independent from named Compose
+volumes and is not removed by `docker compose down -v`.
+
 ## Ownership Rule
 
 To avoid repeating the same explanation in multiple places:
 
-- `README.md` owns first-run onboarding and clone customization
+- `README.md` owns the first-run quick start
+- `docs/project.md` owns documentation navigation, local infrastructure, and
+  derived-project preparation
 - `docs/capability-status.md` classifies implementation status
 - `docs/core/core.md` owns the `core/` package boundary
 - `docs/core/celery/celery.md` owns the Celery runtime and bootstrap
@@ -89,3 +133,19 @@ To avoid repeating the same explanation in multiple places:
 
 When one topic depends on another, link to the owning document instead of
 duplicating its full contract.
+
+## Starting A Derived Project
+
+Before using a clone as a new project:
+
+- update repository metadata, Git remotes, and stable display branding
+- replace secrets and configure allowed hosts and trusted origins
+- choose project-specific database credentials and keep the schema, Compose,
+  and Django settings aligned
+- select the media and static storage providers
+- configure mail delivery, Redis, Celery, language, and timezone
+- create the initial superuser, tenant, owner membership, and permissions
+- retain, reconfigure, or remove the optional Discord workflow
+- review existing migrations before adding project-specific models
+- run Django checks, the complete default test suite, translation checks, and
+  production deployment checks
