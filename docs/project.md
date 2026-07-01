@@ -29,6 +29,7 @@ part of the current tree. They may appear only as clearly labeled examples.
 
 - Repository setup and development workflow: `README.md`
 - Capability status by implementation stage: `docs/capability-status.md`
+- Continuous integration quality gates: `docs/github/workflows/ci.md`
 - Optional Discord repository notifications: `docs/github/workflows/discord.md`
 
 ## Core Documentation
@@ -138,6 +139,7 @@ To avoid repeating the same explanation in multiple places:
 - `docs/tenancy/runtime.md` owns request-time tenant behavior
 - `docs/tenancy/access.md` owns tenant access policy
 - `docs/tenancy/resolution.md` owns tenant resolution strategies
+- `docs/github/workflows/ci.md` owns automated project quality gates
 - `docs/github/workflows/discord.md` owns optional Discord workflow operation
 
 When one topic depends on another, link to the owning document instead of

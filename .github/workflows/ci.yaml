@@ -1,0 +1,107 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - "feature/**"
+      - "bugfix/**"
+      - "fix/**"
+      - "enhancement/**"
+      - "test/**"
+  pull_request:
+    branches:
+      - master
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  django:
+    name: Django / Python 3.11
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      SECRET_KEY: django-insecure-ci-only
+      DEBUG: "False"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CSRF_TRUSTED_ORIGINS: http://localhost,http://127.0.0.1
+      TIME_ZONE: UTC
+      DATABASE_URL: postgres://django:django@127.0.0.1:5432/django_base
+      DB_SCHEMA: app
+      EMAIL_BACKEND: django.core.mail.backends.locmem.EmailBackend
+      CELERY_TASK_ALWAYS_EAGER: "True"
+      RUN_STORAGE_INTEGRATION_TESTS: "False"
+      RUN_MAIL_INTEGRATION_TESTS: "False"
+      RUN_ASYNC_MAIL_INTEGRATION_TESTS: "False"
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: django_base
+          POSTGRES_USER: django
+          POSTGRES_PASSWORD: django
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U django -d django_base"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install runtime dependencies
+        run: python -m pip install --requirement requirements.txt
+
+      - name: Install gettext
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes gettext
+
+      - name: Initialize PostgreSQL schema
+        env:
+          PGPASSWORD: django
+        run: |
+          psql \
+            --host 127.0.0.1 \
+            --username django \
+            --dbname django_base \
+            --set ON_ERROR_STOP=1 \
+            --command "CREATE SCHEMA IF NOT EXISTS app AUTHORIZATION django;"
+          psql \
+            --host 127.0.0.1 \
+            --username django \
+            --dbname django_base \
+            --set ON_ERROR_STOP=1 \
+            --command "ALTER ROLE django SET search_path TO app,public;"
+
+      - name: Run Django checks
+        run: python manage.py check
+
+      - name: Check migration drift
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Compile Spanish translations
+        run: python manage.py compilemessages --locale es
+
+      - name: Run default test suite
+        run: python manage.py test accounts.tests core.tests tenancy.tests
