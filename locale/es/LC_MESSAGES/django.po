@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-base\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-05 01:25-0300\n"
+"POT-Creation-Date: 2026-07-01 04:29-0300\n"
 "PO-Revision-Date: 2026-04-02 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -234,12 +234,12 @@ msgstr "Usuario"
 msgid "Users"
 msgstr "Usuarios"
 
-#: .\accounts\tests\admin\test_owner_accounts_admin.py:232
+#: .\accounts\tests\admin\test_owner_accounts_admin.py:231
 #: .\tenancy\choices\tenant_role.py:11
 msgid "Owner"
 msgstr "Propietario"
 
-#: .\accounts\tests\admin\test_owner_accounts_admin.py:232
+#: .\accounts\tests\admin\test_owner_accounts_admin.py:231
 #: .\tenancy\choices\tenant_role.py:12
 msgid "Operator"
 msgstr "Operador"
@@ -631,13 +631,13 @@ msgstr ""
 msgid "Reset filters"
 msgstr "Restablecer filtros"
 
-#: .\core\settings.py:160
-msgid "Spanish"
-msgstr "Español"
-
-#: .\core\settings.py:161
+#: .\core\settings.py:164
 msgid "English"
 msgstr "Inglés"
+
+#: .\core\settings.py:165
+msgid "Spanish"
+msgstr "Español"
 
 #: .\tenancy\admin\owner\owner_tenant_settings_form.py:22
 #: .\tenancy\models\tenant_model.py:33

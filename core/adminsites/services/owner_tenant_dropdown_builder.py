@@ -55,7 +55,8 @@ class OwnerTenantDropdownBuilder:
         for membership in list(memberships):
             tenant = membership.tenant
             is_current_tenant = str(tenant.pk) == current_tenant_id
-            title = f"{tenant.name} ({_('Current')})" if is_current_tenant else tenant.name
+            current_label = _("Current")
+            title = f"{tenant.name} ({current_label})" if is_current_tenant else tenant.name
 
             dropdown_items.append(
                 {
