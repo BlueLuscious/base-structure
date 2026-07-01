@@ -174,9 +174,8 @@ It is intentionally present because the future frontend may need tenant resoluti
 
 Example future URL patterns:
 
-- `/t/<tenant-slug>/products/`
-- `/t/<tenant-slug>/quotes/`
-- `/t/<tenant-slug>/checkout/`
+- `/t/<tenant-slug>/<resource>/`
+- `/t/<tenant-slug>/<resource>/<object-id>/`
 
 Possible future behavior:
 
@@ -185,6 +184,10 @@ Possible future behavior:
 - optionally validate user access depending on the surface
 
 This strategy is not wired into the current middleware yet.
+
+The designed frontend direction is documented in:
+
+- `docs/front/front.md`
 
 ## Future Strategy Options
 

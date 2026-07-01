@@ -1,226 +1,183 @@
 # Capability Status Map
 
-This document classifies the main project capabilities by implementation status.
-
-Use it as a quick answer to questions such as:
-
-- what already runs in production-style runtime today
-- what is already implemented but not connected yet
-- what is only designed as a future direction
+This document classifies the reusable base capabilities by implementation
+status.
 
 See also:
 
 - `docs/project.md`
 
-## How To Read This Document
+## Status Definitions
 
-Each capability falls into one of these states:
+- `Implemented`: active code is present in the current runtime.
+- `Extension point`: supporting code exists, but the optional path is not active.
+- `Designed for future`: documentation defines a direction with no current runtime
+  implementation.
 
-- `Implemented now`: active in the current runtime
-- `Implemented as extension point`: code or structure already exists, but it is not the active runtime path yet
-- `Designed for future`: documented direction that still requires real implementation work
-
-This document is an index, not the detailed owner of each topic.
-Follow the linked docs to inspect the full rules for one capability.
-
-## Implemented Now
+## Implemented
 
 ### Accounts And Authentication
 
 - custom `UserModel`
-- owner and master admin registrations for users and groups
-- tenant-scoped owner account management rules
+- typed manager and queryset foundations
+- master and owner admin registrations for users and groups
+- tenant-scoped owner account management
 
-Check:
+Read:
 
 - `docs/accounts/accounts.md`
 - `docs/core/adminsites/adminsites.md`
 
-### Tenancy Base
+### Tenancy
 
-- `TenantModel`
-- `TenantMembershipModel`
-- `TenantGroupModel`
-- `TenantBrandingModel`
-- active tenant stored on `request.tenant`
+- tenant, membership, tenant-group, and branding models
+- session-first active-tenant resolution with membership fallback
+- request middleware and runtime tenant context
+- explicit owner-admin tenant switching
+- owner-facing tenant settings and branding
 
-Check:
+Read:
 
 - `docs/tenancy/tenancy.md`
 - `docs/tenancy/runtime.md`
-
-### Active Tenant Resolution For Admin
-
-- middleware-driven active tenant resolution
-- session-first admin flow
-- membership fallback when no active tenant is stored
-- explicit tenant switching through the owner admin
-
-Check:
-
-- `docs/tenancy/runtime.md`
 - `docs/tenancy/resolution.md`
+- `docs/tenancy/access.md`
 
-### Owner Admin Base Structure
+### Administration
 
-- custom owner admin site
-- tenant-aware header metadata and branding
-- tenant switcher dropdown
-- direct business settings flow for the active tenant
-- portable redirect behavior when switching tenants from admin change views
+- separate master and owner admin sites
+- Unfold integration
+- tenant-aware owner metadata, navigation, and branding
+- light and dark owner favicon support
+- django-import-export integration installed at project level
 
-Check:
+No app-owned import/export resource is included yet.
+
+Read:
 
 - `docs/core/adminsites/adminsites.md`
-- `docs/tenancy/runtime.md`
+- `docs/core/adminsites/owner-managed-apps.md`
 
-### Tenant-Aware Media Storage
+### Storage
 
-- tenant-aware media object naming based on the active tenant
-- local, S3, and R2 support for media
-- local, WhiteNoise, S3, and R2 support for static files
+- local, S3, and R2 media adapters
+- local, WhiteNoise, S3, and R2 static-file adapters
+- tenant-aware media object paths
+- opt-in external storage integration tests
 
-Check:
+Read:
 
 - `docs/core/config/storage/storage.md`
 - `docs/core/config/storage/testing.md`
 
-### Core Mail Service
+### Mail
 
-- project-wide outbound mail service under `core/mail/`
-- synchronous delivery through Django's email stack
-- asynchronous delivery through the shared Celery runtime for raw and templated mail
-- DTO, backend, factory, serializer, and task layers wired for both sync and async delivery
-- reusable template-based mail rendering with a shared base layout and mandatory system footer
+- synchronous and asynchronous delivery
+- raw and template-based message services
+- DTO, serializer, renderer, composer, policy, and backend layers
+- shared HTML and text layouts
+- tenant-aware template context and reply behavior
+- opt-in MailHog integration tests
 
-Check:
+Read:
 
 - `docs/core/mail/mail.md`
 - `docs/core/mail/runtime.md`
 - `docs/core/mail/templates.md`
+- `docs/core/mail/composers.md`
 
-### Owner Favicon Theme Support
+### Asynchronous Runtime
 
-- light and dark favicon variants resolved from tenant branding
-- small owner-admin script that finalizes `prefers-color-scheme` behavior in the browser
+- Redis-backed Celery configuration
+- Worker and Beat bootstrap
+- code-owned Beat schedule builder
+- asynchronous mail tasks
+- app-owned task conventions
 
-Check:
+The Beat schedule is intentionally empty until a real recurring task exists.
 
-- `docs/core/adminsites/adminsites.md`
-- `docs/tenancy/tenancy.md`
-
-## Implemented As Extension Point
-
-### Project-Wide Async Task Runtime
-
-- Redis-backed Celery wiring already exists in `core/`
-- the stack is prepared for any future asynchronous task, not only mail
-- outbound mail is already running on top of the shared runtime
-- future app-owned tasks can build on the same bootstrap and task conventions
-
-Check:
+Read:
 
 - `docs/core/celery/celery.md`
-- `docs/core/mail/runtime.md`
+- `docs/core/celery/tasks/tasks.md`
+
+### Development Infrastructure
+
+- PostgreSQL, MinIO, MailHog, and Redis through Docker Compose
+- host-run Django, Celery Worker, and Celery Beat
+- environment examples for supported storage combinations
+- optional Discord repository notifications
+
+Read:
+
+- `README.md`
+- `docs/github/workflows/discord.md`
+
+## Extension Points
 
 ### Path-Based Tenant Resolution
 
-- `PathTenantResolutionStrategy` already exists as a dedicated strategy hook
-- it is not part of the active runtime resolver yet
+`PathTenantResolutionStrategy` exists but always returns `None` and is not part
+of the active resolver chain. It is reserved for a future tenant-aware public
+surface.
 
-Check:
+Read:
 
 - `docs/tenancy/resolution.md`
 - `docs/front/front.md`
 
-### Front App As Future UI Surface
+### Owner-Managed Domain Apps
 
-- `front/` already exists as the intended home for reusable components and future frontend routes
-- it is not part of the current runtime app scope wired by `core/settings.py`
-- the project already defines how tenant-aware frontend routing should be wired once the first real surface appears
+The access and admin wiring contract exists for future tenant-scoped apps.
+There is no business-domain app in the current repository.
 
-Check:
-
-- `docs/front/front.md`
-- `docs/tenancy/resolution.md`
-
-### Future Owner-Managed App Pattern
-
-- the project already defines the wiring contract for future owner-managed apps
-- `accounts` and `tenancy` stay owner-only
-- future tenant-member apps should use tenant membership plus Django permissions
-
-Check:
+Read:
 
 - `docs/core/adminsites/owner-managed-apps.md`
 - `docs/tenancy/access.md`
-- `docs/accounts/accounts.md`
+
+### Import/Export Resources
+
+The dependency and Unfold integration are installed, but no model-specific
+resource is currently implemented. Future resources belong to the app that owns
+their model.
+
+Read:
+
+- `docs/core/adminsites/adminsites.md`
 
 ## Designed For Future
 
-### Host-Based Tenancy
+### Front App And Public UI
 
-- host or subdomain-based tenant identity is a documented future option
-- no runtime resolver is wired for it today
+No `front/` package, public page, or reusable component tree currently exists.
+`front/` remains the designed project path for reusable components, pages,
+frontend views, assets, sandbox examples, and future public routes.
 
-Check:
-
-- `docs/tenancy/resolution.md`
-
-### Path-Based Tenant-Aware Frontend Surface
-
-- the route contract and wiring direction are documented
-- no real frontend tenant-aware flow is active yet
-
-Check:
+Read:
 
 - `docs/front/front.md`
+
+### Host-Based Tenancy
+
+Host or subdomain tenant resolution is not implemented.
+
+Read:
+
 - `docs/tenancy/resolution.md`
 
-### New Domain Apps
+### Business-Domain Apps
 
-- `catalog/`
-- `cart/`
-- `masterdata/`
-- `quotation/`
+No catalog, cart, quotation, master-data, or other product-specific app is part
+of this base. Derived projects should introduce only the domains they need and
+follow the app, tenancy, admin, task, test, translation, and documentation
+contracts described by this repository.
 
-These app folders exist in the repository, but they are not yet the primary documented runtime scope of this branch.
+## Maintenance Rule
 
-Check:
+When capability status changes:
 
-- `docs/project.md`
-
-### New Storage Adapter Onboarding
-
-- the process for adding one new storage provider is documented
-- no additional provider beyond the current supported set is being added right now
-
-Check:
-
-- `docs/core/config/storage/storage.md`
-- `docs/core/config/storage/testing.md`
-
-## Process Families To Reuse Later
-
-These are the main future process types that the project should reuse instead of inventing ad hoc wiring each time:
-
-1. owner-only app wiring
-2. operator-capable owner-managed app wiring
-3. non-tenant-aware app wiring
-4. tenant-aware frontend wiring by path
-5. non-tenant-aware frontend wiring
-6. admin session-based tenant switching
-7. storage wiring by environment
-8. tenant-aware media storage wiring
-9. global staticfiles wiring
-10. new storage adapter onboarding
-11. host-based tenancy onboarding
-12. future domain-app documentation onboarding
-
-## Rule Of Thumb
-
-When a capability changes status:
-
-- update the owner document first
-- update this index second
-- keep local backlog tracking separate from stable architectural truth
+1. update the code-owning document
+2. update this status map
+3. update `docs/project.md` when navigation or ownership changes
+4. keep branch-local planning outside committed project documentation

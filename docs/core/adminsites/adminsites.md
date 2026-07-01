@@ -124,8 +124,9 @@ Rules:
 
 - keep the dependency and installed-app wiring in the base project layer
 - keep model-specific resources inside the app that owns the model
-- prefer app-owned resources such as `<app>/resources/`
-- base-owned examples should use base apps such as `accounts/resources/` or `tenancy/resources/`
+- future model-specific resources should use `<app>/resources/`
+- future base-owned examples should use base apps such as
+  `accounts/resources/` or `tenancy/resources/`
 - use Unfold's import/export forms when an admin class enables import/export
 - do not create project-wide custom import/export templates unless the Unfold integration has a real gap
 - keep imports tenant-scoped in owner admin and never trust tenant identifiers from uploaded files
@@ -213,7 +214,7 @@ Characteristics:
 
 If a concern is shared by all admin sites, place it in:
 
-- `sites/base_admin_site.py`
+- `core/adminsites/sites/base_admin_site.py`
 - or the `unfold/` adapter layer when it is Unfold-specific
 
 If a concern is specific to one domain app, keep it inside that app instead of growing `core/adminsites/`.

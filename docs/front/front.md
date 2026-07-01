@@ -1,97 +1,90 @@
 # Front App
 
-This document explains the current role of `front/` and the intended future process for wiring frontend surfaces.
+This document defines the intended future role of `front/` and the process for
+wiring public frontend surfaces.
 
 See also:
 
 - `docs/project.md`
+- `docs/capability-status.md`
 - `docs/tenancy/tenancy.md`
 - `docs/tenancy/runtime.md`
 - `docs/tenancy/resolution.md`
 
 ## Current Status
 
-`front/` exists as the intended home for reusable UI components, pages, and future frontend routes.
+`front/` is a designed future integration surface. It is not present in the
+current repository tree and is not registered in `core/settings.py`.
 
-At the moment:
+When introduced, it is intended to own:
 
-- it is not the primary documented runtime surface of the project
-- it is not part of the current runtime app scope wired by `core/settings.py`
-- it should remain decoupled from owner-admin concerns
-- it should only become tenant-aware when a real tenant-aware frontend flow exists
+- reusable UI components
+- public pages and templates
+- public base views and view mixins
+- page-specific CSS and JavaScript
+- frontend route definitions
+- sandbox examples for reusable components
 
-This means the project should not pre-emptively force tenant awareness into every frontend page.
+It must remain decoupled from owner-admin concerns and should become
+tenant-aware only when a real frontend flow requires tenant context.
 
 ## Future Frontend Surface Types
 
-The future frontend can evolve into more than one kind of surface:
+The frontend may contain more than one explicit surface:
 
-- tenant-aware frontend routes whose URL explicitly identifies the tenant
-- global frontend routes that are not tenant-aware
-- public or anonymous routes that do not require tenant membership
-- authenticated tenant routes that require an active tenant and tenant-scoped permissions
+- tenant-aware routes whose URL identifies the tenant
+- global routes without tenant context
+- public or anonymous routes that do not require membership
+- authenticated tenant routes with tenant-scoped access policies
 
-These should stay explicit. One frontend surface should not silently adopt the rules of another.
+One surface must not silently inherit the rules of another.
 
 ## Future Tenant-Aware Frontend By Path
 
-When the first tenant-aware frontend flow appears, the preferred direction is path-based tenant identity.
+When the first tenant-aware frontend flow appears, the preferred direction is
+path-based tenant identity.
 
-Example patterns:
+Example route contract:
 
-- `/t/<tenant-slug>/products/`
-- `/t/<tenant-slug>/quotes/`
-- `/t/<tenant-slug>/checkout/`
+```text
+/t/<tenant-slug>/<resource>/
+```
 
 Recommended process:
 
-1. define one stable path convention for tenant-aware frontend routes
-2. resolve tenant identity from the URL before page-specific business logic runs
-3. keep tenant resolution separate from access policy checks
-4. validate tenant membership or tenant visibility after resolution, not inside the path parser
-5. keep non-tenant-aware frontend routes outside that path contract
+1. define one stable path convention
+2. resolve tenant identity before page-specific business logic
+3. keep tenant resolution separate from access policy
+4. validate membership or public visibility after resolution
+5. scope app-owned queries to the resolved tenant
+6. preserve the tenant path in generated links
+7. keep reusable components independent from tenant resolution
 
-The preferred backend support for this future flow is already described in `docs/tenancy/resolution.md` through the planned `PathTenantResolutionStrategy`.
+`PathTenantResolutionStrategy` is the existing extension hook for this future
+flow. It is deliberately inactive today.
 
-## Recommended Wiring For Future Tenant-Aware Frontend Pages
+## Future Global Frontend Pages
 
-When a new tenant-aware frontend page is introduced, the expected wiring should be:
+When a page is not tenant-aware:
 
-1. route includes a stable tenant identifier, preferably the tenant slug
-2. tenant is resolved from the route by the dedicated resolution strategy
-3. page access checks are applied after tenant resolution
-4. data queries are scoped to the resolved tenant
-5. links generated inside that surface preserve the tenant path contract
-6. shared components remain agnostic and should not embed tenant-resolution rules by themselves
+- do not force an active tenant into its route
+- do not depend on tenant-scoped query helpers
+- do not import tenant access policies
+- introduce tenant context only through an explicit transition
 
-This keeps:
+Possible examples include landing, sign-in, documentation, or support pages.
 
-- resolution in the resolution layer
-- authorization in the access layer
-- data scoping in the app layer
-- rendering concerns in the frontend layer
+## Implementation Gate
 
-## Recommended Wiring For Future Non-Tenant-Aware Frontend Pages
+Before creating `front/`:
 
-When a frontend page is not tenant-aware:
+1. identify the first real page and its access contract
+2. define explicit component, view, template, asset, sandbox, and test ownership
+3. register the app and routes explicitly
+4. activate only the tenant-resolution strategies required by real routes
+5. add component sandbox examples when reusable components are introduced
+6. add rendering, contract, and integration tests
+7. update `docs/project.md` and `docs/capability-status.md`
 
-- do not force an active tenant into the route
-- do not depend on tenant-scoped query filters
-- do not import tenant-aware policies unless the page explicitly transitions into a tenant-aware flow
-
-Examples:
-
-- landing pages
-- marketing pages
-- generic sign-in flows
-- documentation or support pages
-
-## Design Rules
-
-When wiring future frontend routes:
-
-- prefer explicit tenant identity in the URL over implicit tenant context
-- do not infer tenant context inside reusable UI components
-- do not let owner-admin routing rules leak into frontend pages
-- keep path-based tenant resolution and tenant access policy as separate steps
-- only extract reusable frontend tenant helpers after at least one real tenant-aware surface exists
+Do not create placeholder business pages or claim frontend runtime capability
+before the corresponding code exists.

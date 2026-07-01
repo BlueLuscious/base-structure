@@ -37,7 +37,8 @@ Recommended placement:
 Examples:
 
 - project-wide mail infrastructure can live in `core/tasks/`
-- a quotation-specific follow-up task should prefer living in `quotation/tasks/`
+- an app-specific email task should prefer living in the owning app's
+  `<app>/tasks/email/` package
 
 ## Payload Rule
 
@@ -79,7 +80,7 @@ Examples:
 
 - `send_mail_message_task`
 - `send_templated_mail_task`
-- `send_quotation_inquiry_email_task`
+- `send_customer_email_task`
 
 Avoid vague names such as:
 
@@ -92,8 +93,8 @@ Prefer `tasks.py` as the module name inside one task package or subpackage.
 Preferred examples:
 
 - `core/tasks/mail/tasks.py`
-- `quotation/tasks/email/tasks.py`
-- `quotation/tasks/reminders/tasks.py`
+- `<app>/tasks/email/tasks.py`
+- `<app>/tasks/maintenance/tasks.py`
 
 Avoid file names such as:
 
@@ -113,7 +114,7 @@ core/
       __init__.py
       tasks.py
 
-quotation/
+<app>/
   tasks/
     __init__.py
     email/
@@ -137,7 +138,11 @@ Keep this split:
 Examples:
 
 - one mail task should delegate to the existing mail service or composer layers
-- one quotation task should delegate to one quotation service or one quotation-specific mail composer
+- one app-owned email task should delegate to an email service or composer owned
+  by that app
+
+Use a package such as `<app>/tasks/notifications/` only when the owning app has
+a real multi-channel notification concern rather than email-specific work.
 
 ## Retry Rule
 

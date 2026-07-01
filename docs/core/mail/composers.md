@@ -93,7 +93,7 @@ Create a domain composer when:
 
 Typical examples:
 
-- quotation inquiry notifications
+- customer request notifications
 - customer confirmation emails
 - account recovery or invitation flows owned by one app
 
@@ -110,7 +110,7 @@ When creating a new composer:
 
 ## Example Future Composer
 
-One future composer for quotation inquiries could look like this:
+One hypothetical app-owned composer for a customer request could look like this:
 
 ```python
 from core.mail import (
@@ -120,40 +120,44 @@ from core.mail import (
     TenantMailRecipientResolver,
     TenantMailReplyPolicy,
 )
+from example_app.dtos import CustomerRequestDTO
 
 
-class QuotationInquiryMailComposer:
-    """ Compose one tenant notification mail for a quotation inquiry. """
+class CustomerRequestMailComposer:
+    """ Compose one tenant notification for a customer request. """
 
     @classmethod
-    def compose(cls, inquiry) -> MailMessageDTO:
-        """ Build one outbound mail payload for a quotation inquiry.
+    def compose(cls, request_dto: CustomerRequestDTO) -> MailMessageDTO:
+        """ Build one outbound mail payload for a customer request.
 
         Args:
-            inquiry: Domain object or DTO carrying the quotation inquiry data.
+            request_dto: App-owned DTO carrying the customer request.
 
         Returns:
             MailMessageDTO: Transport-ready outbound message.
         """
-        tenant_recipient = TenantMailRecipientResolver.resolve_contact_recipient(inquiry.tenant)
+        tenant_recipient = TenantMailRecipientResolver.resolve_contact_recipient(
+            request_dto.tenant
+        )
         if tenant_recipient is None:
-            raise ValueError("Quotation inquiry mail requires one tenant contact recipient.")
+            raise ValueError("Customer request mail requires one tenant contact recipient.")
 
         request = TemplateMailRequestDTO(
-            subject=f"New quotation inquiry from {inquiry.customer_name}",
+            subject=f"New customer request from {request_dto.customer_name}",
             to=[tenant_recipient],
             context={
-                "mail_title": "New quotation inquiry",
-                "mail_intro": "A customer submitted a new quotation inquiry.",
-                "mail_body": inquiry.message,
-                "mail_outro": "Reply to continue the conversation.",
-                "customer_name": inquiry.customer_name,
-                "customer_email": inquiry.customer_email,
+                "mail_title": "New customer request",
+                "mail_intro": "A customer submitted a new request.",
+                "mail_body": request_dto.message,
+                "customer_name": request_dto.customer_name,
+                "customer_email": request_dto.customer_email,
             },
-            html_template_name="core/mail/messages/quotation_inquiry.html",
-            text_template_name="core/mail/messages/quotation_inquiry.txt",
-            tenant=inquiry.tenant,
-            reply_to=TenantMailReplyPolicy.resolve_customer_reply_to(inquiry.customer_email),
+            html_template_name="example_app/mail/customer_request.html",
+            text_template_name="example_app/mail/customer_request.txt",
+            tenant=request_dto.tenant,
+            reply_to=TenantMailReplyPolicy.resolve_customer_reply_to(
+                request_dto.customer_email
+            ),
         )
         return TemplateMailComposer.compose(request)
 ```
@@ -165,27 +169,27 @@ The application flow should stay simple:
 ```python
 from core.mail import MailService
 
-message = QuotationInquiryMailComposer.compose(inquiry)
+message = CustomerRequestMailComposer.compose(request_dto)
 MailService.send(message)
 ```
 
 If one app wants a thin app-owned sender facade, it can wrap that:
 
 ```python
-class QuotationInquiryMailService:
-    """ Send quotation inquiry emails for the quotation app. """
+class CustomerRequestMailService:
+    """ Send customer request emails for the owning app. """
 
     @classmethod
-    def send(cls, inquiry) -> int:
-        """ Compose and send one quotation inquiry mail.
+    def send(cls, request_dto: CustomerRequestDTO) -> int:
+        """ Compose and send one customer request mail.
 
         Args:
-            inquiry: Domain object or DTO carrying the quotation inquiry data.
+            request_dto: App-owned DTO carrying the customer request.
 
         Returns:
             int: Number of successfully delivered messages.
         """
-        message = QuotationInquiryMailComposer.compose(inquiry)
+        message = CustomerRequestMailComposer.compose(request_dto)
         return MailService.send(message)
 ```
 
