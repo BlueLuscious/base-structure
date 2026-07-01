@@ -47,6 +47,9 @@ development. Django, Celery Worker, and Celery Beat run on the host.
    pip install -r requirements.txt
    ```
 
+   `requirements.in` owns the reviewed direct dependencies.
+   `requirements.txt` is the generated, fully pinned runtime lock.
+
 4. Copy `.env.example` to `.env` and review its development values.
 
    Windows:
@@ -120,3 +123,9 @@ Development defaults are not production-safe. Replace credentials and review
 Django's
 [deployment checklist](https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/)
 before release.
+
+Run Django's deployment checks with production-intended environment values:
+
+```bash
+python manage.py check --deploy
+```

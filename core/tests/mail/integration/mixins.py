@@ -1,9 +1,8 @@
 """ Shared mixins for MailHog-backed mail integration tests. """
 
-import json
-import os
-import time
+import json, os, time
 from urllib.request import urlopen
+from core.config.environment import EnvironmentValueParser
 from core.mail import MailMessageDTO, MailRecipientDTO
 
 
@@ -11,8 +10,14 @@ class MailIntegrationAssertionsMixin:
     """ Define shared MailHog-backed assertions and polling helpers for mail integration tests. """
 
     mailhog_messages_url = os.environ.get("MAILHOG_MESSAGES_API_URL", "http://127.0.0.1:8025/api/v2/messages")
-    mailhog_wait_timeout_seconds = float(os.environ.get("MAILHOG_WAIT_TIMEOUT_SECONDS", "20"))
-    mailhog_poll_interval_seconds = float(os.environ.get("MAILHOG_POLL_INTERVAL_SECONDS", "0.25"))
+    mailhog_wait_timeout_seconds = EnvironmentValueParser.get_positive_float(
+        "MAILHOG_WAIT_TIMEOUT_SECONDS",
+        20.0,
+    )
+    mailhog_poll_interval_seconds = EnvironmentValueParser.get_positive_float(
+        "MAILHOG_POLL_INTERVAL_SECONDS",
+        0.25,
+    )
 
     @classmethod
     def fetch_mailhog_messages(cls) -> list[dict[str, object]]:

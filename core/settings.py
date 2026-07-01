@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from core.adminsites.admin_namespace import AdminNamespace
 from core.adminsites.unfold import AdminSiteUnfoldSettings
 from core.beat import CeleryBeatScheduleBuilder
+from core.config.environment import EnvironmentContractValidator, EnvironmentValueParser
 from core.config.logging import LoggingConfigBuilder
 from core.config.storage import MediaStorageAdapterResolver, StaticStorageAdapterResolver
 
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-prod')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ('1', 'true', 'yes', 'on')
+DEBUG = EnvironmentValueParser.get_bool('DEBUG', True)
 
 ALLOWED_HOSTS = [
     host.strip()
@@ -153,7 +154,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ.get('TIME_ZONE', 'UTC')
 
 USE_I18N = True
 
@@ -174,12 +175,19 @@ LOCALE_PATHS = [
 
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = os.environ.get('EMAIL_HOST', '127.0.0.1')
-EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '1025'))
+EMAIL_PORT = EnvironmentValueParser.get_int('EMAIL_PORT', 1025)
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'False').lower() in ('1', 'true', 'yes', 'on')
-EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False').lower() in ('1', 'true', 'yes', 'on')
+EMAIL_USE_TLS = EnvironmentValueParser.get_bool('EMAIL_USE_TLS', False)
+EMAIL_USE_SSL = EnvironmentValueParser.get_bool('EMAIL_USE_SSL', False)
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@localhost')
+
+EnvironmentContractValidator.validate_mutually_exclusive(
+    'EMAIL_USE_TLS',
+    EMAIL_USE_TLS,
+    'EMAIL_USE_SSL',
+    EMAIL_USE_SSL,
+)
 
 
 # Celery
@@ -193,7 +201,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-CELERY_TASK_ALWAYS_EAGER = os.environ.get('CELERY_TASK_ALWAYS_EAGER', 'False').lower() in ('1', 'true', 'yes', 'on')
+CELERY_TASK_ALWAYS_EAGER = EnvironmentValueParser.get_bool('CELERY_TASK_ALWAYS_EAGER', False)
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_ENABLE_UTC = USE_TZ
 CELERY_BEAT_SCHEDULE = CeleryBeatScheduleBuilder.build()

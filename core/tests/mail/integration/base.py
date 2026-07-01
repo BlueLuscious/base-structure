@@ -1,9 +1,9 @@
 """ Shared base cases for MailHog-backed mail integration tests. """
 
-import os
 from unittest import SkipTest
 from django.conf import settings
 from django.test import override_settings
+from core.config.environment import EnvironmentValueParser
 from core.testing import LoggedSimpleTestCase, LoggedTransactionTestCase
 from core.tests.mail.integration.mixins import MailIntegrationAssertionsMixin
 
@@ -14,7 +14,7 @@ def is_mail_integration_enabled() -> bool:
     Returns:
         bool: True when mail integration tests are explicitly enabled.
     """
-    return os.environ.get("RUN_MAIL_INTEGRATION_TESTS", "False").lower() in ("1", "true", "yes", "on")
+    return EnvironmentValueParser.get_bool("RUN_MAIL_INTEGRATION_TESTS", False)
 
 
 def is_async_mail_integration_enabled() -> bool:
@@ -23,7 +23,7 @@ def is_async_mail_integration_enabled() -> bool:
     Returns:
         bool: True when asynchronous mail integration tests are explicitly enabled.
     """
-    return os.environ.get("RUN_ASYNC_MAIL_INTEGRATION_TESTS", "False").lower() in ("1", "true", "yes", "on")
+    return EnvironmentValueParser.get_bool("RUN_ASYNC_MAIL_INTEGRATION_TESTS", False)
 
 
 @override_settings(

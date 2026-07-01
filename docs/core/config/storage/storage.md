@@ -128,6 +128,15 @@ These variables are for `docker-compose.yml`. Django does not need them unless y
 - `MAILHOG_SMTP_PORT`
 - `MAILHOG_UI_PORT`
 
+The local MinIO bootstrap creates `MINIO_BUCKET_NAME`. Its neutral default is
+`django-base-media`, matching `.env.example` and Docker Compose. Bootstrap
+errors stop the one-shot client container instead of being silently ignored.
+
+The Compose MinIO server and client use reviewed release tags rather than
+floating `latest` tags. These images support local S3-compatible development;
+their versions and upstream maintenance status must be reviewed before using a
+derived project in production.
+
 ## Supported Combinations
 
 ### 1. Local + Local

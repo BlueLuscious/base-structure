@@ -61,6 +61,11 @@ Current examples:
 - `EMAIL_USE_SSL`
 - `DEFAULT_FROM_EMAIL`
 
+Boolean mail settings use the shared strict environment parser.
+`EMAIL_USE_TLS` and `EMAIL_USE_SSL` cannot both be enabled; unsupported boolean
+values and non-integer `EMAIL_PORT` values raise actionable configuration
+errors.
+
 Current meaning of `DEFAULT_FROM_EMAIL`:
 
 - it is the project-level fallback sender used when one outbound message does not provide an explicit `from_email`
@@ -182,6 +187,8 @@ Enable them with:
 - optional override: `MAILHOG_MESSAGES_API_URL=http://127.0.0.1:8025/api/v2/messages`
 - optional override: `MAILHOG_WAIT_TIMEOUT_SECONDS=20`
 - optional override: `MAILHOG_POLL_INTERVAL_SECONDS=0.25`
+
+MailHog timeout and polling overrides must be finite values greater than zero.
 
 Current integration coverage verifies:
 

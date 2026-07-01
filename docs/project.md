@@ -78,6 +78,15 @@ Inside each Compose network, services retain the stable names `db`, `minio`,
 
 Host ports remain configurable so multiple clones can run simultaneously.
 
+Long-running services use `restart: unless-stopped`. The one-shot `minio-mc`
+bootstrap does not restart automatically and fails when alias or bucket setup
+fails.
+
+PostgreSQL, MinIO, MailHog, and Redis expose health checks where the image
+provides the required client. MinIO bootstrap waits for a healthy MinIO server.
+The MinIO, MinIO Client, and MailHog images use explicit reviewed versions;
+PostgreSQL and Redis retain explicit major-version tracks.
+
 Stop services without removing data:
 
 ```bash

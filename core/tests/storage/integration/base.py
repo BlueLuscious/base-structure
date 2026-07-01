@@ -1,9 +1,9 @@
 """ Shared base test cases for storage integration tests. """
 
-import os
 from unittest import SkipTest
 from django.conf import settings
 from django.core.files.base import ContentFile
+from core.config.environment import EnvironmentValueParser
 from core.config.storage import MediaStorageAdapterResolver
 from core.config.storage.media_storage.adapters import MediaStorageConfig
 from core.testing.base import LoggedSimpleTestCase
@@ -16,7 +16,7 @@ def is_storage_integration_enabled() -> bool:
     Returns:
         bool: True when storage integration tests are explicitly enabled.
     """
-    return os.environ.get("RUN_STORAGE_INTEGRATION_TESTS", "False").lower() in ("1", "true", "yes", "on")
+    return EnvironmentValueParser.get_bool("RUN_STORAGE_INTEGRATION_TESTS", False)
 
 
 class BaseStorageIntegrationSimpleTestCase(StorageIntegrationMixin, LoggedSimpleTestCase):

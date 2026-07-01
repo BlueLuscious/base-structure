@@ -66,6 +66,9 @@ Current default behavior:
 - broker retry on startup stays enabled
 - eager mode is available for opt-in local or test scenarios
 
+`CELERY_TASK_ALWAYS_EAGER` uses the shared strict boolean environment contract
+documented in `docs/core/config/config.md`.
+
 ## Local Development
 
 Redis is expected to be available locally through Docker:

@@ -2,6 +2,7 @@
 
 import importlib.util, os
 from typing import Any
+from core.config.environment import EnvironmentValueParser
 
 
 def build_extra_apps() -> list[str]:
@@ -23,10 +24,7 @@ def parse_bool_env(name: str, default: bool) -> bool:
     Returns:
         bool: Parsed boolean value.
     """
-    raw_value = os.environ.get(name)
-    if raw_value is None:
-        return default
-    return raw_value.lower() in ("1", "true", "yes", "on")
+    return EnvironmentValueParser.get_bool(name, default)
 
 
 def normalize_location(name: str, default: str) -> str:
