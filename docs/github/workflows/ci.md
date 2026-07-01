@@ -78,10 +78,37 @@ project test packages.
 Migration drift detection is read-only: it fails when model state would require
 an untracked migration, but it does not create a migration file.
 
-The job compiles the tracked Spanish catalog before running tests so
+The Django job compiles the tracked Spanish catalog before running tests so
 translation assertions execute against the same runtime artifacts expected in
-a real installation. Strict catalog drift and completeness checks remain a
-separate planned translation gate.
+a real installation.
+
+## Translation Gates
+
+The separate `Spanish translations` job:
+
+- extracts the Spanish catalog using the documented project ignore patterns
+- normalizes source locations and generation timestamps before comparison so
+  Windows and Linux extraction remain comparable
+- fails when tracked source strings and catalog content drift apart
+- validates gettext syntax and headers
+- rejects fuzzy or untranslated stable messages
+- rejects known mojibake patterns
+- compiles the catalog
+
+Catalog extraction and compilation remain manual local operations unless the
+user explicitly requests them. CI runs them as deterministic validation.
+
+## YAML Gate
+
+The separate `YAML` job installs the pinned development-tool lock and validates:
+
+- `.yamllint.yaml`
+- `docker-compose.yml`
+- `.github/workflows/`
+
+Line endings are intentionally not enforced because the repository is used
+from both Windows and Linux. Syntax, indentation, duplicate keys, trailing
+spaces, and the other enabled yamllint rules remain enforced.
 
 ## External Integration Boundary
 
@@ -106,8 +133,6 @@ and testing documents.
 
 Later Phase 4 stages will add separate jobs for:
 
-- translation integrity
-- workflow YAML validation
 - formatting, linting, and import ordering
 - incremental typing
 - Markdown and local-link validation
@@ -137,3 +162,6 @@ When configuring this in GitHub:
 
 Do not require the Discord notification workflow. Discord is an optional
 observer and must not control whether code can be merged.
+
+After their first successful remote run, `Spanish translations` and `YAML`
+should also become required checks.

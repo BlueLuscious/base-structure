@@ -113,6 +113,8 @@ Dependency ownership is split between:
 
 - `requirements.in`: reviewed direct runtime dependencies
 - `requirements.txt`: generated, fully pinned runtime dependency lock
+- `requirements-dev.in`: reviewed direct development and quality dependencies
+- `requirements-dev.txt`: generated, fully pinned development-tool lock
 
 Compile the lock after reviewing direct dependency changes:
 
@@ -127,6 +129,16 @@ Install or synchronize the environment from the lock:
 python -m pip install -r requirements.txt
 ```
 
+Compile and install the development-tool lock:
+
+```bash
+python -m piptools compile --output-file=requirements-dev.txt requirements-dev.in
+python -m pip install -r requirements-dev.txt
+```
+
+The development lock uses the runtime lock as a constraint. Install both locks
+when one local workflow needs the Django runtime and quality tools together.
+
 The base intentionally owns these optional-capability dependencies:
 
 - `boto3` and `django-storages` for S3-compatible storage
@@ -139,9 +151,9 @@ The base intentionally owns these optional-capability dependencies:
 `requirements.in`. The generated lock contains both `psycopg` and its binary
 implementation as resolved packages.
 
-Development-only requirement files should be introduced only when the project
-gains tooling that is not needed at runtime. Automated updates and security
-auditing belong to the Phase 4 CI quality gates.
+The first development-only dependency is yamllint, which validates Compose and
+GitHub workflow YAML without becoming a runtime application dependency.
+Automated updates and security auditing remain Phase 4 quality-gate work.
 
 ## What Belongs In `core/config/`
 

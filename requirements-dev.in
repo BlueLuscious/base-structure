@@ -1,0 +1,7 @@
+# Direct development and quality dependencies.
+# Compile this file with:
+# python -m piptools compile --output-file=requirements-dev.txt requirements-dev.in
+
+-c requirements.txt
+
+yamllint==1.38.0
