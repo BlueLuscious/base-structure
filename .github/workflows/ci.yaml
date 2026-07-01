@@ -194,7 +194,6 @@ jobs:
               --untranslated \
               --no-obsolete \
               --no-location \
-              --omit-header \
               "$CATALOG" \
               > "/tmp/untranslated-$DOMAIN.po"
             if [ -s "/tmp/untranslated-$DOMAIN.po" ]; then
