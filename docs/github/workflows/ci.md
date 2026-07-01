@@ -86,7 +86,8 @@ a real installation.
 
 The separate `Spanish translations` job:
 
-- extracts the Spanish catalog using the documented project ignore patterns
+- extracts the Spanish `django` and `djangojs` catalogs using the documented
+  project ignore patterns
 - normalizes source locations, generation timestamps, and gettext-generated
   format flags before comparison so Windows and Linux extraction remain
   comparable
@@ -98,6 +99,11 @@ The separate `Spanish translations` job:
 
 Catalog extraction and compilation remain manual local operations unless the
 user explicitly requests them. CI runs them as deterministic validation.
+
+For each domain, untranslated entries are written without the gettext header
+to a temporary catalog. The job fails only when that catalog contains a real
+message, avoiding shell pipeline false positives when there are zero missing
+translations.
 
 ## YAML Gate
 

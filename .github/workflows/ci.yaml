@@ -141,68 +141,76 @@ jobs:
 
       - name: Check extracted catalog drift
         run: |
-          cp locale/es/LC_MESSAGES/django.po /tmp/tracked-django.po
+          for DOMAIN in django djangojs; do
+            CATALOG="locale/es/LC_MESSAGES/$DOMAIN.po"
+            cp "$CATALOG" "/tmp/tracked-$DOMAIN.po"
 
-          python manage.py makemessages \
-            --locale es \
-            --domain django \
-            --ignore ".venv/*" \
-            --ignore "locale/*" \
-            --ignore "*.md" \
-            --ignore "**/*.md" \
-            --ignore "*.txt" \
-            --ignore "**/*.txt" \
-            --ignore "staticfiles/*" \
-            --ignore "**/__pycache__/*"
+            python manage.py makemessages \
+              --locale es \
+              --domain "$DOMAIN" \
+              --ignore ".venv/*" \
+              --ignore "locale/*" \
+              --ignore "*.md" \
+              --ignore "**/*.md" \
+              --ignore "*.txt" \
+              --ignore "**/*.txt" \
+              --ignore "staticfiles/*" \
+              --ignore "**/__pycache__/*"
 
-          msgcat --no-location --sort-output /tmp/tracked-django.po \
-            | sed \
-                -e '/^"POT-Creation-Date:/d' \
-                -e '/^#,/d' \
-            > /tmp/tracked-django.normalized.po
-          msgcat --no-location --sort-output locale/es/LC_MESSAGES/django.po \
-            | sed \
-                -e '/^"POT-Creation-Date:/d' \
-                -e '/^#,/d' \
-            > /tmp/extracted-django.normalized.po
+            msgcat --no-location --sort-output "/tmp/tracked-$DOMAIN.po" \
+              | sed \
+                  -e '/^"POT-Creation-Date:/d' \
+                  -e '/^#,/d' \
+              > "/tmp/tracked-$DOMAIN.normalized.po"
+            msgcat --no-location --sort-output "$CATALOG" \
+              | sed \
+                  -e '/^"POT-Creation-Date:/d' \
+                  -e '/^#,/d' \
+              > "/tmp/extracted-$DOMAIN.normalized.po"
 
-          diff \
-            --unified \
-            /tmp/tracked-django.normalized.po \
-            /tmp/extracted-django.normalized.po
+            diff \
+              --unified \
+              "/tmp/tracked-$DOMAIN.normalized.po" \
+              "/tmp/extracted-$DOMAIN.normalized.po"
+          done
 
       - name: Validate catalog integrity
         run: |
-          CATALOG="locale/es/LC_MESSAGES/django.po"
+          for DOMAIN in django djangojs; do
+            CATALOG="locale/es/LC_MESSAGES/$DOMAIN.po"
 
-          msgfmt \
-            --check \
-            --check-header \
-            --output-file=/dev/null \
-            "$CATALOG"
+            msgfmt \
+              --check \
+              --check-header \
+              --output-file=/dev/null \
+              "$CATALOG"
 
-          if grep --line-number --extended-regexp '^#,.*fuzzy' "$CATALOG"; then
-            echo "Fuzzy Spanish translations are not allowed."
-            exit 1
-          fi
+            if grep --line-number --extended-regexp '^#,.*fuzzy' "$CATALOG"; then
+              echo "Fuzzy Spanish translations are not allowed in $CATALOG."
+              exit 1
+            fi
 
-          UNTRANSLATED_COUNT="$(
-            msgattrib --untranslated --no-obsolete --no-location "$CATALOG" \
-              | grep --count '^msgid '
-          )"
-          if [ "$UNTRANSLATED_COUNT" -gt 1 ]; then
-            echo "Untranslated Spanish messages were found."
-            msgattrib --untranslated --no-obsolete --no-location "$CATALOG"
-            exit 1
-          fi
+            msgattrib \
+              --untranslated \
+              --no-obsolete \
+              --no-location \
+              --omit-header \
+              "$CATALOG" \
+              > "/tmp/untranslated-$DOMAIN.po"
+            if [ -s "/tmp/untranslated-$DOMAIN.po" ]; then
+              echo "Untranslated Spanish messages were found in $CATALOG."
+              cat "/tmp/untranslated-$DOMAIN.po"
+              exit 1
+            fi
 
-          if grep \
-            --line-number \
-            --extended-regexp 'Ã|Â|â€™|ðŸ|�' \
-            "$CATALOG"; then
-            echo "Possible mojibake was found in the Spanish catalog."
-            exit 1
-          fi
+            if grep \
+              --line-number \
+              --extended-regexp 'Ã|Â|â€™|ðŸ|�' \
+              "$CATALOG"; then
+              echo "Possible mojibake was found in $CATALOG."
+              exit 1
+            fi
+          done
 
       - name: Compile Spanish translations
         run: python manage.py compilemessages --locale es
