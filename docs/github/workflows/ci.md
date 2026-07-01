@@ -31,6 +31,9 @@ Superseded runs for the same workflow and ref are cancelled.
 
 The workflow uses read-only repository-content permission.
 
+The optional Discord workflow observes completed CI runs separately. A Discord
+delivery problem cannot change the CI conclusion.
+
 ## Supported Runtime
 
 The first CI contract uses:
@@ -112,3 +115,25 @@ Later Phase 4 stages will add separate jobs for:
 
 Each job should remain independently diagnosable and should be enabled only
 after the repository has a clean reproducible baseline for that gate.
+
+## Required Check
+
+Repository branch rules should require the successful check named:
+
+```text
+Django / Python 3.11
+```
+
+Apply it to pull requests targeting `master` and `develop`.
+
+When configuring this in GitHub:
+
+1. open repository settings
+2. inspect existing rulesets or classic branch protection rules
+3. edit the applicable `master` and `develop` rules instead of replacing them
+4. enable required status checks
+5. select `Django / Python 3.11`
+6. save the rule and confirm one pull request is blocked when the check fails
+
+Do not require the Discord notification workflow. Discord is an optional
+observer and must not control whether code can be merged.

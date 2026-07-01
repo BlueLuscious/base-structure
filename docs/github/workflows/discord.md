@@ -19,10 +19,26 @@ Current notifications cover:
 - commits pushed to configured branches
 - branch creation and deletion
 - pull requests opened, reopened, synchronized, merged, or closed
+- completed `Continuous Integration` workflow runs
 
 Pull Request actions use distinct colors so their state remains visible in the
 Discord timeline. Branch creation and deletion share one lifecycle step while
 preserving their own title, color, and icon.
+
+Continuous Integration results use:
+
+- green for success
+- red for failure
+- gray for cancellation
+- yellow for any other conclusion
+
+The CI notification links directly to the completed workflow run and uses the
+same optional `DISCORD_WEBHOOK` secret. It runs through `workflow_run`, so
+Discord delivery is not part of the CI job and cannot change the CI
+conclusion.
+
+The `workflow_run` trigger becomes active when this workflow exists on the
+repository default branch.
 
 ## Setup
 
@@ -51,6 +67,10 @@ Push notifications currently watch:
 - `test/**`
 
 Pull Request notifications currently target `master` and `develop`.
+
+Continuous Integration notifications follow completed runs of the workflow
+named `Continuous Integration`; their branch coverage comes from that
+workflow's own trigger configuration.
 
 Update these filters in `.github/workflows/discord.yaml` when a derived project
 uses a different branch strategy.
