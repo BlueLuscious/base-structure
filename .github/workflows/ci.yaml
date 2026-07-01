@@ -156,10 +156,14 @@ jobs:
             --ignore "**/__pycache__/*"
 
           msgcat --no-location --sort-output /tmp/tracked-django.po \
-            | sed '/^"POT-Creation-Date:/d' \
+            | sed \
+                -e '/^"POT-Creation-Date:/d' \
+                -e '/^#,/d' \
             > /tmp/tracked-django.normalized.po
           msgcat --no-location --sort-output locale/es/LC_MESSAGES/django.po \
-            | sed '/^"POT-Creation-Date:/d' \
+            | sed \
+                -e '/^"POT-Creation-Date:/d' \
+                -e '/^#,/d' \
             > /tmp/extracted-django.normalized.po
 
           diff \

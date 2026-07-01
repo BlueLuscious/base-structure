@@ -87,8 +87,9 @@ a real installation.
 The separate `Spanish translations` job:
 
 - extracts the Spanish catalog using the documented project ignore patterns
-- normalizes source locations and generation timestamps before comparison so
-  Windows and Linux extraction remain comparable
+- normalizes source locations, generation timestamps, and gettext-generated
+  format flags before comparison so Windows and Linux extraction remain
+  comparable
 - fails when tracked source strings and catalog content drift apart
 - validates gettext syntax and headers
 - rejects fuzzy or untranslated stable messages
