@@ -1,4 +1,4 @@
-""" Accounts models package. """
+"""Accounts models package."""
 
 from accounts.models.user_model import UserModel
 

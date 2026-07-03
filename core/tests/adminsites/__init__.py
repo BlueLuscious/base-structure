@@ -1,1 +1,1 @@
-""" Admin site tests. """
+"""Admin site tests."""

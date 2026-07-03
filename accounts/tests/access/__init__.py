@@ -1,1 +1,1 @@
-""" Accounts access tests. """
+"""Accounts access tests."""

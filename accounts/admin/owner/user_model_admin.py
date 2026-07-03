@@ -1,14 +1,16 @@
-""" User admin registration for the owner admin site. """
+"""User admin registration for the owner admin site."""
 
 import logging
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
-from accounts.access import AccountsAccessPolicy
 from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm
+
+from accounts.access import AccountsAccessPolicy
 from accounts.admin.owner.tenant_membership_inline import TenantMembershipInline
 from accounts.admin.owner.user_model_admin_creation_form import OwnerUserModelAdminCreationForm
 from accounts.admin.owner.user_model_admin_form import OwnerUserModelAdminForm
@@ -21,10 +23,10 @@ logger = logging.getLogger(__name__)
 
 @admin.register(UserModel, site=owner_admin_site)
 class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
-    """ Guided user admin for owner-managed support accounts. """
+    """Guided user admin for owner-managed support accounts."""
 
     class Media:
-        """ Owner admin assets for small layout refinements. """
+        """Owner admin assets for small layout refinements."""
 
         css = {
             "all": ("accounts/admin/owner/user_model_admin.css",),
@@ -94,7 +96,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
     )
 
     def get_queryset(self, request: HttpRequest):
-        """ Hide superusers from the owner admin user list.
+        """Hide superusers from the owner admin user list.
 
         Args:
             request: Current admin request.
@@ -124,7 +126,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return tenant_queryset
 
     def get_readonly_fields(self, request: HttpRequest, obj: UserModel | None = None) -> tuple[str, ...]:
-        """ Prevent owners from removing their own admin access by mistake.
+        """Prevent owners from removing their own admin access by mistake.
 
         Args:
             request: Current admin request.
@@ -141,7 +143,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return tuple(dict.fromkeys(readonly_fields))
 
     def formfield_for_manytomany(self, db_field, request: HttpRequest, **kwargs):
-        """ Filter assignable groups to the active tenant scope.
+        """Filter assignable groups to the active tenant scope.
 
         Args:
             db_field: Django model field being converted into a form field.
@@ -170,7 +172,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return form_field
 
     def get_formset_kwargs(self, request: HttpRequest, obj, inline, prefix: str) -> dict:
-        """ Inject the current request into the tenant membership inline formset.
+        """Inject the current request into the tenant membership inline formset.
 
         Args:
             request: Current admin request.
@@ -189,7 +191,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return formset_kwargs
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        """ Require an active owner membership before exposing the user module.
+        """Require an active owner membership before exposing the user module.
 
         Args:
             request: Current admin request.
@@ -200,7 +202,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_access_users(request) and super().has_module_permission(request)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
-        """ Require an active owner membership before allowing user creation.
+        """Require an active owner membership before allowing user creation.
 
         Args:
             request: Current admin request.
@@ -211,7 +213,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_add_user(request) and super().has_add_permission(request)
 
     def has_view_permission(self, request: HttpRequest, obj: UserModel | None = None) -> bool:
-        """ Restrict user visibility to owner memberships for the active tenant.
+        """Restrict user visibility to owner memberships for the active tenant.
 
         Args:
             request: Current admin request.
@@ -232,7 +234,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_view_user(request, obj)
 
     def has_change_permission(self, request: HttpRequest, obj: UserModel | None = None) -> bool:
-        """ Restrict user editing to owner memberships for the active tenant.
+        """Restrict user editing to owner memberships for the active tenant.
 
         Args:
             request: Current admin request.
@@ -253,7 +255,7 @@ class OwnerUserModelAdmin(BaseUserAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_view_user(request, obj)
 
     def has_delete_permission(self, request: HttpRequest, obj: UserModel | None = None) -> bool:
-        """ Disable hard delete in favor of deactivation.
+        """Disable hard delete in favor of deactivation.
 
         Args:
             request: Current admin request.

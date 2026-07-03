@@ -1,27 +1,26 @@
-""" Tests for admin site Unfold configuration resolution. """
+"""Tests for admin site Unfold configuration resolution."""
 
-from django.test import RequestFactory
 from django.templatetags.static import static
-from tenancy.models import TenantModel
+from django.test import RequestFactory
+
 from core.adminsites.admin_namespace import AdminNamespace
-from core.adminsites.site_instances import owner_admin_site
-from core.adminsites.site_instances import master_admin_site
+from core.adminsites.site_instances import master_admin_site, owner_admin_site
 from core.adminsites.sites.master_admin_site import MasterAdminSite
-from core.adminsites.unfold import AdminSiteUnfoldCallbacks
-from core.adminsites.unfold import AdminSiteUnfoldSettings
+from core.adminsites.unfold import AdminSiteUnfoldCallbacks, AdminSiteUnfoldSettings
 from core.testing.base import LoggedSimpleTestCase
+from tenancy.models import TenantModel
 
 
 class TestAdminSitesUnfold(LoggedSimpleTestCase):
-    """ Cover request-based Unfold configuration for custom admin sites. """
+    """Cover request-based Unfold configuration for custom admin sites."""
 
     def setUp(self) -> None:
-        """ Create the request factory used by the tests. """
+        """Create the request factory used by the tests."""
         self.request_factory = RequestFactory()
 
     @staticmethod
     def build_file(url: str) -> object:
-        """ Build a minimal file-like object exposing one ``url`` attribute.
+        """Build a minimal file-like object exposing one ``url`` attribute.
 
         Args:
             url: Asset URL returned by the fake file.
@@ -32,7 +31,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         return type("BrandingFile", (), {"url": url})()
 
     def test_build_admin_site_unfold_settings_uses_site_metadata_for_static_values(self) -> None:
-        """ Verify the generated settings dictionary reuses static metadata from the site class. """
+        """Verify the generated settings dictionary reuses static metadata from the site class."""
         request = self.request_factory.get("/admin/")
         settings_dict = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.MASTER).build()
 
@@ -48,7 +47,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual(settings_dict["LOGIN"]["image"](request), MasterAdminSite.get_login_image(request))
 
     def test_build_admin_site_unfold_settings_keeps_dynamic_sidebar_and_assets(self) -> None:
-        """ Verify the generated settings dictionary keeps request-aware hooks only where needed. """
+        """Verify the generated settings dictionary keeps request-aware hooks only where needed."""
         settings_dict = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.MASTER).build()
 
         self.assertEqual(settings_dict["SITE_TITLE"].__name__, "site_title")
@@ -68,7 +67,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertTrue(settings_dict["SIDEBAR"]["show_all_applications"](self.request_factory.get("/admin/")))
 
     def test_dynamic_callbacks_dispatch_to_owner_site_instance(self) -> None:
-        """ Verify dynamic callbacks resolve the owner admin site instance from the request namespace. """
+        """Verify dynamic callbacks resolve the owner admin site instance from the request namespace."""
         membership = type(
             "Membership",
             (),
@@ -125,7 +124,9 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual(AdminSiteUnfoldCallbacks.environment(request), owner_admin_site.get_environment(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.login_image(request), owner_admin_site.get_login_image(request))
         self.assertEqual(AdminSiteUnfoldCallbacks.site_dropdown(request), owner_admin_site.get_site_dropdown(request))
-        self.assertEqual(AdminSiteUnfoldCallbacks.show_search(request), owner_admin_site.get_show_sidebar_search(request))
+        self.assertEqual(
+            AdminSiteUnfoldCallbacks.show_search(request), owner_admin_site.get_show_sidebar_search(request)
+        )
         self.assertEqual(
             AdminSiteUnfoldCallbacks.show_all_applications(request),
             owner_admin_site.get_show_all_applications(request),
@@ -133,7 +134,9 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         callback_navigation = AdminSiteUnfoldCallbacks.sidebar_navigation(request)
         site_navigation = owner_admin_site.get_sidebar_navigation(request)
 
-        self.assertEqual([group["title"] for group in callback_navigation], [group["title"] for group in site_navigation])
+        self.assertEqual(
+            [group["title"] for group in callback_navigation], [group["title"] for group in site_navigation]
+        )
         self.assertEqual(
             [item["title"] for group in callback_navigation for item in group["items"]],
             [item["title"] for group in site_navigation for item in group["items"]],
@@ -146,14 +149,14 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual(AdminSiteUnfoldCallbacks.styles(request), owner_admin_site.get_styles(request))
 
     def test_owner_admin_site_metadata_prefers_the_active_tenant(self) -> None:
-        """ Verify the owner admin metadata uses the active tenant when one is available. """
+        """Verify the owner admin metadata uses the active tenant when one is available."""
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
 
         self.assertEqual("GEA Lubricantes", owner_admin_site.get_site_title(request))
 
     def test_owner_admin_branding_prefers_display_name_for_title_and_header(self) -> None:
-        """ Verify owner admin title and header prefer tenant branding display names. """
+        """Verify owner admin title and header prefer tenant branding display names."""
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
         request.tenant._state.fields_cache["branding"] = type("Branding", (), {"display_name": "Example Company"})()
@@ -162,7 +165,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual("Example Company", owner_admin_site.get_site_header(request))
 
     def test_owner_admin_branding_builds_logo_icon_and_favicons(self) -> None:
-        """ Verify owner admin exposes tenant branding assets in the shapes expected by Unfold. """
+        """Verify owner admin exposes tenant branding assets in the shapes expected by Unfold."""
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
         request.tenant._state.fields_cache["branding"] = type(
@@ -201,7 +204,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         )
 
     def test_owner_admin_each_context_includes_script_assets_from_callable_settings(self) -> None:
-        """ Verify owner admin scripts configured through Unfold callbacks reach the template context. """
+        """Verify owner admin scripts configured through Unfold callbacks reach the template context."""
         request = self.request_factory.get("/owner-admin/")
         request.user = type(
             "AnonymousLikeUser",
@@ -222,7 +225,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         )
 
     def test_owner_admin_environment_uses_the_active_membership_role(self) -> None:
-        """ Verify the owner admin environment badge reflects the active tenant role. """
+        """Verify the owner admin environment badge reflects the active tenant role."""
         request = self.request_factory.get("/owner-admin/")
         request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
         membership = type(
@@ -245,7 +248,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         self.assertEqual(["Owner", "primary"], owner_admin_site.get_environment(request))
 
     def test_master_admin_sidebar_navigation_includes_users_groups_and_tenancy(self) -> None:
-        """ Verify the master admin sidebar includes account and tenancy management links. """
+        """Verify the master admin sidebar includes account and tenancy management links."""
         request = self.request_factory.get("/admin/")
         request.user = type(
             "SuperUser",
@@ -260,11 +263,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
         )()
         navigation = master_admin_site.get_sidebar_navigation(request)
 
-        item_links = {
-            item["link"]
-            for group in navigation
-            for item in group["items"]
-        }
+        item_links = {item["link"] for group in navigation for item in group["items"]}
 
         self.assertIn("/admin/accounts/usermodel/", item_links)
         self.assertIn("/admin/auth/group/", item_links)

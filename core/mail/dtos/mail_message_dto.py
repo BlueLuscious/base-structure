@@ -1,14 +1,15 @@
-""" DTO representing one outbound mail message. """
+"""DTO representing one outbound mail message."""
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
+
 from core.mail.dtos.mail_attachment_dto import MailAttachmentDTO
 from core.mail.dtos.mail_recipient_dto import MailRecipientDTO
 
 
 @dataclass(frozen=True)
 class MailMessageDTO:
-    """ Represent one outbound mail payload.
+    """Represent one outbound mail payload.
 
     Args:
         subject: Mail subject line.
@@ -35,7 +36,7 @@ class MailMessageDTO:
     attachments: Sequence[MailAttachmentDTO] = field(default_factory=tuple)
 
     def __post_init__(self) -> None:
-        """ Validate and normalize the outbound message payload.
+        """Validate and normalize the outbound message payload.
 
         Returns:
             None

@@ -1,17 +1,18 @@
-""" Tests for asynchronous templated mail service dispatch. """
+"""Tests for asynchronous templated mail service dispatch."""
 
 from unittest.mock import MagicMock, patch
 from uuid import uuid4
+
 from core.mail import MailRecipientDTO, TemplateMailRequestDTO, TemplateMailService
 from core.testing import LoggedTestCase
 from tenancy.models import TenantModel
 
 
 class TestTemplateMailServiceAsync(LoggedTestCase):
-    """ Verify templated mail services enqueue Celery tasks with serialized payloads. """
+    """Verify templated mail services enqueue Celery tasks with serialized payloads."""
 
     def test_send_async_serializes_the_request_and_dispatches_the_templated_mail_task(self) -> None:
-        """ Serialize one templated mail request and enqueue the shared templated mail task. """
+        """Serialize one templated mail request and enqueue the shared templated mail task."""
         tenant = TenantModel.objects.create(name="Example Company", slug=f"example-company-{uuid4()}")
         request = TemplateMailRequestDTO(
             subject="Async test",

@@ -1,19 +1,28 @@
-""" Amazon S3 compatible static storage adapter. """
+"""Amazon S3 compatible static storage adapter."""
 
 import os
 from pathlib import Path
 from typing import Any
-from core.config.storage.common import build_extra_apps, build_remote_url, build_s3_compatible_storage_options, normalize_location
-from core.config.storage.static_storage.adapters.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
+
+from core.config.storage.common import (
+    build_extra_apps,
+    build_remote_url,
+    build_s3_compatible_storage_options,
+    normalize_location,
+)
+from core.config.storage.static_storage.adapters.base_static_storage_adapter import (
+    BaseStaticStorageAdapter,
+    StaticStorageConfig,
+)
 
 
 class S3StaticStorageAdapter(BaseStaticStorageAdapter):
-    """ Build static storage settings for Amazon S3 compatible backends. """
+    """Build static storage settings for Amazon S3 compatible backends."""
 
     provider = "s3"
 
     def build(self, base_dir: Path) -> StaticStorageConfig:
-        """ Build S3 static storage configuration.
+        """Build S3 static storage configuration.
 
         Args:
             base_dir: Project base directory used to resolve local paths.
@@ -38,12 +47,12 @@ class S3StaticStorageAdapter(BaseStaticStorageAdapter):
         )
 
     def ensure_dependencies(self) -> None:
-        """ Ensure required third-party dependencies are available."""
+        """Ensure required third-party dependencies are available."""
         if "storages" not in build_extra_apps():
             raise RuntimeError("Remote staticfiles storage requires django-storages to be installed.")
 
     def build_static_url(self) -> str:
-        """ Resolve the static URL for the remote provider.
+        """Resolve the static URL for the remote provider.
 
         Returns:
             str: Remote or fallback static URL.
@@ -56,7 +65,7 @@ class S3StaticStorageAdapter(BaseStaticStorageAdapter):
         )
 
     def build_storage_options(self) -> dict[str, Any]:
-        """ Build common S3 static storage options from environment variables.
+        """Build common S3 static storage options from environment variables.
 
         Returns:
             dict[str, Any]: Keyword arguments for the S3 static storage backend.

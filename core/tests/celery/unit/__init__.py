@@ -1,1 +1,1 @@
-""" Unit tests for project-wide Celery wiring. """
+"""Unit tests for project-wide Celery wiring."""

@@ -1,4 +1,4 @@
-""" Tests for tenant-aware mail recipient resolution. """
+"""Tests for tenant-aware mail recipient resolution."""
 
 from core.mail import TenantMailRecipientResolver
 from core.testing import LoggedSimpleTestCase
@@ -6,10 +6,10 @@ from tenancy.models import TenantBrandingModel, TenantModel
 
 
 class TestTenantMailRecipientResolver(LoggedSimpleTestCase):
-    """ Verify tenant-facing contact recipients resolve from tenant metadata. """
+    """Verify tenant-facing contact recipients resolve from tenant metadata."""
 
     def test_resolve_contact_email_prefers_support_email(self) -> None:
-        """ Resolve the preferred contact email from support email before business email. """
+        """Resolve the preferred contact email from support email before business email."""
         tenant = TenantModel(
             name="Example Company",
             slug="example-company",
@@ -23,7 +23,7 @@ class TestTenantMailRecipientResolver(LoggedSimpleTestCase):
         )
 
     def test_resolve_contact_recipient_uses_display_name_when_branding_exists(self) -> None:
-        """ Build one tenant-facing recipient with the preferred business display name. """
+        """Build one tenant-facing recipient with the preferred business display name."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",

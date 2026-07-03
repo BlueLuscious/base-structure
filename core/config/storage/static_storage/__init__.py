@@ -1,4 +1,4 @@
-""" Public static storage configuration API. """
+"""Public static storage configuration API."""
 
 from core.config.storage.static_storage.adapters import (
     BaseStaticStorageAdapter,
@@ -9,7 +9,6 @@ from core.config.storage.static_storage.adapters import (
     WhiteNoiseStaticStorageAdapter,
 )
 from core.config.storage.static_storage.static_storage_adapter_resolver import StaticStorageAdapterResolver
-
 
 __all__ = [
     "BaseStaticStorageAdapter",

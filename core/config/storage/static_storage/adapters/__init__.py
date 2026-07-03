@@ -1,7 +1,6 @@
-""" Static storage adapters grouped by provider. """
+"""Static storage adapters grouped by provider."""
 
-from .base_static_storage_adapter import BaseStaticStorageAdapter
-from .base_static_storage_adapter import StaticStorageConfig
+from .base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
 from .local_static_storage_adapter import LocalStaticStorageAdapter
 from .r2_static_storage_adapter import R2StaticStorageAdapter
 from .s3_static_storage_adapter import S3StaticStorageAdapter

@@ -1,16 +1,17 @@
-""" MailHog-backed asynchronous integration tests for the templated mail service. """
+"""MailHog-backed asynchronous integration tests for the templated mail service."""
 
 from uuid import uuid4
+
 from core.mail import MailRecipientDTO, TemplateMailRequestDTO, TemplateMailService
 from core.tests.mail.integration.base import BaseAsyncMailIntegrationTransactionTestCase
 from tenancy.models import TenantBrandingModel, TenantModel
 
 
 class TestMailhogAsyncTemplateMailServiceIntegration(BaseAsyncMailIntegrationTransactionTestCase):
-    """ Verify asynchronous templated mail delivery reaches MailHog through Celery. """
+    """Verify asynchronous templated mail delivery reaches MailHog through Celery."""
 
     def test_send_async_delivers_one_real_templated_message_to_mailhog(self) -> None:
-        """ Deliver one templated mail message asynchronously and confirm MailHog captures it. """
+        """Deliver one templated mail message asynchronously and confirm MailHog captures it."""
         subject = f"MailHog async templated {uuid4()}"
 
         async_result = TemplateMailService.send_async(
@@ -33,7 +34,7 @@ class TestMailhogAsyncTemplateMailServiceIntegration(BaseAsyncMailIntegrationTra
         self.wait_for_mailhog_subject(subject)
 
     def test_send_async_delivers_one_real_tenant_aware_templated_message_to_mailhog(self) -> None:
-        """ Deliver one tenant-aware templated message asynchronously and confirm MailHog captures its business context. """
+        """Deliver one tenant-aware templated message asynchronously and confirm MailHog captures its business context."""
         subject = f"MailHog async tenant aware {uuid4()}"
         tenant = TenantModel.objects.create(
             name="Example Company Legal",

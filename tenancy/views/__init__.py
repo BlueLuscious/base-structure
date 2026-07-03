@@ -1,4 +1,4 @@
-""" View exports for tenancy flows. """
+"""View exports for tenancy flows."""
 
 from tenancy.views.switch_active_tenant_view import SwitchActiveTenantView
 

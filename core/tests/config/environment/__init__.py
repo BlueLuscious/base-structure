@@ -1,1 +1,1 @@
-""" Environment configuration tests. """
+"""Environment configuration tests."""

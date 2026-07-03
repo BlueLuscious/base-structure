@@ -1,7 +1,9 @@
-""" Object-oriented resolver for static storage adapters and configuration. """
+"""Object-oriented resolver for static storage adapters and configuration."""
 
-import logging, os
+import logging
+import os
 from pathlib import Path
+
 from core.config.storage.static_storage.adapters import (
     BaseStaticStorageAdapter,
     LocalStaticStorageAdapter,
@@ -15,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class StaticStorageAdapterResolver:
-    """ Resolve static storage adapters and build provider-specific configuration."""
+    """Resolve static storage adapters and build provider-specific configuration."""
 
     adapter_classes: dict[str, type[BaseStaticStorageAdapter]] = {
         "local": LocalStaticStorageAdapter,
@@ -26,7 +28,7 @@ class StaticStorageAdapterResolver:
 
     @classmethod
     def get_adapter(cls, provider: str) -> BaseStaticStorageAdapter:
-        """ Resolve the adapter for one static storage provider.
+        """Resolve the adapter for one static storage provider.
 
         Args:
             provider: Static storage provider identifier from environment.
@@ -43,7 +45,7 @@ class StaticStorageAdapterResolver:
 
     @classmethod
     def build_config(cls, base_dir: Path) -> StaticStorageConfig:
-        """ Build static storage settings from environment variables.
+        """Build static storage settings from environment variables.
 
         Args:
             base_dir: Project base directory used to resolve local paths.

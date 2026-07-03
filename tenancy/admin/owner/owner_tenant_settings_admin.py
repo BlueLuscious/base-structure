@@ -1,14 +1,16 @@
-""" Owner-admin tenant settings registration scoped to the active business. """
+"""Owner-admin tenant settings registration scoped to the active business."""
 
 import logging
+
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from core.adminsites.site_instances import owner_admin_site
 from unfold.admin import ModelAdmin
+
+from core.adminsites.site_instances import owner_admin_site
 from tenancy.access.tenant_access_policy import TenantAccessPolicy
 from tenancy.admin.owner.owner_tenant_settings_form import OwnerTenantSettingsForm
 from tenancy.admin.owner.tenant_branding_inline import TenantBrandingInline
@@ -19,10 +21,10 @@ logger = logging.getLogger(__name__)
 
 @admin.register(TenantModel, site=owner_admin_site)
 class OwnerTenantSettingsAdmin(ModelAdmin):
-    """ Native owner-admin change form for the active tenant business settings. """
+    """Native owner-admin change form for the active tenant business settings."""
 
     class Media:
-        """ Owner-admin assets for small business settings refinements. """
+        """Owner-admin assets for small business settings refinements."""
 
         css = {
             "all": ("tenancy/admin/owner/owner_tenant_settings_admin.css",),
@@ -39,8 +41,14 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
                 "classes": ("tab",),
                 "fields": (
                     "name",
-                    ("business_email", "support_email",),
-                    ("phone_number", "website_url",),
+                    (
+                        "business_email",
+                        "support_email",
+                    ),
+                    (
+                        "phone_number",
+                        "website_url",
+                    ),
                 ),
             },
         ),
@@ -48,7 +56,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
 
     @staticmethod
     def _can_manage_active_tenant(request: HttpRequest) -> bool:
-        """ Return whether the current request may manage the active tenant.
+        """Return whether the current request may manage the active tenant.
 
         Args:
             request: Current admin request.
@@ -59,7 +67,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         return TenantAccessPolicy.can_manage_tenant(request.user, getattr(request, "tenant", None))
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        """ Return whether the owner business settings module should be visible.
+        """Return whether the owner business settings module should be visible.
 
         Args:
             request: Current admin request.
@@ -70,7 +78,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         return self._can_manage_active_tenant(request)
 
     def has_view_permission(self, request: HttpRequest, obj: TenantModel | None = None) -> bool:
-        """ Return whether the current request may view the active tenant settings.
+        """Return whether the current request may view the active tenant settings.
 
         Args:
             request: Current admin request.
@@ -89,7 +97,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         return self._can_manage_active_tenant(request)
 
     def has_change_permission(self, request: HttpRequest, obj: TenantModel | None = None) -> bool:
-        """ Return whether the current request may edit the active tenant settings.
+        """Return whether the current request may edit the active tenant settings.
 
         Args:
             request: Current admin request.
@@ -108,7 +116,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         return self._can_manage_active_tenant(request)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
-        """ Return whether the owner business settings screen supports adds.
+        """Return whether the owner business settings screen supports adds.
 
         Args:
             request: Current admin request.
@@ -119,7 +127,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         return False
 
     def has_delete_permission(self, request: HttpRequest, obj: TenantModel | None = None) -> bool:
-        """ Return whether the owner business settings screen supports deletes.
+        """Return whether the owner business settings screen supports deletes.
 
         Args:
             request: Current admin request.
@@ -131,7 +139,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         return False
 
     def get_queryset(self, request: HttpRequest):
-        """ Restrict the owner tenant admin to the active tenant only.
+        """Restrict the owner tenant admin to the active tenant only.
 
         Args:
             request: Current admin request.
@@ -148,7 +156,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         return queryset.filter(pk=tenant.pk)
 
     def changelist_view(self, request: HttpRequest, extra_context=None):
-        """ Redirect the owner tenant changelist to the active tenant change form.
+        """Redirect the owner tenant changelist to the active tenant change form.
 
         Args:
             request: Current admin request.
@@ -179,7 +187,7 @@ class OwnerTenantSettingsAdmin(ModelAdmin):
         )
 
     def change_view(self, request: HttpRequest, object_id: str, form_url: str = "", extra_context=None):
-        """ Render the tenant change form without owner-facing links to the changelist.
+        """Render the tenant change form without owner-facing links to the changelist.
 
         Args:
             request: Current admin request.

@@ -1,1 +1,1 @@
-""" Core internationalization helpers and extension points. """
+"""Core internationalization helpers and extension points."""

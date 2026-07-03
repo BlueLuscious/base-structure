@@ -1,1 +1,1 @@
-""" QuerySet tests for the accounts app. """
+"""QuerySet tests for the accounts app."""

@@ -1,15 +1,17 @@
-""" Shared base cases for MailHog-backed mail integration tests. """
+"""Shared base cases for MailHog-backed mail integration tests."""
 
 from unittest import SkipTest
+
 from django.conf import settings
 from django.test import override_settings
+
 from core.config.environment import EnvironmentValueParser
 from core.testing import LoggedSimpleTestCase, LoggedTransactionTestCase
 from core.tests.mail.integration.mixins import MailIntegrationAssertionsMixin
 
 
 def is_mail_integration_enabled() -> bool:
-    """ Return whether mail integration tests should run.
+    """Return whether mail integration tests should run.
 
     Returns:
         bool: True when mail integration tests are explicitly enabled.
@@ -18,7 +20,7 @@ def is_mail_integration_enabled() -> bool:
 
 
 def is_async_mail_integration_enabled() -> bool:
-    """ Return whether asynchronous mail integration tests should run.
+    """Return whether asynchronous mail integration tests should run.
 
     Returns:
         bool: True when asynchronous mail integration tests are explicitly enabled.
@@ -33,11 +35,11 @@ def is_async_mail_integration_enabled() -> bool:
     DEFAULT_FROM_EMAIL="noreply@example.com",
 )
 class BaseMailIntegrationSimpleTestCase(MailIntegrationAssertionsMixin, LoggedSimpleTestCase):
-    """ Define shared MailHog-backed integration helpers for outbound mail. """
+    """Define shared MailHog-backed integration helpers for outbound mail."""
 
     @classmethod
     def setUpClass(cls) -> None:
-        """ Skip the suite when MailHog integration is not explicitly enabled. """
+        """Skip the suite when MailHog integration is not explicitly enabled."""
         super().setUpClass()
 
         if not is_mail_integration_enabled():
@@ -55,11 +57,11 @@ class BaseMailIntegrationSimpleTestCase(MailIntegrationAssertionsMixin, LoggedSi
     CELERY_TASK_ALWAYS_EAGER=False,
 )
 class BaseAsyncMailIntegrationTransactionTestCase(MailIntegrationAssertionsMixin, LoggedTransactionTestCase):
-    """ Define shared MailHog-backed integration helpers for asynchronous outbound mail. """
+    """Define shared MailHog-backed integration helpers for asynchronous outbound mail."""
 
     @classmethod
     def setUpClass(cls) -> None:
-        """ Skip the suite when asynchronous MailHog integration is not explicitly enabled. """
+        """Skip the suite when asynchronous MailHog integration is not explicitly enabled."""
         super().setUpClass()
 
         if not is_async_mail_integration_enabled():

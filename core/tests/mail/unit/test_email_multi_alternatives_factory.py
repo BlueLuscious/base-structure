@@ -1,7 +1,8 @@
-""" Tests for the Django mail message factory. """
+"""Tests for the Django mail message factory."""
 
 from django.core.mail import EmailMultiAlternatives
 from django.test import override_settings
+
 from core.mail import MailAttachmentDTO, MailMessageDTO, MailRecipientDTO
 from core.mail.factories import EmailMultiAlternativesFactory
 from core.testing import LoggedSimpleTestCase
@@ -9,10 +10,10 @@ from core.testing import LoggedSimpleTestCase
 
 @override_settings(DEFAULT_FROM_EMAIL="noreply@example.com")
 class TestEmailMultiAlternativesFactory(LoggedSimpleTestCase):
-    """ Verify outbound DTOs are converted into Django email objects correctly. """
+    """Verify outbound DTOs are converted into Django email objects correctly."""
 
     def test_build_creates_email_with_plain_html_and_attachment_payloads(self) -> None:
-        """ Build one Django email object preserving recipients, alternatives, and attachments. """
+        """Build one Django email object preserving recipients, alternatives, and attachments."""
         message = MailMessageDTO(
             subject="Welcome",
             to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],
@@ -47,7 +48,7 @@ class TestEmailMultiAlternativesFactory(LoggedSimpleTestCase):
         self.assertEqual("hello.txt", email_message.attachments[0][0])
 
     def test_build_prefers_message_from_email_when_provided(self) -> None:
-        """ Prefer one explicit sender over the project default sender. """
+        """Prefer one explicit sender over the project default sender."""
         message = MailMessageDTO(
             subject="Override sender",
             to=[MailRecipientDTO(email="owner@example.com")],

@@ -1,6 +1,7 @@
 """Manager tests for tenant-group access helpers."""
 
 from django.contrib.auth.models import Group
+
 from core.testing.base import LoggedTestCase
 from tenancy.models import TenantGroupModel, TenantModel
 

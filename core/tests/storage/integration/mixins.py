@@ -1,22 +1,24 @@
-""" Shared mixins for storage integration tests. """
+"""Shared mixins for storage integration tests."""
+
+from importlib import import_module
+from typing import Any
 
 import boto3
-from typing import Any
-from importlib import import_module
 from botocore.client import Config as BotoConfig
 from django.core.files.storage import Storage
+
 from core.config.storage.media_storage.adapters import MediaStorageConfig
 from core.tests.storage.integration.protocols import S3ClientProtocol
 
 
 class StorageIntegrationMixin:
-    """ Provide helper methods for remote storage integration tests. """
+    """Provide helper methods for remote storage integration tests."""
 
     expected_provider: str
     storage_config: MediaStorageConfig
 
     def build_boto3_client(self) -> S3ClientProtocol:
-        """ Build a boto3 client using the configured S3-compatible backend.
+        """Build a boto3 client using the configured S3-compatible backend.
 
         Returns:
             S3ClientProtocol: Configured boto3 S3 client.
@@ -36,7 +38,7 @@ class StorageIntegrationMixin:
         return client
 
     def build_django_storage(self) -> Storage:
-        """ Build the configured django-storages backend directly.
+        """Build the configured django-storages backend directly.
 
         Returns:
             Storage: Configured Django storage backend instance.
@@ -48,7 +50,7 @@ class StorageIntegrationMixin:
         return backend_class(**storage_definition["OPTIONS"])
 
     def build_object_key(self, suffix: str) -> str:
-        """ Build a namespaced object key for the current provider.
+        """Build a namespaced object key for the current provider.
 
         Args:
             suffix: Unique suffix for the object inside the healthchecks prefix.
@@ -59,7 +61,7 @@ class StorageIntegrationMixin:
         return f"healthchecks/{self.expected_provider}-{suffix}"
 
     def delete_object_if_present(self, client: S3ClientProtocol, bucket_name: str, object_key: str) -> None:
-        """ Delete a remote object when it exists.
+        """Delete a remote object when it exists.
 
         Args:
             client: Configured boto3 S3 client.

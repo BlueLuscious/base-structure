@@ -1,10 +1,10 @@
-""" Admin site namespaces used across the project. """
+"""Admin site namespaces used across the project."""
 
 from enum import StrEnum
 
 
 class AdminNamespace(StrEnum):
-    """ Supported admin site namespaces. """
+    """Supported admin site namespaces."""
 
     MASTER = "master_admin"
     OWNER = "owner_admin"

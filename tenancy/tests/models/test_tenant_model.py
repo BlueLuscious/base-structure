@@ -1,22 +1,23 @@
-""" Model tests for tenant persistence. """
+"""Model tests for tenant persistence."""
 
 from uuid import UUID
+
 from core.testing.base import LoggedTestCase
 from tenancy.models import TenantModel
 
 
 class TestTenantModel(LoggedTestCase):
-    """ Verify tenant persistence and representation. """
+    """Verify tenant persistence and representation."""
 
     def test_string_representation_uses_tenant_name(self) -> None:
-        """ Verify the tenant string representation stays human-friendly. """
+        """Verify the tenant string representation stays human-friendly."""
         tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
 
         self.assertEqual("GEA Center", str(tenant))
         self.assertIsInstance(tenant.pk, UUID)
 
     def test_optional_contact_fields_persist_on_the_tenant(self) -> None:
-        """ Verify tenant operational contact metadata persists independently from visual branding. """
+        """Verify tenant operational contact metadata persists independently from visual branding."""
         tenant = TenantModel.objects.create(
             name="GEA Center",
             slug="gea-center",

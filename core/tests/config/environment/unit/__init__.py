@@ -1,1 +1,1 @@
-""" Unit tests for environment configuration. """
+"""Unit tests for environment configuration."""

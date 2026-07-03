@@ -1,9 +1,11 @@
-""" Service for building the owner tenant sidebar navigation. """
+"""Service for building the owner tenant sidebar navigation."""
 
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
 from accounts.access import AccountsAccessPolicy
 from tenancy.access.tenant_access_policy import TenantAccessPolicy
 
@@ -12,11 +14,11 @@ if TYPE_CHECKING:
 
 
 class OwnerTenantSidebarNavigationBuilder:
-    """ Build sidebar navigation groups for the owner admin site. """
+    """Build sidebar navigation groups for the owner admin site."""
 
     @staticmethod
     def get_business_settings_link(request: HttpRequest) -> str:
-        """ Return the owner business settings link for the active tenant.
+        """Return the owner business settings link for the active tenant.
 
         Args:
             request: Current admin request.
@@ -38,7 +40,7 @@ class OwnerTenantSidebarNavigationBuilder:
 
     @classmethod
     def build(cls, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Build owner sidebar navigation for the active tenant scope.
+        """Build owner sidebar navigation for the active tenant scope.
 
         Args:
             request: Current admin request.
@@ -54,8 +56,8 @@ class OwnerTenantSidebarNavigationBuilder:
                         "title": _("Settings"),
                         "icon": "storefront",
                         "link": cls.get_business_settings_link(request),
-                        "permission": lambda req: (
-                            TenantAccessPolicy.can_manage_tenant(req.user, getattr(req, "tenant", None))
+                        "permission": lambda req: TenantAccessPolicy.can_manage_tenant(
+                            req.user, getattr(req, "tenant", None)
                         ),
                     },
                 ],

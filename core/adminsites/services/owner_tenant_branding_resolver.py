@@ -1,23 +1,25 @@
-""" Tenant-branding resolver used by the owner admin site. """
+"""Tenant-branding resolver used by the owner admin site."""
 
 import logging
 from typing import TYPE_CHECKING
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 
 if TYPE_CHECKING:
     from django.db.models.fields.files import ImageFieldFile
+
     from tenancy.models import TenantBrandingModel, TenantModel
 
 logger = logging.getLogger(__name__)
 
 
 class OwnerTenantBrandingResolver:
-    """ Resolve tenant branding assets for the owner admin site. """
+    """Resolve tenant branding assets for the owner admin site."""
 
     @classmethod
     def get_branding(cls, request: HttpRequest) -> "TenantBrandingModel | None":
-        """ Return tenant branding for the current request when available.
+        """Return tenant branding for the current request when available.
 
         Args:
             request: Current admin request.
@@ -46,7 +48,7 @@ class OwnerTenantBrandingResolver:
 
     @classmethod
     def get_display_name(cls, request: HttpRequest) -> str | None:
-        """ Return the preferred tenant display name for owner admin branding.
+        """Return the preferred tenant display name for owner admin branding.
 
         Args:
             request: Current admin request.
@@ -68,7 +70,7 @@ class OwnerTenantBrandingResolver:
 
     @staticmethod
     def get_file_url(field: "ImageFieldFile") -> str | None:
-        """ Return the URL of one file-like field when available.
+        """Return the URL of one file-like field when available.
 
         Args:
             field: File-like object or ``None``.
@@ -82,8 +84,10 @@ class OwnerTenantBrandingResolver:
         return getattr(field, "url", None)
 
     @classmethod
-    def build_themed_asset(cls, light_field: "ImageFieldFile", dark_field: "ImageFieldFile") -> dict[str, str] | str | None:
-        """ Build the Unfold asset payload for one optional light or dark pair.
+    def build_themed_asset(
+        cls, light_field: "ImageFieldFile", dark_field: "ImageFieldFile"
+    ) -> dict[str, str] | str | None:
+        """Build the Unfold asset payload for one optional light or dark pair.
 
         Args:
             light_field: Light-themed file-like field.
@@ -105,7 +109,7 @@ class OwnerTenantBrandingResolver:
 
     @staticmethod
     def build_favicon_entry(href: str) -> dict[str, str]:
-        """ Build one favicon entry for Unfold.
+        """Build one favicon entry for Unfold.
 
         Args:
             href: Public URL of the favicon asset.
@@ -121,7 +125,7 @@ class OwnerTenantBrandingResolver:
 
     @classmethod
     def get_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
-        """ Return the owner-site logo payload from tenant branding.
+        """Return the owner-site logo payload from tenant branding.
 
         Args:
             request: Current admin request.
@@ -137,7 +141,7 @@ class OwnerTenantBrandingResolver:
 
     @classmethod
     def get_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
-        """ Return the owner-site icon payload from tenant branding.
+        """Return the owner-site icon payload from tenant branding.
 
         Args:
             request: Current admin request.
@@ -153,7 +157,7 @@ class OwnerTenantBrandingResolver:
 
     @classmethod
     def get_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
-        """ Return the owner-site favicon entries from tenant branding.
+        """Return the owner-site favicon entries from tenant branding.
 
         Args:
             request: Current admin request.

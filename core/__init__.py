@@ -1,4 +1,4 @@
-""" Project package bootstrap exports. """
+"""Project package bootstrap exports."""
 
 from core.celery import celery_app
 

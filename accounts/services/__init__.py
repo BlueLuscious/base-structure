@@ -1,4 +1,4 @@
-""" Service exports for the accounts app. """
+"""Service exports for the accounts app."""
 
 from .owner_delegable_permission_resolver import OwnerDelegablePermissionResolver
 

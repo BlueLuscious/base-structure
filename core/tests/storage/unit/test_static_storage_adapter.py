@@ -1,26 +1,27 @@
-""" Unit tests for static storage adapters. """
+"""Unit tests for static storage adapters."""
 
 import os
 from pathlib import Path
 from unittest.mock import patch
+
 from core.config.storage import StaticStorageAdapterResolver
 from core.config.storage.static_storage.adapters import WhiteNoiseStaticStorageAdapter
 from core.testing.base import LoggedSimpleTestCase
 
 
 class TestStaticStorageAdapter(LoggedSimpleTestCase):
-    """ Cover static storage adapter discovery and static-specific behavior. """
+    """Cover static storage adapter discovery and static-specific behavior."""
 
     base_dir: Path
 
     @classmethod
     def setUpClass(cls) -> None:
-        """ Prepare a stable base directory for adapter resolution. """
+        """Prepare a stable base directory for adapter resolution."""
         super().setUpClass()
         cls.base_dir = Path(__file__).resolve().parents[4]
 
     def build_environment(self, **overrides: str) -> dict[str, str]:
-        """ Build an environment dictionary for static storage adapter tests.
+        """Build an environment dictionary for static storage adapter tests.
 
         Args:
             **overrides: Environment overrides applied on top of the defaults.
@@ -49,7 +50,7 @@ class TestStaticStorageAdapter(LoggedSimpleTestCase):
         return environment
 
     def test_static_storage_adapter__resolver_build_config_uses_local_backend(self) -> None:
-        """ Verify the local static adapter builds Django staticfiles storage without extra middleware. """
+        """Verify the local static adapter builds Django staticfiles storage without extra middleware."""
         with (
             patch.dict(os.environ, self.build_environment(), clear=False),
             patch("core.config.storage.static_storage.static_storage_adapter_resolver.logger.info") as logger_info_mock,
@@ -65,7 +66,7 @@ class TestStaticStorageAdapter(LoggedSimpleTestCase):
         logger_info_mock.assert_called_once()
 
     def test_static_storage_adapter__whitenoise_adds_expected_middleware(self) -> None:
-        """ Verify the WhiteNoise adapter adds the expected middleware and backend. """
+        """Verify the WhiteNoise adapter adds the expected middleware and backend."""
         with patch("importlib.util.find_spec", return_value=object()):
             with patch.dict(os.environ, self.build_environment(STATICFILES_PROVIDER="whitenoise"), clear=False):
                 static_storage_config = StaticStorageAdapterResolver.build_config(self.base_dir)
@@ -78,7 +79,7 @@ class TestStaticStorageAdapter(LoggedSimpleTestCase):
         self.assertEqual(static_storage_config.extra_middleware, ["whitenoise.middleware.WhiteNoiseMiddleware"])
 
     def test_static_storage_adapter__s3_builds_custom_domain_url_with_location(self) -> None:
-        """ Verify the S3 static adapter builds a public static URL from custom domain and location. """
+        """Verify the S3 static adapter builds a public static URL from custom domain and location."""
         with patch.dict(
             os.environ,
             self.build_environment(
@@ -93,7 +94,7 @@ class TestStaticStorageAdapter(LoggedSimpleTestCase):
         self.assertEqual(static_storage_config.static_url, "https://cdn.example.com/assets-static/")
 
     def test_static_storage_adapter__whitenoise_raises_when_dependency_is_missing(self) -> None:
-        """ Verify the WhiteNoise adapter fails clearly when the dependency is unavailable. """
+        """Verify the WhiteNoise adapter fails clearly when the dependency is unavailable."""
         with patch("importlib.util.find_spec", return_value=None):
             with self.assertRaises(RuntimeError):
                 WhiteNoiseStaticStorageAdapter().ensure_dependencies()

@@ -1,20 +1,22 @@
-""" Tests for the owner tenant settings native change flow. """
+"""Tests for the owner tenant settings native change flow."""
 
 from unittest.mock import patch
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from core.testing.base import LoggedTestCase
+
 from accounts.models import UserModel
+from core.testing.base import LoggedTestCase
 from tenancy.choices import TenantRole
 from tenancy.models import TenantBrandingModel, TenantMembershipModel, TenantModel
 
 
 class TestOwnerTenantSettingsAdmin(LoggedTestCase):
-    """ Verify owners can reach and use the native owner tenant change form. """
+    """Verify owners can reach and use the native owner tenant change form."""
 
     def setUp(self) -> None:
-        """ Create reusable users and one active tenant for the owner settings flow. """
+        """Create reusable users and one active tenant for the owner settings flow."""
         self.owner = UserModel.objects.create_user(
             username="owner-settings",
             password="test-pass",
@@ -45,15 +47,13 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         )
 
     def test_owner_can_open_native_change_screen_for_active_tenant(self) -> None:
-        """ Verify owners can render the native tenant change form. """
+        """Verify owners can render the native tenant change form."""
         self.client.force_login(self.owner)
         session = self.client.session
         session["active_tenant_id"] = str(self.tenant.pk)
         session.save()
 
-        response = self.client.get(
-            reverse("owner_admin:tenancy_tenantmodel_change", args=(str(self.tenant.pk),))
-        )
+        response = self.client.get(reverse("owner_admin:tenancy_tenantmodel_change", args=(str(self.tenant.pk),)))
 
         self.assertEqual(200, response.status_code)
         self.assertContains(response, "Example Company")
@@ -63,7 +63,7 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         self.assertContains(response, _("Website"))
 
     def test_owner_tenant_changelist_redirects_to_active_tenant_change_screen(self) -> None:
-        """ Verify the owner tenant changelist redirects to the active tenant change form. """
+        """Verify the owner tenant changelist redirects to the active tenant change form."""
         self.client.force_login(self.owner)
         session = self.client.session
         session["active_tenant_id"] = str(self.tenant.pk)
@@ -83,20 +83,18 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_operator_cannot_open_native_change_screen(self) -> None:
-        """ Verify operators are forbidden from the owner native tenant change screen. """
+        """Verify operators are forbidden from the owner native tenant change screen."""
         self.client.force_login(self.operator)
         session = self.client.session
         session["active_tenant_id"] = str(self.tenant.pk)
         session.save()
 
-        response = self.client.get(
-            reverse("owner_admin:tenancy_tenantmodel_change", args=(str(self.tenant.pk),))
-        )
+        response = self.client.get(reverse("owner_admin:tenancy_tenantmodel_change", args=(str(self.tenant.pk),)))
 
         self.assertEqual(403, response.status_code)
 
     def test_post_creates_branding_record_for_active_tenant(self) -> None:
-        """ Verify posting valid inline data creates one branding record for the active tenant. """
+        """Verify posting valid inline data creates one branding record for the active tenant."""
         self.client.force_login(self.owner)
         session = self.client.session
         session["active_tenant_id"] = str(self.tenant.pk)
@@ -126,7 +124,7 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         self.assertEqual("Example Company Pro", branding.display_name)
 
     def test_post_updates_existing_branding_record_for_active_tenant(self) -> None:
-        """ Verify posting valid inline data updates the existing branding record. """
+        """Verify posting valid inline data updates the existing branding record."""
         branding = TenantBrandingModel.objects.create(
             tenant=self.tenant,
             display_name="Example Company",
@@ -163,7 +161,7 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         self.assertEqual("Example Company Updated", branding.display_name)
 
     def test_post_accepts_branding_file_uploads(self) -> None:
-        """ Verify owners can upload one branding asset through the inline formset. """
+        """Verify owners can upload one branding asset through the inline formset."""
         self.client.force_login(self.owner)
         session = self.client.session
         session["active_tenant_id"] = str(self.tenant.pk)
@@ -204,7 +202,7 @@ class TestOwnerTenantSettingsAdmin(LoggedTestCase):
         self.assertIn("logo-light", branding.logo_light.name)
 
     def test_post_updates_operational_contact_fields_for_the_active_tenant(self) -> None:
-        """ Verify owner settings can update tenant business contact fields without touching branding. """
+        """Verify owner settings can update tenant business contact fields without touching branding."""
         self.client.force_login(self.owner)
         session = self.client.session
         session["active_tenant_id"] = str(self.tenant.pk)

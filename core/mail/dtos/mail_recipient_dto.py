@@ -1,4 +1,4 @@
-""" DTO representing one outbound mail recipient. """
+"""DTO representing one outbound mail recipient."""
 
 from dataclasses import dataclass
 from email.utils import formataddr
@@ -6,7 +6,7 @@ from email.utils import formataddr
 
 @dataclass(frozen=True)
 class MailRecipientDTO:
-    """ Represent one mail recipient with an optional display name.
+    """Represent one mail recipient with an optional display name.
 
     Args:
         email: Recipient email address.
@@ -17,7 +17,7 @@ class MailRecipientDTO:
     name: str | None = None
 
     def __post_init__(self) -> None:
-        """ Validate and normalize the recipient fields.
+        """Validate and normalize the recipient fields.
 
         Returns:
             None
@@ -32,7 +32,7 @@ class MailRecipientDTO:
         object.__setattr__(self, "name", normalized_name or None)
 
     def as_rfc822_address(self) -> str:
-        """ Return the recipient formatted for email headers.
+        """Return the recipient formatted for email headers.
 
         Returns:
             str: RFC 822 formatted email address.

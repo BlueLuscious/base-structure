@@ -1,7 +1,9 @@
-""" Object-oriented resolver for media storage adapters and configuration. """
+"""Object-oriented resolver for media storage adapters and configuration."""
 
-import logging, os
+import logging
+import os
 from pathlib import Path
+
 from core.config.storage.media_storage.adapters import (
     BaseMediaStorageAdapter,
     LocalMediaStorageAdapter,
@@ -14,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class MediaStorageAdapterResolver:
-    """ Resolve media storage adapters and build provider-specific configuration. """
+    """Resolve media storage adapters and build provider-specific configuration."""
 
     adapter_classes: dict[str, type[BaseMediaStorageAdapter]] = {
         "local": LocalMediaStorageAdapter,
@@ -24,7 +26,7 @@ class MediaStorageAdapterResolver:
 
     @classmethod
     def get_adapter(cls, provider: str) -> BaseMediaStorageAdapter:
-        """ Resolve the adapter for one media storage provider.
+        """Resolve the adapter for one media storage provider.
 
         Args:
             provider: Media storage provider identifier from environment.
@@ -41,7 +43,7 @@ class MediaStorageAdapterResolver:
 
     @classmethod
     def build_config(cls, base_dir: Path) -> MediaStorageConfig:
-        """ Build media storage settings from environment variables.
+        """Build media storage settings from environment variables.
 
         Args:
             base_dir: Project base directory used to resolve local media paths.

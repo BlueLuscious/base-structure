@@ -1,11 +1,11 @@
-""" DTO representing one outbound mail attachment. """
+"""DTO representing one outbound mail attachment."""
 
 from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
 class MailAttachmentDTO:
-    """ Represent one attachment added to one outbound mail message.
+    """Represent one attachment added to one outbound mail message.
 
     Args:
         filename: Public attachment filename.
@@ -18,7 +18,7 @@ class MailAttachmentDTO:
     mimetype: str | None = None
 
     def __post_init__(self) -> None:
-        """ Validate the attachment contract.
+        """Validate the attachment contract.
 
         Returns:
             None

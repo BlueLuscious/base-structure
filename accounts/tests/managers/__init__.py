@@ -1,1 +1,1 @@
-""" Manager tests for the accounts app. """
+"""Manager tests for the accounts app."""

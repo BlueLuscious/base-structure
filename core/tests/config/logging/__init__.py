@@ -1,1 +1,1 @@
-""" Tests for project-wide logging configuration helpers. """
+"""Tests for project-wide logging configuration helpers."""

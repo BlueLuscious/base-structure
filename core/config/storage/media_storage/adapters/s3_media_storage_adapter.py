@@ -1,19 +1,28 @@
-""" Amazon S3 compatible media storage adapter. """
+"""Amazon S3 compatible media storage adapter."""
 
 import os
 from pathlib import Path
 from typing import Any
-from core.config.storage.common import build_extra_apps, build_remote_url, build_s3_compatible_storage_options, normalize_location
-from core.config.storage.media_storage.adapters.base_media_storage_adapter import BaseMediaStorageAdapter, MediaStorageConfig
+
+from core.config.storage.common import (
+    build_extra_apps,
+    build_remote_url,
+    build_s3_compatible_storage_options,
+    normalize_location,
+)
+from core.config.storage.media_storage.adapters.base_media_storage_adapter import (
+    BaseMediaStorageAdapter,
+    MediaStorageConfig,
+)
 
 
 class S3MediaStorageAdapter(BaseMediaStorageAdapter):
-    """ Build media storage settings for Amazon S3 compatible backends. """
+    """Build media storage settings for Amazon S3 compatible backends."""
 
     provider = "s3"
 
     def build(self, base_dir: Path) -> MediaStorageConfig:
-        """ Build S3 media storage configuration.
+        """Build S3 media storage configuration.
 
         Args:
             base_dir: Project base directory used to resolve local paths.
@@ -37,12 +46,12 @@ class S3MediaStorageAdapter(BaseMediaStorageAdapter):
         )
 
     def ensure_dependencies(self) -> None:
-        """ Ensure required third-party dependencies are available. """
+        """Ensure required third-party dependencies are available."""
         if "storages" not in build_extra_apps():
             raise RuntimeError("Remote file storage requires django-storages to be installed.")
 
     def build_media_url(self) -> str:
-        """ Resolve the media URL for the remote provider.
+        """Resolve the media URL for the remote provider.
 
         Returns:
             str: Remote or fallback media URL.
@@ -55,7 +64,7 @@ class S3MediaStorageAdapter(BaseMediaStorageAdapter):
         )
 
     def build_storage_options(self) -> dict[str, Any]:
-        """ Build common S3 media storage options from environment variables.
+        """Build common S3 media storage options from environment variables.
 
         Returns:
             dict[str, Any]: Keyword arguments for the S3 media storage backend.

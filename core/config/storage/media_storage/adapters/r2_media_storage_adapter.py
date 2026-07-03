@@ -1,17 +1,18 @@
-""" Cloudflare R2 media storage adapter. """
+"""Cloudflare R2 media storage adapter."""
 
 import os
 from typing import Any
+
 from core.config.storage.media_storage.adapters.s3_media_storage_adapter import S3MediaStorageAdapter
 
 
 class R2MediaStorageAdapter(S3MediaStorageAdapter):
-    """ Build media storage settings for Cloudflare R2. """
+    """Build media storage settings for Cloudflare R2."""
 
     provider = "r2"
 
     def build_storage_options(self) -> dict[str, Any]:
-        """ Build R2 media storage options from environment variables.
+        """Build R2 media storage options from environment variables.
 
         Returns:
             dict[str, Any]: Keyword arguments for the R2-compatible media backend.

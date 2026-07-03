@@ -1,1 +1,1 @@
-""" Project-level Celery tests. """
+"""Project-level Celery tests."""

@@ -1,6 +1,7 @@
-""" Policy helpers for deciding reply-to behavior in tenant-aware mail flows. """
+"""Policy helpers for deciding reply-to behavior in tenant-aware mail flows."""
 
 from typing import TYPE_CHECKING
+
 from core.mail.resolvers import TenantMailRecipientResolver
 
 if TYPE_CHECKING:
@@ -8,13 +9,13 @@ if TYPE_CHECKING:
 
 
 class TenantMailReplyPolicy:
-    """ Decide reply-to addresses for tenant-aware outbound mail flows. """
+    """Decide reply-to addresses for tenant-aware outbound mail flows."""
 
     recipient_resolver_class = TenantMailRecipientResolver
 
     @staticmethod
     def _normalize_email(email: str | None) -> str | None:
-        """ Normalize one optional email address.
+        """Normalize one optional email address.
 
         Args:
             email: Optional email address.
@@ -27,7 +28,7 @@ class TenantMailReplyPolicy:
 
     @classmethod
     def resolve_customer_reply_to(cls, customer_email: str | None) -> tuple[str, ...]:
-        """ Return the reply-to target for one customer-originated request.
+        """Return the reply-to target for one customer-originated request.
 
         Args:
             customer_email: Customer email address that should receive owner replies.
@@ -40,7 +41,7 @@ class TenantMailReplyPolicy:
 
     @classmethod
     def resolve_tenant_contact_reply_to(cls, tenant: "TenantModel | None") -> tuple[str, ...]:
-        """ Return the reply-to target for one tenant-facing business reply channel.
+        """Return the reply-to target for one tenant-facing business reply channel.
 
         Args:
             tenant: Tenant whose preferred contact email should receive replies.

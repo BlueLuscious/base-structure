@@ -1,8 +1,10 @@
-""" Tests for the templated mail service. """
+"""Tests for the templated mail service."""
+
+from unittest.mock import patch
 
 from django.core import mail
 from django.test import override_settings
-from unittest.mock import patch
+
 from core.mail import MailRecipientDTO, TemplateMailRequestDTO, TemplateMailService
 from core.testing import LoggedSimpleTestCase
 from tenancy.models import TenantBrandingModel, TenantModel
@@ -14,10 +16,10 @@ from tenancy.runtime import ActiveTenantContext
     DEFAULT_FROM_EMAIL="noreply@example.com",
 )
 class TestTemplateMailService(LoggedSimpleTestCase):
-    """ Verify templated mail is rendered and delivered through the mail service. """
+    """Verify templated mail is rendered and delivered through the mail service."""
 
     def setUp(self) -> None:
-        """ Reset the in-memory outbox before each test.
+        """Reset the in-memory outbox before each test.
 
         Returns:
             None
@@ -26,7 +28,7 @@ class TestTemplateMailService(LoggedSimpleTestCase):
         mail.outbox = []
 
     def test_send_delivers_one_rendered_template_message(self) -> None:
-        """ Deliver one templated message through the configured backend. """
+        """Deliver one templated message through the configured backend."""
         with patch("core.mail.services.template_mail_service.logger.info") as logger_info_mock:
             delivered_count = TemplateMailService.send(
                 TemplateMailRequestDTO(
@@ -55,7 +57,7 @@ class TestTemplateMailService(LoggedSimpleTestCase):
         logger_info_mock.assert_called_once()
 
     def test_send_includes_active_tenant_business_context_when_available(self) -> None:
-        """ Deliver one templated message with tenant-aware branding and contact values. """
+        """Deliver one templated message with tenant-aware branding and contact values."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",
@@ -94,7 +96,7 @@ class TestTemplateMailService(LoggedSimpleTestCase):
         self.assertIn("Website: https://example.test", mail.outbox[0].body)
 
     def test_send_accepts_an_explicit_tenant_without_relying_on_runtime_context(self) -> None:
-        """ Deliver one templated message using an explicit tenant snapshot instead of ambient runtime state. """
+        """Deliver one templated message using an explicit tenant snapshot instead of ambient runtime state."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",

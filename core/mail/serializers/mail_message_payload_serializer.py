@@ -1,16 +1,17 @@
-""" Serialize outbound mail message DTOs into Celery-safe payloads. """
+"""Serialize outbound mail message DTOs into Celery-safe payloads."""
 
 from collections.abc import Mapping
 from typing import Any
+
 from core.mail.dtos import MailAttachmentDTO, MailMessageDTO, MailRecipientDTO
 
 
 class MailMessagePayloadSerializer:
-    """ Convert raw mail DTOs to and from plain Celery-safe payload dictionaries. """
+    """Convert raw mail DTOs to and from plain Celery-safe payload dictionaries."""
 
     @classmethod
     def serialize(cls, message: MailMessageDTO) -> dict[str, Any]:
-        """ Serialize one outbound mail message DTO.
+        """Serialize one outbound mail message DTO.
 
         Args:
             message: Outbound mail message DTO.
@@ -33,7 +34,7 @@ class MailMessagePayloadSerializer:
 
     @classmethod
     def deserialize(cls, payload: Mapping[str, Any]) -> MailMessageDTO:
-        """ Deserialize one plain payload into one outbound mail message DTO.
+        """Deserialize one plain payload into one outbound mail message DTO.
 
         Args:
             payload: Serialized mail message payload.
@@ -56,7 +57,7 @@ class MailMessagePayloadSerializer:
 
     @staticmethod
     def _serialize_recipient(recipient: MailRecipientDTO) -> dict[str, str | None]:
-        """ Serialize one recipient DTO.
+        """Serialize one recipient DTO.
 
         Args:
             recipient: Recipient DTO to serialize.
@@ -71,7 +72,7 @@ class MailMessagePayloadSerializer:
 
     @staticmethod
     def _deserialize_recipient(payload: Mapping[str, Any]) -> MailRecipientDTO:
-        """ Deserialize one recipient payload.
+        """Deserialize one recipient payload.
 
         Args:
             payload: Plain recipient payload.
@@ -86,7 +87,7 @@ class MailMessagePayloadSerializer:
 
     @staticmethod
     def _serialize_attachment(attachment: MailAttachmentDTO) -> dict[str, Any]:
-        """ Serialize one attachment DTO.
+        """Serialize one attachment DTO.
 
         Args:
             attachment: Attachment DTO to serialize.
@@ -102,7 +103,7 @@ class MailMessagePayloadSerializer:
 
     @staticmethod
     def _deserialize_attachment(payload: Mapping[str, Any]) -> MailAttachmentDTO:
-        """ Deserialize one attachment payload.
+        """Deserialize one attachment payload.
 
         Args:
             payload: Plain attachment payload.

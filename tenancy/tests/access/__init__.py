@@ -1,1 +1,1 @@
-""" Access policy tests for tenancy. """
+"""Access policy tests for tenancy."""

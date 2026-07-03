@@ -1,4 +1,4 @@
-""" Public resolver exports for the mail package. """
+"""Public resolver exports for the mail package."""
 
 from core.mail.resolvers.mail_template_base_context_builder import MailTemplateBaseContextBuilder
 from core.mail.resolvers.tenant_mail_context_resolver import TenantMailContextResolver

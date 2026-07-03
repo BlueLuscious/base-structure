@@ -1,12 +1,14 @@
-""" Shared helpers for media and static storage adapters. """
+"""Shared helpers for media and static storage adapters."""
 
-import importlib.util, os
+import importlib.util
+import os
 from typing import Any
+
 from core.config.environment import EnvironmentValueParser
 
 
 def build_extra_apps() -> list[str]:
-    """ Resolve extra Django apps required by storage providers.
+    """Resolve extra Django apps required by storage providers.
 
     Returns:
         list[str]: Additional installed apps for the current provider.
@@ -15,7 +17,7 @@ def build_extra_apps() -> list[str]:
 
 
 def parse_bool_env(name: str, default: bool) -> bool:
-    """ Parse a boolean environment variable using Django-style truthy values.
+    """Parse a boolean environment variable using Django-style truthy values.
 
     Args:
         name: Environment variable name to inspect.
@@ -28,7 +30,7 @@ def parse_bool_env(name: str, default: bool) -> bool:
 
 
 def normalize_location(name: str, default: str) -> str:
-    """ Normalize a bucket location prefix from environment.
+    """Normalize a bucket location prefix from environment.
 
     Args:
         name: Environment variable holding the logical prefix.
@@ -41,7 +43,7 @@ def normalize_location(name: str, default: str) -> str:
 
 
 def build_remote_url(custom_domain: str, location: str, fallback_url: str) -> str:
-    """ Build a public URL for remote storage when a custom domain is configured.
+    """Build a public URL for remote storage when a custom domain is configured.
 
     Args:
         custom_domain: Optional CDN or bucket custom domain.
@@ -64,7 +66,7 @@ def build_s3_compatible_storage_options(
     default_file_overwrite: bool,
     default_querystring_auth: bool,
 ) -> dict[str, Any]:
-    """ Build shared S3-compatible storage options from environment variables.
+    """Build shared S3-compatible storage options from environment variables.
 
     Args:
         location_env_name: Environment variable name used for the storage prefix.

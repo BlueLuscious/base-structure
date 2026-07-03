@@ -1,19 +1,20 @@
-""" Typed parsing for project environment variables. """
+"""Typed parsing for project environment variables."""
 
 import os
 from math import isfinite
+
 from django.core.exceptions import ImproperlyConfigured
 
 
 class EnvironmentValueParser:
-    """ Parse environment values with consistent, actionable errors. """
+    """Parse environment values with consistent, actionable errors."""
 
     TRUE_VALUES = frozenset({"1", "true", "yes", "on"})
     FALSE_VALUES = frozenset({"0", "false", "no", "off"})
 
     @classmethod
     def get_bool(cls, name: str, default: bool) -> bool:
-        """ Read a strict boolean environment variable.
+        """Read a strict boolean environment variable.
 
         Args:
             name: Environment variable name.
@@ -36,13 +37,12 @@ class EnvironmentValueParser:
             return False
 
         raise ImproperlyConfigured(
-            f"{name} must be one of: 1, true, yes, on, 0, false, no, off; "
-            f"received {raw_value!r}."
+            f"{name} must be one of: 1, true, yes, on, 0, false, no, off; received {raw_value!r}."
         )
 
     @staticmethod
     def get_int(name: str, default: int) -> int:
-        """ Read an integer environment variable.
+        """Read an integer environment variable.
 
         Args:
             name: Environment variable name.
@@ -61,13 +61,11 @@ class EnvironmentValueParser:
         try:
             return int(raw_value)
         except ValueError as error:
-            raise ImproperlyConfigured(
-                f"{name} must be an integer; received {raw_value!r}."
-            ) from error
+            raise ImproperlyConfigured(f"{name} must be an integer; received {raw_value!r}.") from error
 
     @staticmethod
     def get_positive_float(name: str, default: float) -> float:
-        """ Read a positive floating-point environment variable.
+        """Read a positive floating-point environment variable.
 
         Args:
             name: Environment variable name.
@@ -86,12 +84,8 @@ class EnvironmentValueParser:
         try:
             parsed_value = float(raw_value)
         except ValueError as error:
-            raise ImproperlyConfigured(
-                f"{name} must be a positive number; received {raw_value!r}."
-            ) from error
+            raise ImproperlyConfigured(f"{name} must be a positive number; received {raw_value!r}.") from error
 
         if not isfinite(parsed_value) or parsed_value <= 0:
-            raise ImproperlyConfigured(
-                f"{name} must be a finite number greater than zero; received {raw_value!r}."
-            )
+            raise ImproperlyConfigured(f"{name} must be a finite number greater than zero; received {raw_value!r}.")
         return parsed_value

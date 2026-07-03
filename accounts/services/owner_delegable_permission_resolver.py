@@ -1,21 +1,22 @@
-""" Policy object for owner-delegable Django permissions. """
+"""Policy object for owner-delegable Django permissions."""
 
 import logging
-from django.contrib.auth.models import Permission
-from django.contrib.auth.models import PermissionsMixin
+
+from django.contrib.auth.models import Permission, PermissionsMixin
 from django.db.models import Q, QuerySet
-from tenancy.models import TenantModel
+
 from tenancy.access.tenant_access_policy import TenantAccessPolicy
+from tenancy.models import TenantModel
 
 logger = logging.getLogger(__name__)
 
 
 class OwnerDelegablePermissionResolver:
-    """ Resolve the permissions that one owner may delegate through tenant-scoped groups. """
+    """Resolve the permissions that one owner may delegate through tenant-scoped groups."""
 
     @classmethod
     def get_queryset(cls, user: PermissionsMixin, tenant: TenantModel | None = None) -> QuerySet[Permission]:
-        """ Return the permissions that the current owner may delegate.
+        """Return the permissions that the current owner may delegate.
 
         Args:
             user: Authenticated owner user whose effective permissions should cap delegation.
@@ -54,10 +55,14 @@ class OwnerDelegablePermissionResolver:
             )
             return Permission.objects.none()
 
-        permission_queryset = Permission.objects.filter(permission_filter).select_related("content_type").order_by(
-            "content_type__app_label",
-            "content_type__model",
-            "codename",
+        permission_queryset = (
+            Permission.objects.filter(permission_filter)
+            .select_related("content_type")
+            .order_by(
+                "content_type__app_label",
+                "content_type__model",
+                "codename",
+            )
         )
         logger.info(
             "Resolved delegable permissions user_id=%s tenant_id=%s permission_count=%s",

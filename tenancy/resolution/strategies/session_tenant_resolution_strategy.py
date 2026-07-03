@@ -1,7 +1,9 @@
-""" Session-backed strategy for active-tenant resolution. """
+"""Session-backed strategy for active-tenant resolution."""
 
 import logging
+
 from django.http import HttpRequest
+
 from tenancy.models import TenantMembershipModel, TenantModel
 from tenancy.resolution.strategies.tenant_resolution_strategy import TenantResolutionStrategy
 from tenancy.session import ActiveTenantSessionStore
@@ -10,14 +12,14 @@ logger = logging.getLogger(__name__)
 
 
 class SessionTenantResolutionStrategy(TenantResolutionStrategy):
-    """ Resolve the active tenant from session when the membership is still valid. """
+    """Resolve the active tenant from session when the membership is still valid."""
 
     session_store_class = ActiveTenantSessionStore
     membership_model = TenantMembershipModel
 
     @classmethod
     def resolve(cls, request: HttpRequest) -> TenantModel | None:
-        """ Return the session-selected tenant when the user still belongs to it.
+        """Return the session-selected tenant when the user still belongs to it.
 
         Args:
             request: Current HTTP request.

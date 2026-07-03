@@ -1,11 +1,13 @@
-""" Formset used by the owner user admin tenant membership inline. """
+"""Formset used by the owner user admin tenant membership inline."""
 
-from typing import TYPE_CHECKING
 import logging
+from typing import TYPE_CHECKING
+
 from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
+
 from tenancy.choices import TenantRole
 from tenancy.models import TenantMembershipModel
 
@@ -17,13 +19,13 @@ logger = logging.getLogger(__name__)
 
 
 class TenantMembershipInlineFormSet(BaseInlineFormSet):
-    """ Owner-scoped inline formset for one tenant membership per visible user. """
+    """Owner-scoped inline formset for one tenant membership per visible user."""
 
     request: HttpRequest
     can_delete = False
 
     def __init__(self, *args, request: HttpRequest | None = None, **kwargs) -> None:
-        """ Mark the visible membership form as required in add and change flows.
+        """Mark the visible membership form as required in add and change flows.
 
         Args:
             *args: Positional formset arguments.
@@ -37,7 +39,7 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
             form.empty_permitted = False
 
     def get_queryset(self) -> "TenantMembershipModelQuerySet":
-        """ Return only the membership bound to the active tenant.
+        """Return only the membership bound to the active tenant.
 
         Returns:
             TenantMembershipModelQuerySet: Active-tenant membership rows for the inline.
@@ -51,7 +53,7 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
         return queryset.filter(tenant=tenant)
 
     def clean(self) -> None:
-        """ Require one tenant membership and preserve at least one active owner.
+        """Require one tenant membership and preserve at least one active owner.
 
         Raises:
             ValidationError: When no membership is provided or the tenant would lose all active owners.
@@ -79,18 +81,14 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
         resulting_is_active = bool(membership_form.cleaned_data.get("is_active", False))
         current_user_id = getattr(self.instance, "pk", None)
         other_active_owner_exists = (
-            TenantMembershipModel.objects.for_tenant(tenant)
-            .active()
-            .owners()
-            .exclude(user_id=current_user_id)
-            .exists()
+            TenantMembershipModel.objects.for_tenant(tenant).active().owners().exclude(user_id=current_user_id).exists()
         )
 
         if (resulting_role != TenantRole.OWNER or not resulting_is_active) and not other_active_owner_exists:
             raise ValidationError(_("Each business must keep at least one active owner account."))
 
     def save_new(self, form: "TenantMembershipInlineForm", commit: bool = True) -> TenantMembershipModel:
-        """ Create one membership bound to the active tenant and current user.
+        """Create one membership bound to the active tenant and current user.
 
         Args:
             form: Bound inline form.
@@ -117,8 +115,10 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
 
         return membership
 
-    def save_existing(self, form: "TenantMembershipInlineForm", instance: TenantMembershipModel, commit: bool = True) -> TenantMembershipModel:
-        """ Keep the membership anchored to the active tenant while editing it.
+    def save_existing(
+        self, form: "TenantMembershipInlineForm", instance: TenantMembershipModel, commit: bool = True
+    ) -> TenantMembershipModel:
+        """Keep the membership anchored to the active tenant while editing it.
 
         Args:
             form: Bound inline form.
@@ -145,7 +145,7 @@ class TenantMembershipInlineFormSet(BaseInlineFormSet):
         return membership
 
     def save_new_objects(self, commit: bool = True) -> list[TenantMembershipModel]:
-        """ Persist the visible membership form even when its values match the defaults.
+        """Persist the visible membership form even when its values match the defaults.
 
         Args:
             commit: Whether to persist the memberships immediately.

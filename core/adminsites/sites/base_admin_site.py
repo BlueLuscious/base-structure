@@ -1,16 +1,17 @@
-""" Shared base admin site for project-specific admin sites. """
+"""Shared base admin site for project-specific admin sites."""
 
 from typing import Any
+
 from django.conf import settings
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import get_language
-from unfold.sites import UnfoldAdminSite
 from unfold.settings import get_config
+from unfold.sites import UnfoldAdminSite
 
 
 class BaseAdminSite(UnfoldAdminSite):
-    """ Shared project admin site with default Unfold metadata and hooks. """
+    """Shared project admin site with default Unfold metadata and hooks."""
 
     site_symbol = ""
     site_url = "/"
@@ -21,7 +22,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_title(cls, request: HttpRequest) -> str:
-        """ Return the site title for the current request.
+        """Return the site title for the current request.
 
         Args:
             request: Current admin request.
@@ -33,7 +34,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_header(cls, request: HttpRequest) -> str:
-        """ Return the site header for the current request.
+        """Return the site header for the current request.
 
         Args:
             request: Current admin request.
@@ -45,7 +46,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_symbol(cls, request: HttpRequest) -> str:
-        """ Return the site symbol for the current request.
+        """Return the site symbol for the current request.
 
         Args:
             request: Current admin request.
@@ -57,7 +58,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
-        """ Return the site logo for the current request.
+        """Return the site logo for the current request.
 
         Args:
             request: Current admin request.
@@ -69,7 +70,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
-        """ Return the site icon for the current request.
+        """Return the site icon for the current request.
 
         Args:
             request: Current admin request.
@@ -81,7 +82,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
-        """ Return favicon entries for the current request.
+        """Return favicon entries for the current request.
 
         Args:
             request: Current admin request.
@@ -93,7 +94,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_login_image(cls, request: HttpRequest) -> str | None:
-        """ Return the login image for the current request.
+        """Return the login image for the current request.
 
         Args:
             request: Current admin request.
@@ -105,7 +106,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_subheader(cls, request: HttpRequest) -> str | None:
-        """ Return the site subheader for the current request.
+        """Return the site subheader for the current request.
 
         Args:
             request: Current admin request.
@@ -117,7 +118,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_site_url(cls, request: HttpRequest) -> str:
-        """ Return the site URL for the current request.
+        """Return the site URL for the current request.
 
         Args:
             request: Current admin request.
@@ -129,7 +130,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_environment(cls, request: HttpRequest) -> list[str] | tuple[str, str] | None:
-        """ Return the environment badge shown in the admin header.
+        """Return the environment badge shown in the admin header.
 
         Args:
             request: Current admin request.
@@ -141,7 +142,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_languages_navigation(cls, request: HttpRequest) -> list[dict[str, str]]:
-        """ Return language switcher items sourced from Django settings.
+        """Return language switcher items sourced from Django settings.
 
         Args:
             request: Current admin request.
@@ -163,7 +164,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_languages_action(cls, request: HttpRequest) -> str:
-        """ Return the URL used by the admin language switcher form.
+        """Return the URL used by the admin language switcher form.
 
         Args:
             request: Current admin request.
@@ -175,7 +176,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_show_languages(cls, request: HttpRequest) -> bool:
-        """ Return whether the site should show the language switcher.
+        """Return whether the site should show the language switcher.
 
         Args:
             request: Current admin request.
@@ -187,7 +188,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_show_all_applications(cls, request: HttpRequest) -> bool:
-        """ Return whether the site should show all applications.
+        """Return whether the site should show all applications.
 
         Args:
             request: Current admin request.
@@ -199,7 +200,7 @@ class BaseAdminSite(UnfoldAdminSite):
 
     @classmethod
     def get_show_sidebar_search(cls, request: HttpRequest) -> bool:
-        """ Return whether the site should show sidebar search.
+        """Return whether the site should show sidebar search.
 
         Args:
             request: Current admin request.
@@ -210,7 +211,7 @@ class BaseAdminSite(UnfoldAdminSite):
         return cls.show_sidebar_search
 
     def get_sidebar_navigation(self, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Return sidebar navigation items for the current request.
+        """Return sidebar navigation items for the current request.
 
         Args:
             request: Current admin request.
@@ -221,7 +222,7 @@ class BaseAdminSite(UnfoldAdminSite):
         return []
 
     def get_site_dropdown(self, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Return site dropdown items for the current request.
+        """Return site dropdown items for the current request.
 
         Args:
             request: Current admin request.
@@ -232,7 +233,7 @@ class BaseAdminSite(UnfoldAdminSite):
         return []
 
     def get_scripts(self, request: HttpRequest) -> list[str]:
-        """ Return additional Unfold script paths for the current request.
+        """Return additional Unfold script paths for the current request.
 
         Args:
             request: Current admin request.
@@ -243,7 +244,7 @@ class BaseAdminSite(UnfoldAdminSite):
         return []
 
     def get_styles(self, request: HttpRequest) -> list[str]:
-        """ Return additional Unfold style paths for the current request.
+        """Return additional Unfold style paths for the current request.
 
         Args:
             request: Current admin request.
@@ -254,7 +255,7 @@ class BaseAdminSite(UnfoldAdminSite):
         return []
 
     def _get_list(self, key: str, *args: Any) -> list[Any]:
-        """ Resolve one Unfold list setting, including callable root values.
+        """Resolve one Unfold list setting, including callable root values.
 
         Args:
             key: Setting key to resolve.

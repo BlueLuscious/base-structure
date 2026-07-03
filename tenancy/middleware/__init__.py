@@ -1,4 +1,4 @@
-""" Middleware exports for tenancy flows. """
+"""Middleware exports for tenancy flows."""
 
 from .active_tenant_middleware import ActiveTenantMiddleware
 

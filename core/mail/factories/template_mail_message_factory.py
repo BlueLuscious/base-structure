@@ -1,11 +1,11 @@
-""" Factory that builds outbound mail DTOs from rendered templates. """
+"""Factory that builds outbound mail DTOs from rendered templates."""
 
 from core.mail.dtos import MailMessageDTO, TemplateMailRequestDTO
 from core.mail.renderers import MailTemplateRenderer
 
 
 class TemplateMailMessageFactory:
-    """ Build outbound mail DTOs from template names and context. """
+    """Build outbound mail DTOs from template names and context."""
 
     renderer_class = MailTemplateRenderer
 
@@ -16,7 +16,7 @@ class TemplateMailMessageFactory:
         request: TemplateMailRequestDTO,
         from_email: str | None = None,
     ) -> MailMessageDTO:
-        """ Build one outbound mail DTO from one template pair.
+        """Build one outbound mail DTO from one template pair.
 
         Args:
             request: Templated outbound mail request.

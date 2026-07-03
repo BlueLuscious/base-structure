@@ -1,8 +1,10 @@
-""" Composite active-tenant resolver built from small strategies. """
+"""Composite active-tenant resolver built from small strategies."""
 
 import logging
 from typing import TYPE_CHECKING
+
 from django.http import HttpRequest
+
 from tenancy.models import TenantModel
 
 if TYPE_CHECKING:
@@ -12,13 +14,13 @@ logger = logging.getLogger(__name__)
 
 
 class CompositeTenantResolver:
-    """ Resolve one tenant by trying small strategies in order. """
+    """Resolve one tenant by trying small strategies in order."""
 
     strategies: tuple[type["TenantResolutionStrategy"], ...] = ()
 
     @classmethod
     def resolve(cls, request: HttpRequest) -> TenantModel | None:
-        """ Return the first tenant resolved by the configured strategies.
+        """Return the first tenant resolved by the configured strategies.
 
         Args:
             request: Current HTTP request.

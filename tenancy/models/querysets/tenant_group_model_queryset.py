@@ -1,11 +1,13 @@
 """Reusable queryset helpers for the tenant-group model."""
 
 from typing import TYPE_CHECKING
+
 from django.db import models
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import Group
-    from tenancy.models import TenantGroupModel, TenantModel
+
+    from tenancy.models import TenantModel
 
 
 class TenantGroupModelQuerySet(models.QuerySet["TenantGroupModel"]):

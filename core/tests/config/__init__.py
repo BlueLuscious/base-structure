@@ -1,1 +1,1 @@
-""" Tests for project-wide configuration helpers. """
+"""Tests for project-wide configuration helpers."""

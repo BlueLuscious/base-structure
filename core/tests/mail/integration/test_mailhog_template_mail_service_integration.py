@@ -1,16 +1,17 @@
-""" MailHog-backed integration tests for the templated mail service. """
+"""MailHog-backed integration tests for the templated mail service."""
 
 from uuid import uuid4
+
 from core.mail import MailRecipientDTO, TemplateMailRequestDTO, TemplateMailService
 from core.tests.mail.integration.base import BaseMailIntegrationSimpleTestCase
 from tenancy.models import TenantBrandingModel, TenantModel
 
 
 class TestMailhogTemplateMailServiceIntegration(BaseMailIntegrationSimpleTestCase):
-    """ Verify the templated mail service can send real SMTP mail to MailHog. """
+    """Verify the templated mail service can send real SMTP mail to MailHog."""
 
     def test_send_delivers_one_real_templated_message_to_mailhog(self) -> None:
-        """ Deliver one real templated message and confirm MailHog captures it. """
+        """Deliver one real templated message and confirm MailHog captures it."""
         subject = f"MailHog templated single {uuid4()}"
 
         delivered_count = TemplateMailService.send(
@@ -34,7 +35,7 @@ class TestMailhogTemplateMailServiceIntegration(BaseMailIntegrationSimpleTestCas
         self.assertTrue(self.mailhog_contains_subject(subject))
 
     def test_send_delivers_multiple_real_templated_messages_to_mailhog(self) -> None:
-        """ Deliver multiple templated messages and confirm MailHog captures both subjects. """
+        """Deliver multiple templated messages and confirm MailHog captures both subjects."""
         first_subject = f"MailHog templated first {uuid4()}"
         second_subject = f"MailHog templated second {uuid4()}"
 
@@ -69,7 +70,7 @@ class TestMailhogTemplateMailServiceIntegration(BaseMailIntegrationSimpleTestCas
         self.assertEqual(1, self.mailhog_subject_count(second_subject))
 
     def test_send_delivers_one_real_tenant_aware_templated_message_to_mailhog(self) -> None:
-        """ Deliver one real templated message using an explicit tenant context and confirm MailHog captures its tenant-aware content. """
+        """Deliver one real templated message using an explicit tenant context and confirm MailHog captures its tenant-aware content."""
         subject = f"MailHog templated tenant aware {uuid4()}"
         tenant = TenantModel(
             name="Example Company Legal",
@@ -104,7 +105,7 @@ class TestMailhogTemplateMailServiceIntegration(BaseMailIntegrationSimpleTestCas
         self.assertTrue(self.mailhog_contains_text("support@example.test"))
 
     def test_send_delivers_multiple_real_tenant_aware_templated_messages_to_mailhog(self) -> None:
-        """ Deliver multiple real templated messages with different explicit tenants and confirm MailHog captures both business contexts. """
+        """Deliver multiple real templated messages with different explicit tenants and confirm MailHog captures both business contexts."""
         first_subject = f"MailHog tenant aware first {uuid4()}"
         second_subject = f"MailHog tenant aware second {uuid4()}"
         first_tenant = TenantModel(

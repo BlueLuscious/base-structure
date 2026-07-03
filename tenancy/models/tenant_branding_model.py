@@ -1,8 +1,10 @@
-""" Tenant-branding persistence model for business visual identity assets. """
+"""Tenant-branding persistence model for business visual identity assets."""
 
 from typing import TYPE_CHECKING
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from tenancy.models.managers.tenant_branding_model_manager import TenantBrandingModelManager
 
 if TYPE_CHECKING:
@@ -10,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class TenantBrandingModel(models.Model):
-    """ Visual branding assets and display metadata attached to one tenant. """
+    """Visual branding assets and display metadata attached to one tenant."""
 
     tenant: "TenantModel" = models.OneToOneField(
         "tenancy.TenantModel",
@@ -67,14 +69,14 @@ class TenantBrandingModel(models.Model):
     objects: TenantBrandingModelManager = TenantBrandingModelManager()
 
     class Meta:
-        """ Declarative admin-facing metadata for tenant branding. """
+        """Declarative admin-facing metadata for tenant branding."""
 
         ordering = ("tenant__name", "id")
         verbose_name = _("Business branding")
         verbose_name_plural = _("Business branding")
 
     def __str__(self) -> str:
-        """ Return the admin-friendly branding label.
+        """Return the admin-friendly branding label.
 
         Returns:
             str: Branding label.

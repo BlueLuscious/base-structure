@@ -1,1 +1,1 @@
-""" QuerySet tests for the tenancy app. """
+"""QuerySet tests for the tenancy app."""

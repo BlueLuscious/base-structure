@@ -1,18 +1,18 @@
-""" Reusable queryset helpers for the tenant model. """
+"""Reusable queryset helpers for the tenant model."""
 
 from typing import TYPE_CHECKING
+
 from django.db import models
 
 if TYPE_CHECKING:
     from accounts.models import UserModel
-    from tenancy.models import TenantModel
 
 
 class TenantModelQuerySet(models.QuerySet["TenantModel"]):
-    """ QuerySet for reusable tenant filters. """
+    """QuerySet for reusable tenant filters."""
 
     def active(self) -> "TenantModelQuerySet":
-        """ Filter tenants that remain active.
+        """Filter tenants that remain active.
 
         Returns:
             TenantModelQuerySet: Active tenants only.
@@ -20,7 +20,7 @@ class TenantModelQuerySet(models.QuerySet["TenantModel"]):
         return self.filter(is_active=True)
 
     def for_user(self, user: "UserModel") -> "TenantModelQuerySet":
-        """ Filter tenants related to a given user through memberships.
+        """Filter tenants related to a given user through memberships.
 
         Args:
             user: User whose tenants should be returned.

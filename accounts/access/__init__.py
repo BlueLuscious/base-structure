@@ -1,4 +1,4 @@
-""" Accounts access policies. """
+"""Accounts access policies."""
 
 from .accounts_access_policy import AccountsAccessPolicy
 

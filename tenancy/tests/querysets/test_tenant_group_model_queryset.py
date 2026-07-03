@@ -1,6 +1,7 @@
 """QuerySet tests for tenant-group filters."""
 
 from django.contrib.auth.models import Group
+
 from core.testing.base import LoggedTestCase
 from tenancy.models import TenantGroupModel, TenantModel
 

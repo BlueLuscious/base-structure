@@ -1,26 +1,27 @@
-""" Unit tests for the Cloudflare R2 storage adapter. """
+"""Unit tests for the Cloudflare R2 storage adapter."""
 
 import os
 from pathlib import Path
 from unittest.mock import patch
+
 from core.config.storage import MediaStorageAdapterResolver
 from core.config.storage.media_storage.adapters.r2_media_storage_adapter import R2MediaStorageAdapter
 from core.testing.base import LoggedSimpleTestCase
 
 
 class TestR2StorageAdapter(LoggedSimpleTestCase):
-    """ Cover R2 adapter configuration behavior without remote I/O. """
+    """Cover R2 adapter configuration behavior without remote I/O."""
 
     base_dir: Path
 
     @classmethod
     def setUpClass(cls) -> None:
-        """ Prepare a stable base directory for adapter resolution. """
+        """Prepare a stable base directory for adapter resolution."""
         super().setUpClass()
         cls.base_dir = Path(__file__).resolve().parents[4]
 
     def build_environment(self, **overrides: str) -> dict[str, str]:
-        """ Build an environment dictionary for the R2 adapter.
+        """Build an environment dictionary for the R2 adapter.
 
         Args:
             **overrides: Environment overrides applied on top of the defaults.
@@ -50,7 +51,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
         return environment
 
     def test_r2_storage_adapter__resolver_build_config_derives_endpoint_from_account_id(self) -> None:
-        """ Verify the R2 adapter derives the endpoint when no explicit endpoint is configured. """
+        """Verify the R2 adapter derives the endpoint when no explicit endpoint is configured."""
         with (
             patch.dict(os.environ, self.build_environment(), clear=False),
             patch("core.config.storage.media_storage.media_storage_adapter_resolver.logger.info") as logger_info_mock,
@@ -69,7 +70,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
         logger_info_mock.assert_called_once()
 
     def test_r2_storage_adapter__explicit_endpoint_takes_precedence_over_account_id(self) -> None:
-        """ Verify the R2 adapter preserves an explicit endpoint instead of deriving one. """
+        """Verify the R2 adapter preserves an explicit endpoint instead of deriving one."""
         with patch.dict(
             os.environ,
             self.build_environment(
@@ -84,7 +85,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
         self.assertEqual(options["endpoint_url"], "https://custom-endpoint.example.com")
 
     def test_r2_storage_adapter__custom_domain_builds_media_url_with_media_location(self) -> None:
-        """ Verify the R2 adapter builds a public media URL from the custom domain and media location. """
+        """Verify the R2 adapter builds a public media URL from the custom domain and media location."""
         with patch.dict(
             os.environ,
             self.build_environment(
@@ -98,7 +99,7 @@ class TestR2StorageAdapter(LoggedSimpleTestCase):
         self.assertEqual(storage_config.media_url, "https://cdn.example.com/product-media/")
 
     def test_r2_storage_adapter__storage_options_keep_expected_s3_compatibility_flags(self) -> None:
-        """ Verify the R2 adapter keeps the expected S3 compatibility options for django-storages. """
+        """Verify the R2 adapter keeps the expected S3 compatibility options for django-storages."""
         with patch.dict(os.environ, self.build_environment(AWS_S3_ADDRESSING_STYLE="path"), clear=False):
             adapter = R2MediaStorageAdapter()
             options = adapter.build_storage_options()

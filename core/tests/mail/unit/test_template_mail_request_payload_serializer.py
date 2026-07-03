@@ -1,6 +1,7 @@
-""" Tests for the templated mail request payload serializer. """
+"""Tests for the templated mail request payload serializer."""
 
 from uuid import uuid4
+
 from core.mail import (
     MailRecipientDTO,
     TemplateMailRequestDTO,
@@ -11,10 +12,10 @@ from tenancy.models import TenantModel
 
 
 class TestTemplateMailRequestPayloadSerializer(LoggedTestCase):
-    """ Verify templated mail requests can be serialized for Celery transport. """
+    """Verify templated mail requests can be serialized for Celery transport."""
 
     def test_roundtrip_preserves_templates_context_and_tenant_snapshot(self) -> None:
-        """ Serialize and deserialize one templated mail request while snapshotting one explicit tenant context. """
+        """Serialize and deserialize one templated mail request while snapshotting one explicit tenant context."""
         tenant = TenantModel.objects.create(
             name="Example Company",
             slug=f"example-company-{uuid4()}",
@@ -42,7 +43,7 @@ class TestTemplateMailRequestPayloadSerializer(LoggedTestCase):
         self.assertEqual(request.reply_to, rebuilt_request.reply_to)
 
     def test_serialize_allows_one_unpersisted_tenant_by_snapshotting_its_context(self) -> None:
-        """ Serialize one async templated payload by snapshotting one explicit tenant even when it is not persisted. """
+        """Serialize one async templated payload by snapshotting one explicit tenant even when it is not persisted."""
         request = TemplateMailRequestDTO(
             subject="Serializer test",
             to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],

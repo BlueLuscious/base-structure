@@ -1,1 +1,1 @@
-""" Unit tests for storage configuration adapters. """
+"""Unit tests for storage configuration adapters."""

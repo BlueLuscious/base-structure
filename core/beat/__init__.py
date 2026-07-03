@@ -1,4 +1,4 @@
-""" Shared Celery Beat schedule helpers. """
+"""Shared Celery Beat schedule helpers."""
 
 from core.beat.celery_beat_schedule_builder import CeleryBeatScheduleBuilder
 

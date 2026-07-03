@@ -1,18 +1,19 @@
-""" Reusable queryset helpers for the tenant-branding model. """
+"""Reusable queryset helpers for the tenant-branding model."""
 
 from typing import TYPE_CHECKING
+
 from django.db import models
 from django.db.models import Q
 
 if TYPE_CHECKING:
-    from tenancy.models import TenantBrandingModel, TenantModel
+    from tenancy.models import TenantModel
 
 
 class TenantBrandingModelQuerySet(models.QuerySet["TenantBrandingModel"]):
-    """ QuerySet for reusable tenant-branding filters. """
+    """QuerySet for reusable tenant-branding filters."""
 
     def for_tenant(self, tenant: "TenantModel") -> "TenantBrandingModelQuerySet":
-        """ Filter branding records belonging to one tenant.
+        """Filter branding records belonging to one tenant.
 
         Args:
             tenant: Tenant whose branding should be returned.
@@ -23,7 +24,7 @@ class TenantBrandingModelQuerySet(models.QuerySet["TenantBrandingModel"]):
         return self.filter(tenant=tenant)
 
     def with_tenant(self) -> "TenantBrandingModelQuerySet":
-        """ Eager-load the related tenant.
+        """Eager-load the related tenant.
 
         Returns:
             TenantBrandingModelQuerySet: Branding with ``tenant`` selected.
@@ -31,7 +32,7 @@ class TenantBrandingModelQuerySet(models.QuerySet["TenantBrandingModel"]):
         return self.select_related("tenant")
 
     def configured(self) -> "TenantBrandingModelQuerySet":
-        """ Filter branding records that already store visible branding data.
+        """Filter branding records that already store visible branding data.
 
         Returns:
             TenantBrandingModelQuerySet: Branding rows with at least one configured field.

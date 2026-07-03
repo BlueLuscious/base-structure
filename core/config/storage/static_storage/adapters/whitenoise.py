@@ -1,17 +1,21 @@
-""" WhiteNoise static storage adapter. """
+"""WhiteNoise static storage adapter."""
 
 import importlib.util
 from pathlib import Path
-from core.config.storage.static_storage.adapters.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
+
+from core.config.storage.static_storage.adapters.base_static_storage_adapter import (
+    BaseStaticStorageAdapter,
+    StaticStorageConfig,
+)
 
 
 class WhiteNoiseStaticStorageAdapter(BaseStaticStorageAdapter):
-    """ Build static storage settings for WhiteNoise-backed deployments. """
+    """Build static storage settings for WhiteNoise-backed deployments."""
 
     provider = "whitenoise"
 
     def build(self, base_dir: Path) -> StaticStorageConfig:
-        """ Build WhiteNoise static storage configuration.
+        """Build WhiteNoise static storage configuration.
 
         Args:
             base_dir: Project base directory used to resolve local paths.
@@ -36,6 +40,6 @@ class WhiteNoiseStaticStorageAdapter(BaseStaticStorageAdapter):
         )
 
     def ensure_dependencies(self) -> None:
-        """ Ensure WhiteNoise is available before using this provider."""
+        """Ensure WhiteNoise is available before using this provider."""
         if importlib.util.find_spec("whitenoise") is None:
             raise RuntimeError("STATICFILES_PROVIDER=whitenoise requires whitenoise to be installed.")

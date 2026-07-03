@@ -1,14 +1,16 @@
-""" Shared form field for flat JSON key-value data. """
+"""Shared form field for flat JSON key-value data."""
 
 from typing import Any
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
 from core.forms.widgets import JsonKeyValueWidget
 
 
 class JsonKeyValueField(forms.Field):
-    """ Normalize key-value form rows into a flat JSON-compatible dictionary. """
+    """Normalize key-value form rows into a flat JSON-compatible dictionary."""
 
     widget = JsonKeyValueWidget
     default_error_messages = {
@@ -26,7 +28,7 @@ class JsonKeyValueField(forms.Field):
         remove_label: str | None = None,
         **kwargs: Any,
     ) -> None:
-        """ Initialize one reusable flat JSON key-value field.
+        """Initialize one reusable flat JSON key-value field.
 
         Args:
             *args: Positional field arguments.
@@ -48,7 +50,7 @@ class JsonKeyValueField(forms.Field):
         super().__init__(*args, **kwargs)
 
     def to_python(self, value: Any) -> dict[str, str]:
-        """ Convert submitted key-value rows into a JSONField-compatible dict.
+        """Convert submitted key-value rows into a JSONField-compatible dict.
 
         Args:
             value: Submitted widget value or current model value.
@@ -71,7 +73,7 @@ class JsonKeyValueField(forms.Field):
         raise ValidationError(self.error_messages["invalid"], code="invalid")
 
     def clean_rows(self, rows: list[Any] | tuple[Any, ...]) -> dict[str, str]:
-        """ Normalize submitted row pairs and validate the JSON object contract.
+        """Normalize submitted row pairs and validate the JSON object contract.
 
         Args:
             rows: Submitted key-value row pairs.
@@ -105,7 +107,7 @@ class JsonKeyValueField(forms.Field):
         return values
 
     def unpack_row(self, row: Any) -> tuple[str, str]:
-        """ Return one row as a string key-value pair.
+        """Return one row as a string key-value pair.
 
         Args:
             row: Submitted row from the widget or a dictionary item.

@@ -1,4 +1,4 @@
-""" Policy helpers for deciding the effective system mail sender. """
+"""Policy helpers for deciding the effective system mail sender."""
 
 from typing import TYPE_CHECKING
 
@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class SystemMailSenderPolicy:
-    """ Decide the effective technical sender for outbound mail. """
+    """Decide the effective technical sender for outbound mail."""
 
     @staticmethod
     def resolve(
@@ -15,7 +15,7 @@ class SystemMailSenderPolicy:
         explicit_from_email: str | None = None,
         tenant: "TenantModel | None" = None,
     ) -> str | None:
-        """ Return the explicit sender override when present.
+        """Return the explicit sender override when present.
 
         Args:
             explicit_from_email: Optional sender override provided by the caller.

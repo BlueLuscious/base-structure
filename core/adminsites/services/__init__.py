@@ -1,4 +1,4 @@
-""" Shared adminsite services. """
+"""Shared adminsite services."""
 
 from .active_tenant_switch_url_builder import ActiveTenantSwitchUrlBuilder
 from .owner_tenant_branding_resolver import OwnerTenantBrandingResolver

@@ -1,4 +1,4 @@
-""" Mail DTO exports. """
+"""Mail DTO exports."""
 
 from core.mail.dtos.mail_attachment_dto import MailAttachmentDTO
 from core.mail.dtos.mail_message_dto import MailMessageDTO

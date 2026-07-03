@@ -1,24 +1,26 @@
-""" Middleware for request-time active tenant resolution. """
+"""Middleware for request-time active tenant resolution."""
 
 import logging
 from collections.abc import Callable
+
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
-from tenancy.runtime import ActiveTenantContext
+
 from tenancy.resolution.active_tenant_resolver import ActiveTenantResolver
+from tenancy.runtime import ActiveTenantContext
 
 logger = logging.getLogger(__name__)
 
 
 class ActiveTenantMiddleware:
-    """ Attach the active tenant to each request after authentication. """
+    """Attach the active tenant to each request after authentication."""
 
     resolver_class = ActiveTenantResolver
     context_class = ActiveTenantContext
     tenant_aware_path_prefixes = ("/owner-admin/",)
 
     def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
-        """ Store the next middleware or view callable.
+        """Store the next middleware or view callable.
 
         Args:
             get_response: Next middleware or view callable.
@@ -26,7 +28,7 @@ class ActiveTenantMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """ Resolve and attach the active tenant before continuing the request.
+        """Resolve and attach the active tenant before continuing the request.
 
         Args:
             request: Current HTTP request.
@@ -54,7 +56,7 @@ class ActiveTenantMiddleware:
 
     @classmethod
     def should_resolve_request(cls, request: HttpRequest) -> bool:
-        """ Return whether the current request belongs to a tenant-aware surface.
+        """Return whether the current request belongs to a tenant-aware surface.
 
         Args:
             request: Current HTTP request.
@@ -67,7 +69,7 @@ class ActiveTenantMiddleware:
 
     @classmethod
     def _localized_prefixes(cls) -> tuple[str, ...]:
-        """ Return tenant-aware prefixes with optional language variants.
+        """Return tenant-aware prefixes with optional language variants.
 
         Returns:
             tuple[str, ...]: Supported path prefixes for active-tenant resolution.
@@ -80,7 +82,7 @@ class ActiveTenantMiddleware:
 
     @staticmethod
     def _path_matches_prefix(path: str, prefix: str) -> bool:
-        """ Return whether one request path is inside one configured prefix.
+        """Return whether one request path is inside one configured prefix.
 
         Args:
             path: Request path.

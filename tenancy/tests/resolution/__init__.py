@@ -1,1 +1,1 @@
-""" Active-tenant resolution tests for tenancy. """
+"""Active-tenant resolution tests for tenancy."""

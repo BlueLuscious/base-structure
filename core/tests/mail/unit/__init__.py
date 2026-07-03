@@ -1,1 +1,1 @@
-""" Unit tests for the core mail package. """
+"""Unit tests for the core mail package."""

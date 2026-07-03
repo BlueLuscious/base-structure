@@ -1,17 +1,17 @@
-""" Tenancy admin package. """
+"""Tenancy admin package."""
 
+from tenancy.admin.master import (
+    TenantBrandingModelAdmin,
+    TenantGroupModelAdmin,
+    TenantMembershipModelAdmin,
+    TenantModelAdmin,
+)
 from tenancy.admin.owner import (
     OwnerTenantSettingsAdmin,
     OwnerTenantSettingsForm,
     TenantBrandingInline,
     TenantBrandingInlineForm,
     TenantBrandingInlineFormSet,
-)
-from tenancy.admin.master import (
-    TenantBrandingModelAdmin,
-    TenantGroupModelAdmin,
-    TenantMembershipModelAdmin,
-    TenantModelAdmin,
 )
 
 __all__: list[str] = [

@@ -1,19 +1,21 @@
-""" Tests for owner-delegable permission resolution. """
+"""Tests for owner-delegable permission resolution."""
 
 from unittest.mock import patch
+
 from django.contrib.auth.models import Permission
-from core.testing.base import LoggedTestCase
+
 from accounts.models import UserModel
 from accounts.services import OwnerDelegablePermissionResolver
+from core.testing.base import LoggedTestCase
 from tenancy.choices import TenantRole
 from tenancy.models import TenantMembershipModel, TenantModel
 
 
 class TestOwnerDelegablePermissionResolver(LoggedTestCase):
-    """ Verify owner-delegable permission resolution stays constrained. """
+    """Verify owner-delegable permission resolution stays constrained."""
 
     def test_get_queryset_returns_all_permissions_already_held_by_the_owner(self) -> None:
-        """ Verify the owner may delegate every permission already held by the actor. """
+        """Verify the owner may delegate every permission already held by the actor."""
         owner = UserModel.objects.create_user(
             username="owner",
             password="test-pass",
@@ -51,7 +53,7 @@ class TestOwnerDelegablePermissionResolver(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_get_queryset_returns_none_for_non_owner_membership(self) -> None:
-        """ Verify non-owner tenant members cannot delegate any permissions. """
+        """Verify non-owner tenant members cannot delegate any permissions."""
         user = UserModel.objects.create_user(
             username="operator",
             password="test-pass",

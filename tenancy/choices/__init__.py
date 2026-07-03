@@ -1,4 +1,4 @@
-""" Shared choice enums for the tenancy app. """
+"""Shared choice enums for the tenancy app."""
 
 from .tenant_role import TenantRole
 

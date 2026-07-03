@@ -1,10 +1,12 @@
-""" Service for building the owner admin tenant switcher dropdown. """
+"""Service for building the owner admin tenant switcher dropdown."""
 
 import logging
 from typing import TYPE_CHECKING, Any, cast
+
 from django.apps import apps
 from django.http import HttpRequest
 from django.utils.translation import gettext as _
+
 from core.adminsites.services.active_tenant_switch_url_builder import ActiveTenantSwitchUrlBuilder
 
 if TYPE_CHECKING:
@@ -14,13 +16,13 @@ logger = logging.getLogger(__name__)
 
 
 class OwnerTenantDropdownBuilder:
-    """ Build tenant switcher dropdown items for the owner admin site. """
+    """Build tenant switcher dropdown items for the owner admin site."""
 
     switch_url_builder_class = ActiveTenantSwitchUrlBuilder
 
     @classmethod
     def get_membership_model(cls) -> type["TenantMembershipModel"]:
-        """ Resolve the tenant-membership model without early ORM imports.
+        """Resolve the tenant-membership model without early ORM imports.
 
         Returns:
             type[TenantMembershipModel]: Runtime tenant-membership model class.
@@ -32,7 +34,7 @@ class OwnerTenantDropdownBuilder:
 
     @classmethod
     def build(cls, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Build tenant switcher items for the owner admin site.
+        """Build tenant switcher items for the owner admin site.
 
         Args:
             request: Current admin request.
@@ -45,7 +47,8 @@ class OwnerTenantDropdownBuilder:
             return []
 
         memberships = (
-            cls.get_membership_model().objects.for_user_active_tenants(request.user)
+            cls.get_membership_model()
+            .objects.for_user_active_tenants(request.user)
             .with_tenant()
             .ordered_for_active_tenant_resolution()
         )

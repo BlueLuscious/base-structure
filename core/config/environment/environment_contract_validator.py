@@ -1,10 +1,10 @@
-""" Validation for relationships between environment-driven settings. """
+"""Validation for relationships between environment-driven settings."""
 
 from django.core.exceptions import ImproperlyConfigured
 
 
 class EnvironmentContractValidator:
-    """ Validate environment values that must agree with each other. """
+    """Validate environment values that must agree with each other."""
 
     @staticmethod
     def validate_mutually_exclusive(
@@ -13,7 +13,7 @@ class EnvironmentContractValidator:
         second_name: str,
         second_enabled: bool,
     ) -> None:
-        """ Reject two settings that cannot be enabled together.
+        """Reject two settings that cannot be enabled together.
 
         Args:
             first_name: Name of the first environment variable.
@@ -25,6 +25,4 @@ class EnvironmentContractValidator:
             ImproperlyConfigured: When both settings are enabled.
         """
         if first_enabled and second_enabled:
-            raise ImproperlyConfigured(
-                f"{first_name} and {second_name} cannot both be enabled."
-            )
+            raise ImproperlyConfigured(f"{first_name} and {second_name} cannot both be enabled.")

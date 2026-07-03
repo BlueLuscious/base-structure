@@ -1,1 +1,1 @@
-""" View tests for tenancy flows. """
+"""View tests for tenancy flows."""

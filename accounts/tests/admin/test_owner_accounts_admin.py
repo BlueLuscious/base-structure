@@ -1,25 +1,28 @@
-""" Owner admin tests for tenant-scoped accounts flows. """
+"""Owner admin tests for tenant-scoped accounts flows."""
 
 from unittest.mock import patch
+
 from django.contrib.auth.models import Group, Permission
 from django.test import Client, RequestFactory
 from django.urls import reverse
-from django.utils.translation import gettext as _, override
-from core.adminsites.site_instances import owner_admin_site
-from core.testing.base import LoggedTestCase
+from django.utils.translation import gettext as _
+from django.utils.translation import override
+
 from accounts.admin.owner.group_admin import OwnerGroupAdmin
 from accounts.admin.owner.tenant_membership_inline import TenantMembershipInline
 from accounts.admin.owner.user_model_admin import OwnerUserModelAdmin
 from accounts.models import UserModel
+from core.adminsites.site_instances import owner_admin_site
+from core.testing.base import LoggedTestCase
 from tenancy.choices import TenantRole
 from tenancy.models import TenantGroupModel, TenantMembershipModel, TenantModel
 
 
 class TestOwnerAccountsAdmin(LoggedTestCase):
-    """ Verify tenant-scoped behavior for owner users and groups. """
+    """Verify tenant-scoped behavior for owner users and groups."""
 
     def setUp(self) -> None:
-        """ Create reusable request, owner, tenants, groups and permissions. """
+        """Create reusable request, owner, tenants, groups and permissions."""
         self.request_factory = RequestFactory()
         self.client = Client()
         self.owner = UserModel.objects.create_user(
@@ -111,7 +114,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         self.membership_inline = TenantMembershipInline(UserModel, owner_admin_site)
 
     def build_request(self) -> object:
-        """ Build one owner-admin request scoped to the primary tenant.
+        """Build one owner-admin request scoped to the primary tenant.
 
         Returns:
             object: Request object with authenticated owner and active tenant.
@@ -122,7 +125,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         return request
 
     def build_non_owner_request(self) -> object:
-        """ Build one owner-admin request for a non-owner tenant member.
+        """Build one owner-admin request for a non-owner tenant member.
 
         Returns:
             object: Request object with authenticated non-owner user and active tenant.
@@ -133,7 +136,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         return request
 
     def test_owner_user_admin_filters_group_choices_to_the_active_tenant(self) -> None:
-        """ Verify the owner user admin exposes only tenant-scoped groups. """
+        """Verify the owner user admin exposes only tenant-scoped groups."""
         request = self.build_request()
 
         with patch("accounts.admin.owner.user_model_admin.logger.info") as logger_info_mock:
@@ -143,7 +146,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_owner_group_admin_queryset_is_scoped_to_the_active_tenant(self) -> None:
-        """ Verify the owner group admin lists only groups bound to the active tenant. """
+        """Verify the owner group admin lists only groups bound to the active tenant."""
         request = self.build_request()
 
         with patch("accounts.admin.owner.group_admin.logger.info") as logger_info_mock:
@@ -152,7 +155,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_owner_user_admin_queryset_is_scoped_to_the_active_tenant(self) -> None:
-        """ Verify the owner user admin lists only users bound to the active tenant. """
+        """Verify the owner user admin lists only users bound to the active tenant."""
         request = self.build_request()
 
         with patch("accounts.admin.owner.user_model_admin.logger.info") as logger_info_mock:
@@ -166,7 +169,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_owner_group_admin_creates_a_tenant_binding_on_add(self) -> None:
-        """ Verify creating a group from owner admin also creates the tenant binding. """
+        """Verify creating a group from owner admin also creates the tenant binding."""
         request = self.build_request()
         group = Group(name="Support")
         form = OwnerGroupAdmin.form(data={"name": "Support"})
@@ -179,7 +182,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_owner_group_admin_filters_permissions_to_the_permissions_the_owner_holds(self) -> None:
-        """ Verify the owner group admin exposes every permission already held by the owner. """
+        """Verify the owner group admin exposes every permission already held by the owner."""
         request = self.build_request()
 
         with patch("accounts.admin.owner.group_admin.logger.info") as group_logger_mock:
@@ -193,7 +196,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         group_logger_mock.assert_called_once()
 
     def test_owner_group_admin_translates_permission_option_labels(self) -> None:
-        """ Verify the permission chooser uses translated, user-friendly labels. """
+        """Verify the permission chooser uses translated, user-friendly labels."""
         request = self.build_request()
         permission = Permission.objects.get(codename="view_tenantgroupmodel")
 
@@ -203,7 +206,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
             self.assertEqual("Acceso al negocio | Grupo del negocio | Puede ver grupo del negocio", label)
 
     def test_non_owner_tenant_member_cannot_manage_owner_users_or_groups(self) -> None:
-        """ Verify non-owner tenant members cannot administer owner accounts surfaces. """
+        """Verify non-owner tenant members cannot administer owner accounts surfaces."""
         request = self.build_non_owner_request()
 
         self.assertFalse(self.user_admin.has_module_permission(request))
@@ -214,7 +217,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         self.assertFalse(self.group_admin.has_view_permission(request))
 
     def test_non_owner_tenant_member_cannot_delegate_permissions(self) -> None:
-        """ Verify non-owner tenant members see no delegable group permissions. """
+        """Verify non-owner tenant members see no delegable group permissions."""
         request = self.build_non_owner_request()
 
         with patch("accounts.admin.owner.group_admin.logger.info") as logger_info_mock:
@@ -224,7 +227,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_owner_membership_inline_limits_role_choices_to_owner_and_operator(self) -> None:
-        """ Verify the owner membership inline exposes only owner-managed tenant roles. """
+        """Verify the owner membership inline exposes only owner-managed tenant roles."""
         form = self.membership_inline.form()
 
         self.assertEqual(
@@ -233,7 +236,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         )
 
     def test_owner_membership_inline_creates_active_tenant_membership_on_save(self) -> None:
-        """ Verify the membership inline saves one tenant-scoped membership for the active tenant. """
+        """Verify the membership inline saves one tenant-scoped membership for the active tenant."""
         request = self.build_request()
         new_user = UserModel.objects.create_user(
             username="new-operator",
@@ -275,7 +278,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_owner_admin_add_view_creates_active_tenant_membership(self) -> None:
-        """ Verify the owner add view persists the tenant membership inline on user creation. """
+        """Verify the owner add view persists the tenant membership inline on user creation."""
         self.client.force_login(self.owner)
         session = self.client.session
         session["active_tenant_id"] = str(self.tenant.pk)

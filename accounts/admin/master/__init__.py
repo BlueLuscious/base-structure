@@ -1,4 +1,4 @@
-""" Master admin registrations for the accounts app. """
+"""Master admin registrations for the accounts app."""
 
 from .group_admin import GroupAdmin
 from .user_model_admin import UserModelAdmin

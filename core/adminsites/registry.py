@@ -1,7 +1,6 @@
-""" Registry of admin site import paths per namespace. """
+"""Registry of admin site import paths per namespace."""
 
 from core.adminsites.admin_namespace import AdminNamespace
-
 
 ADMIN_SITE_CLASS_REGISTRY: dict[AdminNamespace, str] = {
     AdminNamespace.MASTER: "core.adminsites.sites.master_admin_site.MasterAdminSite",

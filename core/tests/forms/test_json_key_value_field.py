@@ -1,30 +1,31 @@
-""" Tests for the shared JSON key-value form field. """
+"""Tests for the shared JSON key-value form field."""
 
 from django.core.exceptions import ValidationError
 from django.http import QueryDict
 from django.utils.translation import override
+
 from core.forms import JsonKeyValueField
 from core.forms.widgets import UNFOLD_READONLY_VALUE_CLASSES
 from core.testing.base import LoggedSimpleTestCase
 
 
 class TestJsonKeyValueField(LoggedSimpleTestCase):
-    """ Verify key-value rows normalize into flat dictionaries. """
+    """Verify key-value rows normalize into flat dictionaries."""
 
     def test_returns_empty_dict_for_empty_rows(self) -> None:
-        """ Verify empty submitted rows are normalized as an empty dictionary. """
+        """Verify empty submitted rows are normalized as an empty dictionary."""
         field = JsonKeyValueField(required=False)
 
         self.assertEqual(field.clean([("", ""), ("  ", "  ")]), {})
 
     def test_trims_keys_and_values(self) -> None:
-        """ Verify submitted keys and values are stripped before persistence. """
+        """Verify submitted keys and values are stripped before persistence."""
         field = JsonKeyValueField(required=False)
 
         self.assertEqual(field.clean([(" capacidad ", " 20L ")]), {"capacidad": "20L"})
 
     def test_rejects_value_only_rows(self) -> None:
-        """ Verify values cannot be submitted without a key. """
+        """Verify values cannot be submitted without a key."""
         field = JsonKeyValueField(required=False)
 
         with override("en"):
@@ -35,7 +36,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
                 field.clean([("", "20L")])
 
     def test_rejects_duplicate_keys_after_trimming(self) -> None:
-        """ Verify repeated keys are rejected after normalization. """
+        """Verify repeated keys are rejected after normalization."""
         field = JsonKeyValueField(required=False)
 
         with override("en"):
@@ -43,7 +44,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
                 field.clean([("capacidad", "20L"), (" capacidad ", "205L")])
 
     def test_widget_reads_repeated_key_value_inputs(self) -> None:
-        """ Verify the widget extracts repeated key-value row inputs from submitted data. """
+        """Verify the widget extracts repeated key-value row inputs from submitted data."""
         field = JsonKeyValueField(required=False)
         data = QueryDict(mutable=True)
         data.setlist("variant-attributes_json__key", ["capacidad", "presentacion"])
@@ -54,7 +55,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
         self.assertEqual(value, [("capacidad", "20L"), ("presentacion", "Tambor")])
 
     def test_widget_returns_empty_row_when_present_without_rows(self) -> None:
-        """ Verify a submitted empty widget clears the previous JSON value. """
+        """Verify a submitted empty widget clears the previous JSON value."""
         field = JsonKeyValueField(required=False)
         data = QueryDict(mutable=True)
         data.setlist("variant-attributes_json__present", ["1"])
@@ -65,7 +66,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
         self.assertEqual(field.clean(value), {})
 
     def test_widget_present_marker_prevents_empty_value_omission(self) -> None:
-        """ Verify submitted empty widgets are not treated as omitted fields. """
+        """Verify submitted empty widgets are not treated as omitted fields."""
         field = JsonKeyValueField(required=False)
         data = QueryDict(mutable=True)
         data.setlist("variant-attributes_json__present", ["1"])
@@ -75,7 +76,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
         self.assertFalse(omitted)
 
     def test_widget_context_uses_unfold_compatible_classes(self) -> None:
-        """ Verify rendered controls receive Unfold-compatible form classes and media. """
+        """Verify rendered controls receive Unfold-compatible form classes and media."""
         field = JsonKeyValueField(required=False)
         context = field.widget.get_context("variant-attributes_json", {}, {})
         rendered_media = str(field.widget.media)
@@ -88,7 +89,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
         self.assertIn("core/forms/widgets/json_key_value_widget.js", rendered_media)
 
     def test_widget_builds_rows_from_bound_submitted_values(self) -> None:
-        """ Verify invalid bound forms can re-render submitted flat rows. """
+        """Verify invalid bound forms can re-render submitted flat rows."""
         field = JsonKeyValueField(required=False)
 
         context = field.widget.get_context(
@@ -106,7 +107,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
         )
 
     def test_editable_widget_renders_without_disabled_attribute(self) -> None:
-        """ Verify editable widgets do not require disabled or readonly attrs. """
+        """Verify editable widgets do not require disabled or readonly attrs."""
         field = JsonKeyValueField(required=False)
 
         rendered = field.widget.render("variant-attributes_json", {"capacity": "20L"}, attrs={"id": "attributes"})
@@ -120,7 +121,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
         self.assertNotIn("readonly disabled", rendered)
 
     def test_disabled_widget_renders_display_blocks_without_actions(self) -> None:
-        """ Verify disabled key-value fields keep layout with display blocks only. """
+        """Verify disabled key-value fields keep layout with display blocks only."""
         field = JsonKeyValueField(required=False, disabled=True)
 
         rendered = field.widget.render("variant-attributes_json", {"capacity": "20L"}, attrs={"disabled": True})
@@ -144,7 +145,7 @@ class TestJsonKeyValueField(LoggedSimpleTestCase):
         self.assertNotIn('name="variant-attributes_json__value"', rendered)
 
     def test_disabled_empty_widget_renders_dash_placeholders(self) -> None:
-        """ Verify disabled empty key-value fields render stable dash placeholders. """
+        """Verify disabled empty key-value fields render stable dash placeholders."""
         field = JsonKeyValueField(required=False, disabled=True)
 
         rendered = field.widget.render("variant-attributes_json", {}, attrs={"disabled": True})

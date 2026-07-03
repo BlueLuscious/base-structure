@@ -1,13 +1,14 @@
-""" Form used by the owner user admin add view. """
+"""Form used by the owner user admin add view."""
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from unfold.forms import UserCreationForm
+
 from accounts.models import UserModel
 
 
 class OwnerUserModelAdminCreationForm(UserCreationForm):
-    """ Owner-facing form for creating support user accounts. """
+    """Owner-facing form for creating support user accounts."""
 
     password1 = forms.CharField(
         label=_("Password"),
@@ -21,9 +22,9 @@ class OwnerUserModelAdminCreationForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
         help_text=_("Type the same password again to confirm it."),
     )
-    
+
     class Meta(UserCreationForm.Meta):
-        """ Declarative field presentation for owner user creation. """
+        """Declarative field presentation for owner user creation."""
 
         model = UserModel
         fields = ("username", "first_name", "last_name", "email", "is_active", "is_staff", "groups")
@@ -44,13 +45,13 @@ class OwnerUserModelAdminCreationForm(UserCreationForm):
         }
 
     def __init__(self, *args, **kwargs) -> None:
-        """ Set owner-friendly defaults for newly created support users.
+        """Set owner-friendly defaults for newly created support users.
 
         Args:
             *args: Positional form arguments.
             **kwargs: Keyword form arguments.
         """
         super().__init__(*args, **kwargs)
-        
+
         self.fields["is_active"].initial = True
         self.fields["is_staff"].initial = True

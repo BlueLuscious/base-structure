@@ -1,7 +1,9 @@
-""" Session helpers for the active tenant. """
+"""Session helpers for the active tenant."""
 
 from typing import TYPE_CHECKING
+
 from django.http import HttpRequest
+
 from tenancy.constants import ACTIVE_TENANT_SESSION_KEY
 
 if TYPE_CHECKING:
@@ -9,13 +11,13 @@ if TYPE_CHECKING:
 
 
 class ActiveTenantSessionStore:
-    """ Encapsulate session-backed persistence for the active tenant. """
+    """Encapsulate session-backed persistence for the active tenant."""
 
     session_key = ACTIVE_TENANT_SESSION_KEY
 
     @classmethod
     def get_tenant_id(cls, request: HttpRequest) -> str | None:
-        """ Return the active tenant identifier stored in session.
+        """Return the active tenant identifier stored in session.
 
         Args:
             request: Current HTTP request.
@@ -27,7 +29,7 @@ class ActiveTenantSessionStore:
 
     @classmethod
     def set_tenant(cls, request: HttpRequest, tenant: "TenantModel") -> None:
-        """ Store one tenant as the active tenant for the current session.
+        """Store one tenant as the active tenant for the current session.
 
         Args:
             request: Current HTTP request.
@@ -37,7 +39,7 @@ class ActiveTenantSessionStore:
 
     @classmethod
     def clear(cls, request: HttpRequest) -> None:
-        """ Remove the active tenant marker from the current session.
+        """Remove the active tenant marker from the current session.
 
         Args:
             request: Current HTTP request.

@@ -1,8 +1,10 @@
-""" Project-wide Celery tasks for outbound mail delivery. """
+"""Project-wide Celery tasks for outbound mail delivery."""
 
 import logging
 from smtplib import SMTPException
+
 from celery import shared_task
+
 from core.mail.serializers import MailMessagePayloadSerializer, TemplateMailRequestPayloadSerializer
 from core.mail.services import MailService, TemplateMailService
 
@@ -26,7 +28,7 @@ MAIL_TASK_RETRY_BACKOFF_MAX_SECONDS = 300
     retry_jitter=True,
 )
 def send_mail_message_task(payload: dict, fail_silently: bool = False) -> int:
-    """ Rebuild one raw mail payload and send it through the project mail service.
+    """Rebuild one raw mail payload and send it through the project mail service.
 
     Args:
         payload: Serialized outbound mail payload.
@@ -54,7 +56,7 @@ def send_mail_message_task(payload: dict, fail_silently: bool = False) -> int:
     retry_jitter=True,
 )
 def send_templated_mail_task(payload: dict, fail_silently: bool = False) -> int:
-    """ Rebuild one templated mail payload and send it through the templated mail service.
+    """Rebuild one templated mail payload and send it through the templated mail service.
 
     Args:
         payload: Serialized templated mail payload.

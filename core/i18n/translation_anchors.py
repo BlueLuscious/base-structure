@@ -1,7 +1,6 @@
-""" Translation anchor strings for Django admin and Unfold overrides. """
+"""Translation anchor strings for Django admin and Unfold overrides."""
 
 from django.utils.translation import gettext_noop
-
 
 gettext_noop("Welcome back to")
 gettext_noop("Return to site")
@@ -58,9 +57,13 @@ gettext_noop("This object doesn’t have a change history. It probably wasn’t 
 gettext_noop("Password change")
 gettext_noop("Your password was changed.")
 gettext_noop("Change my password")
-gettext_noop("Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one.")
+gettext_noop(
+    "Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one."
+)
 gettext_noop("Email address:")
-gettext_noop("If you don’t receive an email, please make sure you’ve entered the address you registered with, and check your spam folder.")
+gettext_noop(
+    "If you don’t receive an email, please make sure you’ve entered the address you registered with, and check your spam folder."
+)
 gettext_noop("Show all")
 gettext_noop("result")
 gettext_noop("results")

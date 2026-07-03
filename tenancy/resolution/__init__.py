@@ -1,4 +1,4 @@
-""" Active-tenant resolution entrypoints. """
+"""Active-tenant resolution entrypoints."""
 
 from .active_tenant_resolver import ActiveTenantResolver
 from .admin_active_tenant_resolver import AdminActiveTenantResolver

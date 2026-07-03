@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import Group
 from django.db import IntegrityError
+
 from core.testing.base import LoggedTestCase
 from tenancy.models import TenantGroupModel, TenantModel
 

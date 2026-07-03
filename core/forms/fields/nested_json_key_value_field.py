@@ -1,9 +1,11 @@
-""" Shared form field for bounded nested JSON key-value data. """
+"""Shared form field for bounded nested JSON key-value data."""
 
 from typing import Any
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
 from core.forms.widgets import NestedJsonKeyValueWidget
 
 NestedJsonValue = str | dict[str, Any]
@@ -11,7 +13,7 @@ NestedJsonDict = dict[str, NestedJsonValue]
 
 
 class NestedJsonKeyValueField(forms.Field):
-    """ Normalize nested key-value rows into a bounded JSON-compatible dictionary. """
+    """Normalize nested key-value rows into a bounded JSON-compatible dictionary."""
 
     max_allowed_depth = 4
     default_error_messages = {
@@ -34,7 +36,7 @@ class NestedJsonKeyValueField(forms.Field):
         remove_label: str | None = None,
         **kwargs: Any,
     ) -> None:
-        """ Initialize one bounded nested JSON key-value field.
+        """Initialize one bounded nested JSON key-value field.
 
         Args:
             *args: Positional field arguments.
@@ -65,7 +67,7 @@ class NestedJsonKeyValueField(forms.Field):
         super().__init__(*args, **kwargs)
 
     def validate_max_depth(self, max_depth: int) -> None:
-        """ Validate the configured maximum nesting depth.
+        """Validate the configured maximum nesting depth.
 
         Args:
             max_depth: Maximum allowed nesting depth.
@@ -74,12 +76,10 @@ class NestedJsonKeyValueField(forms.Field):
             ValueError: When the provided depth is outside supported bounds.
         """
         if max_depth < 1 or max_depth > self.max_allowed_depth:
-            raise ValueError(
-                f"max_depth must be between 1 and {self.max_allowed_depth}."
-            )
+            raise ValueError(f"max_depth must be between 1 and {self.max_allowed_depth}.")
 
     def to_python(self, value: Any) -> NestedJsonDict:
-        """ Convert nested submitted rows or dictionaries into a normalized dictionary.
+        """Convert nested submitted rows or dictionaries into a normalized dictionary.
 
         Args:
             value: Submitted rows or current dictionary value.
@@ -102,7 +102,7 @@ class NestedJsonKeyValueField(forms.Field):
         raise ValidationError(self.error_messages["invalid"], code="invalid")
 
     def clean_mapping(self, value: dict[Any, Any], *, depth: int) -> NestedJsonDict:
-        """ Normalize an existing nested dictionary value.
+        """Normalize an existing nested dictionary value.
 
         Args:
             value: Existing dictionary value.
@@ -143,7 +143,7 @@ class NestedJsonKeyValueField(forms.Field):
         return normalized
 
     def clean_rows(self, rows: list[Any] | tuple[Any, ...]) -> NestedJsonDict:
-        """ Normalize submitted row dictionaries into a nested dictionary.
+        """Normalize submitted row dictionaries into a nested dictionary.
 
         Args:
             rows: Submitted rows with row IDs, parent IDs, keys, and values.
@@ -154,10 +154,7 @@ class NestedJsonKeyValueField(forms.Field):
         Raises:
             ValidationError: When submitted rows are malformed.
         """
-        parsed_rows = [
-            self.parse_row(row, index=index)
-            for index, row in enumerate(rows)
-        ]
+        parsed_rows = [self.parse_row(row, index=index) for index, row in enumerate(rows)]
         children_by_parent = self.build_children_by_parent(parsed_rows)
         root_ids = children_by_parent.get("", [])
         return self.build_mapping(
@@ -168,7 +165,7 @@ class NestedJsonKeyValueField(forms.Field):
         )
 
     def parse_row(self, row: Any, *, index: int) -> dict[str, str]:
-        """ Return one submitted row as a normalized row dictionary.
+        """Return one submitted row as a normalized row dictionary.
 
         Args:
             row: Submitted row dictionary or tuple.
@@ -199,7 +196,7 @@ class NestedJsonKeyValueField(forms.Field):
         }
 
     def build_children_by_parent(self, rows: list[dict[str, str]]) -> dict[str, list[str]]:
-        """ Group submitted row IDs by parent row ID.
+        """Group submitted row IDs by parent row ID.
 
         Args:
             rows: Parsed submitted row dictionaries.
@@ -226,7 +223,7 @@ class NestedJsonKeyValueField(forms.Field):
         children_by_parent: dict[str, list[str]],
         depth: int,
     ) -> NestedJsonDict:
-        """ Build a nested dictionary for one sibling level.
+        """Build a nested dictionary for one sibling level.
 
         Args:
             root_ids: Row IDs that belong to the current sibling level.
@@ -283,7 +280,7 @@ class NestedJsonKeyValueField(forms.Field):
         rows_by_id: dict[str, dict[str, str]],
         children_by_parent: dict[str, list[str]],
     ) -> bool:
-        """ Return whether any row in a subtree contains data.
+        """Return whether any row in a subtree contains data.
 
         Args:
             row_ids: Row IDs to inspect.
@@ -296,17 +293,21 @@ class NestedJsonKeyValueField(forms.Field):
         for row_id in row_ids:
             row = rows_by_id[row_id]
             child_ids = children_by_parent.get(row_id, [])
-            if row["key"] or row["value"] or self.has_meaningful_rows(
-                child_ids,
-                rows_by_id,
-                children_by_parent,
+            if (
+                row["key"]
+                or row["value"]
+                or self.has_meaningful_rows(
+                    child_ids,
+                    rows_by_id,
+                    children_by_parent,
+                )
             ):
                 return True
 
         return False
 
     def validate_depth(self, depth: int) -> None:
-        """ Validate the current normalization depth.
+        """Validate the current normalization depth.
 
         Args:
             depth: Current nesting depth.

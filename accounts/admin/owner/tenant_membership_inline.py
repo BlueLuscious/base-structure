@@ -1,10 +1,12 @@
-""" Inline used by the owner user admin for tenant memberships. """
+"""Inline used by the owner user admin for tenant memberships."""
 
 from typing import TYPE_CHECKING
+
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
-from accounts.access import AccountsAccessPolicy
 from unfold.admin import TabularInline
+
+from accounts.access import AccountsAccessPolicy
 from accounts.admin.owner.tenant_membership_inline_form import TenantMembershipInlineForm
 from accounts.admin.owner.tenant_membership_inline_formset import TenantMembershipInlineFormSet
 from tenancy.models import TenantMembershipModel
@@ -15,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class TenantMembershipInline(TabularInline):
-    """ Edit only the active-tenant membership for the current owner user screen. """
+    """Edit only the active-tenant membership for the current owner user screen."""
 
     model = TenantMembershipModel
     form = TenantMembershipInlineForm
@@ -29,7 +31,7 @@ class TenantMembershipInline(TabularInline):
     verbose_name_plural = _("Business access")
 
     def has_view_permission(self, request: HttpRequest, obj=None) -> bool:
-        """ Allow the inline when the current user may manage the active tenant.
+        """Allow the inline when the current user may manage the active tenant.
 
         Args:
             request: Current admin request.
@@ -41,7 +43,7 @@ class TenantMembershipInline(TabularInline):
         return AccountsAccessPolicy.can_manage_accounts(request)
 
     def has_change_permission(self, request: HttpRequest, obj=None) -> bool:
-        """ Allow inline edits when the current user may manage the active tenant.
+        """Allow inline edits when the current user may manage the active tenant.
 
         Args:
             request: Current admin request.
@@ -53,7 +55,7 @@ class TenantMembershipInline(TabularInline):
         return AccountsAccessPolicy.can_manage_accounts(request)
 
     def has_add_permission(self, request: HttpRequest, obj=None) -> bool:
-        """ Allow inline adds when the current user may manage the active tenant.
+        """Allow inline adds when the current user may manage the active tenant.
 
         Args:
             request: Current admin request.
@@ -65,7 +67,7 @@ class TenantMembershipInline(TabularInline):
         return AccountsAccessPolicy.can_manage_accounts(request)
 
     def get_queryset(self, request: HttpRequest) -> "TenantMembershipModelQuerySet":
-        """ Return only memberships that belong to the active tenant.
+        """Return only memberships that belong to the active tenant.
 
         Args:
             request: Current admin request.
@@ -80,9 +82,9 @@ class TenantMembershipInline(TabularInline):
             return queryset.none()
 
         return queryset.filter(tenant=tenant)
-    
+
     def get_readonly_fields(self, request: HttpRequest, obj: "UserModel | None" = None) -> tuple[str, ...]:
-        """ Prevent owners from removing their own admin access by mistake.
+        """Prevent owners from removing their own admin access by mistake.
 
         Args:
             request: Current admin request.

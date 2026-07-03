@@ -1,12 +1,14 @@
-""" Master admin site definition. """
+"""Master admin site definition."""
 
 from typing import Any
+
 from django.http import HttpRequest
+
 from core.adminsites.sites.base_admin_site import BaseAdminSite
 
 
 class MasterAdminSite(BaseAdminSite):
-    """ Full admin site reserved for technical platform administrators. """
+    """Full admin site reserved for technical platform administrators."""
 
     settings_name = "MASTER_ADMIN_UNFOLD"
     site_header = "Master Administration"
@@ -16,7 +18,7 @@ class MasterAdminSite(BaseAdminSite):
     show_all_applications = True
 
     def get_sidebar_navigation(self, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Return dynamic master admin sidebar navigation.
+        """Return dynamic master admin sidebar navigation.
 
         Args:
             request: Current admin request.
@@ -28,7 +30,7 @@ class MasterAdminSite(BaseAdminSite):
         return [self._build_sidebar_group(app_config) for app_config in app_list]
 
     def _build_sidebar_group(self, app_config: dict[str, Any]) -> dict[str, Any]:
-        """ Build one sidebar group from a Django admin app entry.
+        """Build one sidebar group from a Django admin app entry.
 
         Args:
             app_config: Django admin application entry from ``get_app_list``.
@@ -42,7 +44,7 @@ class MasterAdminSite(BaseAdminSite):
         }
 
     def _build_sidebar_item(self, model_config: dict[str, Any]) -> dict[str, Any]:
-        """ Build one sidebar item from a Django admin model entry.
+        """Build one sidebar item from a Django admin model entry.
 
         Args:
             model_config: Django admin model entry from ``get_app_list``.
@@ -57,7 +59,7 @@ class MasterAdminSite(BaseAdminSite):
         }
 
     def has_permission(self, request: HttpRequest) -> bool:
-        """ Return whether the request user can access the master admin site.
+        """Return whether the request user can access the master admin site.
 
         Args:
             request: Current admin request.

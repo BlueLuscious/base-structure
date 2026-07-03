@@ -1,4 +1,4 @@
-""" Public mail package exports. """
+"""Public mail package exports."""
 
 from core.mail.composers import TemplateMailComposer
 from core.mail.dtos import MailAttachmentDTO, MailMessageDTO, MailRecipientDTO, TemplateMailRequestDTO

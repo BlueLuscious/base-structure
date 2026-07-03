@@ -1,1 +1,1 @@
-""" Integration tests for the core mail package. """
+"""Integration tests for the core mail package."""

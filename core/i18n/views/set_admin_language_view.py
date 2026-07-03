@@ -1,6 +1,7 @@
-""" Custom language switching views. """
+"""Custom language switching views."""
 
 from urllib.parse import urlsplit, urlunsplit
+
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -9,10 +10,10 @@ from django.views import View
 
 
 class SetAdminLanguageView(View):
-    """ Handle admin language changes while normalizing unprefixed default URLs. """
+    """Handle admin language changes while normalizing unprefixed default URLs."""
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        """ Persist the selected language and redirect to the normalized admin URL.
+        """Persist the selected language and redirect to the normalized admin URL.
 
         Args:
             request: Current admin request.
@@ -45,7 +46,7 @@ class SetAdminLanguageView(View):
         return response
 
     def _get_safe_next_url(self, request: HttpRequest) -> str:
-        """ Return a safe redirect target from POST data or HTTP referrer.
+        """Return a safe redirect target from POST data or HTTP referrer.
 
         Args:
             request: Current admin request.
@@ -55,9 +56,7 @@ class SetAdminLanguageView(View):
         """
         next_url = request.POST.get("next", request.GET.get("next"))
 
-        if (
-            next_url or request.accepts("text/html")
-        ) and not url_has_allowed_host_and_scheme(
+        if (next_url or request.accepts("text/html")) and not url_has_allowed_host_and_scheme(
             url=next_url,
             allowed_hosts={request.get_host()},
             require_https=request.is_secure(),
@@ -74,7 +73,7 @@ class SetAdminLanguageView(View):
         return next_url or "/"
 
     def _normalize_next_url(self, next_url: str, language_code: str) -> str:
-        """ Return the redirect target for the selected language.
+        """Return the redirect target for the selected language.
 
         Args:
             next_url: Current redirect target.
@@ -100,7 +99,7 @@ class SetAdminLanguageView(View):
         )
 
     def _strip_language_prefix(self, path: str) -> str:
-        """ Remove any configured language prefix from the given path.
+        """Remove any configured language prefix from the given path.
 
         Args:
             path: Request path to normalize.
@@ -115,6 +114,6 @@ class SetAdminLanguageView(View):
                 return "/"
 
             if path.startswith(f"{prefix}/"):
-                return path[len(prefix):]
+                return path[len(prefix) :]
 
         return path

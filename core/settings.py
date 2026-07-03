@@ -1,9 +1,12 @@
-""" Django settings for core project. """
+"""Django settings for core project."""
 
-import dj_database_url, os
+import os
 from pathlib import Path
-from django_components import ComponentsSettings
+
+import dj_database_url
 from django.utils.translation import gettext_lazy as _
+from django_components import ComponentsSettings
+
 from core.adminsites.admin_namespace import AdminNamespace
 from core.adminsites.unfold import AdminSiteUnfoldSettings
 from core.beat import CeleryBeatScheduleBuilder
@@ -19,23 +22,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-prod')
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-change-me-in-prod")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = EnvironmentValueParser.get_bool('DEBUG', True)
+DEBUG = EnvironmentValueParser.get_bool("DEBUG", True)
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-    if host.strip()
+    host.strip() for host in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if host.strip()
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
-    for origin in os.environ.get(
-        'CSRF_TRUSTED_ORIGINS',
-        'http://localhost:8000,http://127.0.0.1:8000'
-    ).split(',')
+    for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",")
     if origin.strip()
 ]
 
@@ -46,88 +44,91 @@ MEDIA_STORAGE_CONFIG = MediaStorageAdapterResolver.build_config(BASE_DIR)
 STATIC_STORAGE_CONFIG = StaticStorageAdapterResolver.build_config(BASE_DIR)
 
 PROJECT_APPS = [
-    'core',
-    'accounts',
-    'tenancy',
+    "core",
+    "accounts",
+    "tenancy",
 ]
 
 PROJECT_EXTRA_APPS = list(dict.fromkeys(MEDIA_STORAGE_CONFIG.extra_apps + STATIC_STORAGE_CONFIG.extra_apps))
 
 INSTALLED_APPS = [
-    'unfold',
-    'unfold.contrib.import_export',
-    'import_export',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_components',
+    "unfold",
+    "unfold.contrib.import_export",
+    "import_export",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django_components",
     *PROJECT_APPS,
     *PROJECT_EXTRA_APPS,
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    "django.middleware.security.SecurityMiddleware",
     *STATIC_STORAGE_CONFIG.extra_middleware,
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'tenancy.middleware.active_tenant_middleware.ActiveTenantMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "tenancy.middleware.active_tenant_middleware.ActiveTenantMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
         # 'APP_DIRS': True,
-        'OPTIONS': {
-            'loaders': [(
-                'django.template.loaders.cached.Loader', [
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader',
-                    'django_components.template_loader.Loader',
-                ]
-            )],
-            'builtins': [
-                'django_components.templatetags.component_tags',
+        "OPTIONS": {
+            "loaders": [
+                (
+                    "django.template.loaders.cached.Loader",
+                    [
+                        "django.template.loaders.filesystem.Loader",
+                        "django.template.loaders.app_directories.Loader",
+                        "django_components.template_loader.Loader",
+                    ],
+                )
             ],
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.i18n',
+            "builtins": [
+                "django_components.templatetags.component_tags",
+            ],
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.i18n",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DB_SCHEMA = os.environ.get('DB_SCHEMA', 'app')
+DB_SCHEMA = os.environ.get("DB_SCHEMA", "app")
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get('DATABASE_URL', 'postgres://django:django@localhost:5432/django_base'),
+    "default": dj_database_url.parse(
+        os.environ.get("DATABASE_URL", "postgres://django:django@localhost:5432/django_base"),
         conn_max_age=600,
     )
 }
 
-if 'postgresql' in DATABASES['default']['ENGINE']:
-    DATABASES['default'].setdefault('OPTIONS', {})
-    DATABASES['default']['OPTIONS']['options'] = f'-c search_path={DB_SCHEMA},public'
+if "postgresql" in DATABASES["default"]["ENGINE"]:
+    DATABASES["default"].setdefault("OPTIONS", {})
+    DATABASES["default"]["OPTIONS"]["options"] = f"-c search_path={DB_SCHEMA},public"
 
 
 # Password validation
@@ -135,16 +136,16 @@ if 'postgresql' in DATABASES['default']['ENGINE']:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -152,40 +153,40 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = "en"
 
-TIME_ZONE = os.environ.get('TIME_ZONE', 'UTC')
+TIME_ZONE = os.environ.get("TIME_ZONE", "UTC")
 
 USE_I18N = True
 
 USE_TZ = True
 
 LANGUAGES = [
-    ('en', _('English')),
-    ('es', _('Spanish')),
+    ("en", _("English")),
+    ("es", _("Spanish")),
 ]
 
 LOCALE_PATHS = [
-    BASE_DIR / 'locale',
+    BASE_DIR / "locale",
 ]
 
 
 # Email
 # https://docs.djangoproject.com/en/5.2/topics/email/
 
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = os.environ.get('EMAIL_HOST', '127.0.0.1')
-EMAIL_PORT = EnvironmentValueParser.get_int('EMAIL_PORT', 1025)
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = EnvironmentValueParser.get_bool('EMAIL_USE_TLS', False)
-EMAIL_USE_SSL = EnvironmentValueParser.get_bool('EMAIL_USE_SSL', False)
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@localhost')
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "127.0.0.1")
+EMAIL_PORT = EnvironmentValueParser.get_int("EMAIL_PORT", 1025)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = EnvironmentValueParser.get_bool("EMAIL_USE_TLS", False)
+EMAIL_USE_SSL = EnvironmentValueParser.get_bool("EMAIL_USE_SSL", False)
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "noreply@localhost")
 
 EnvironmentContractValidator.validate_mutually_exclusive(
-    'EMAIL_USE_TLS',
+    "EMAIL_USE_TLS",
     EMAIL_USE_TLS,
-    'EMAIL_USE_SSL',
+    "EMAIL_USE_SSL",
     EMAIL_USE_SSL,
 )
 
@@ -193,15 +194,15 @@ EnvironmentContractValidator.validate_mutually_exclusive(
 # Celery
 # https://docs.celeryq.dev/
 
-REDIS_URL = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/0')
+REDIS_URL = os.environ.get("REDIS_URL", "redis://127.0.0.1:6379/0")
 
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', REDIS_URL)
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', REDIS_URL)
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", REDIS_URL)
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", REDIS_URL)
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-CELERY_TASK_ALWAYS_EAGER = EnvironmentValueParser.get_bool('CELERY_TASK_ALWAYS_EAGER', False)
+CELERY_TASK_ALWAYS_EAGER = EnvironmentValueParser.get_bool("CELERY_TASK_ALWAYS_EAGER", False)
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_ENABLE_UTC = USE_TZ
 CELERY_BEAT_SCHEDULE = CeleryBeatScheduleBuilder.build()
@@ -217,18 +218,18 @@ MEDIA_ROOT = MEDIA_STORAGE_CONFIG.media_root
 STORAGES = MEDIA_STORAGE_CONFIG.storages | STATIC_STORAGE_CONFIG.storages
 
 STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'django_components.finders.ComponentsFileSystemFinder',
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "django_components.finders.ComponentsFileSystemFinder",
 ]
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'accounts.UserModel'
+AUTH_USER_MODEL = "accounts.UserModel"
 
 
 # Logging Config
@@ -247,6 +248,6 @@ OWNER_ADMIN_UNFOLD = AdminSiteUnfoldSettings.for_namespace(AdminNamespace.OWNER)
 COMPONENTS = ComponentsSettings(
     dirs=[],
     app_dirs=[
-        'components',
+        "components",
     ],
 )

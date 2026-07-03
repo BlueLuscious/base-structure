@@ -1,8 +1,9 @@
-""" Build the effective base context used by outbound mail templates. """
+"""Build the effective base context used by outbound mail templates."""
 
-from contextlib import contextmanager
 from collections.abc import Mapping
+from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Iterator
+
 from core.mail.resolvers.tenant_mail_context_resolver import TenantMailContextResolver
 from tenancy.runtime import ActiveTenantContext
 
@@ -11,14 +12,14 @@ if TYPE_CHECKING:
 
 
 class MailTemplateBaseContextBuilder:
-    """ Build one outbound mail template context from tenant-aware defaults and caller overrides. """
+    """Build one outbound mail template context from tenant-aware defaults and caller overrides."""
 
     tenant_context_resolver_class = TenantMailContextResolver
     tenant_context_class = ActiveTenantContext
 
     @classmethod
     def build(cls, context: Mapping[str, Any], tenant: "TenantModel | None" = None) -> dict[str, Any]:
-        """ Build one effective mail template context.
+        """Build one effective mail template context.
 
         Args:
             context: Caller-supplied context values.
@@ -36,7 +37,7 @@ class MailTemplateBaseContextBuilder:
     @classmethod
     @contextmanager
     def _use_tenant_context(cls, tenant: "TenantModel | None") -> Iterator[None]:
-        """ Temporarily bind one explicit tenant while one mail context is built.
+        """Temporarily bind one explicit tenant while one mail context is built.
 
         Args:
             tenant: Optional explicit tenant instance.

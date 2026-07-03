@@ -1,10 +1,12 @@
-""" Service for explicit active-tenant switching. """
+"""Service for explicit active-tenant switching."""
 
-from uuid import UUID
 import logging
+from uuid import UUID
+
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
+
 from tenancy.models import TenantMembershipModel
 from tenancy.session import ActiveTenantSessionStore
 
@@ -12,13 +14,13 @@ logger = logging.getLogger(__name__)
 
 
 class ActiveTenantSwitcher:
-    """ Switch the active tenant for one request after validating membership access. """
+    """Switch the active tenant for one request after validating membership access."""
 
     session_store_class = ActiveTenantSessionStore
 
     @classmethod
     def switch(cls, request: HttpRequest, tenant_id: UUID) -> None:
-        """ Switch the active tenant for the current authenticated user.
+        """Switch the active tenant for the current authenticated user.
 
         Args:
             request: Current HTTP request.

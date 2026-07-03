@@ -1,4 +1,4 @@
-""" Shared form widgets used across project apps. """
+"""Shared form widgets used across project apps."""
 
 from core.forms.widgets.action_input_widget import ActionInputWidget
 from core.forms.widgets.common_classes import UNFOLD_READONLY_VALUE_CLASSES

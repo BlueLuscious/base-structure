@@ -1,1 +1,1 @@
-""" Owner tenant view tests. """
+"""Owner tenant view tests."""

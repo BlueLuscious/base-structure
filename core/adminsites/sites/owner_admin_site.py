@@ -1,12 +1,16 @@
-""" Owner admin site definition. """
+"""Owner admin site definition."""
 
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from django.http import HttpRequest
 from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
-from core.adminsites.services import OwnerTenantDropdownBuilder
-from core.adminsites.services import OwnerTenantBrandingResolver
-from core.adminsites.services import OwnerTenantSidebarNavigationBuilder
+
+from core.adminsites.services import (
+    OwnerTenantBrandingResolver,
+    OwnerTenantDropdownBuilder,
+    OwnerTenantSidebarNavigationBuilder,
+)
 from core.adminsites.sites.base_admin_site import BaseAdminSite
 
 if TYPE_CHECKING:
@@ -14,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class OwnerAdminSite(BaseAdminSite):
-    """ Guided admin site intended for business owners and operators. """
+    """Guided admin site intended for business owners and operators."""
 
     settings_name = "OWNER_ADMIN_UNFOLD"
     site_header = _("Business Administration")
@@ -24,7 +28,7 @@ class OwnerAdminSite(BaseAdminSite):
 
     @classmethod
     def get_site_title(cls, request: HttpRequest) -> str:
-        """ Return the owner site title, preferring the active tenant name.
+        """Return the owner site title, preferring the active tenant name.
 
         Args:
             request: Current admin request.
@@ -40,7 +44,7 @@ class OwnerAdminSite(BaseAdminSite):
 
     @classmethod
     def get_site_header(cls, request: HttpRequest) -> str:
-        """ Return the owner site header, preferring the active tenant name.
+        """Return the owner site header, preferring the active tenant name.
 
         Args:
             request: Current admin request.
@@ -56,7 +60,7 @@ class OwnerAdminSite(BaseAdminSite):
 
     @classmethod
     def get_site_logo(cls, request: HttpRequest) -> dict[str, str] | str | None:
-        """ Return the owner site logo from tenant branding when available.
+        """Return the owner site logo from tenant branding when available.
 
         Args:
             request: Current admin request.
@@ -68,7 +72,7 @@ class OwnerAdminSite(BaseAdminSite):
 
     @classmethod
     def get_site_icon(cls, request: HttpRequest) -> dict[str, str] | str | None:
-        """ Return the owner site icon from tenant branding when available.
+        """Return the owner site icon from tenant branding when available.
 
         Args:
             request: Current admin request.
@@ -80,7 +84,7 @@ class OwnerAdminSite(BaseAdminSite):
 
     @classmethod
     def get_site_favicons(cls, request: HttpRequest) -> list[dict[str, str]]:
-        """ Return tenant-specific favicon entries when branding provides them.
+        """Return tenant-specific favicon entries when branding provides them.
 
         Args:
             request: Current admin request.
@@ -92,7 +96,7 @@ class OwnerAdminSite(BaseAdminSite):
 
     @classmethod
     def get_environment(cls, request: HttpRequest) -> list[str] | None:
-        """ Return the owner environment badge using the active membership role.
+        """Return the owner environment badge using the active membership role.
 
         Args:
             request: Current admin request.
@@ -117,7 +121,7 @@ class OwnerAdminSite(BaseAdminSite):
         return [membership.get_role_display(), "primary"]
 
     def has_permission(self, request: HttpRequest) -> bool:
-        """ Return whether the request user can access the owner admin site.
+        """Return whether the request user can access the owner admin site.
 
         Args:
             request: Current admin request.
@@ -129,7 +133,7 @@ class OwnerAdminSite(BaseAdminSite):
         return bool(user.is_active and user.is_staff)
 
     def get_site_dropdown(self, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Return tenant switcher items for the current owner admin request.
+        """Return tenant switcher items for the current owner admin request.
 
         Args:
             request: Current admin request.
@@ -140,7 +144,7 @@ class OwnerAdminSite(BaseAdminSite):
         return OwnerTenantDropdownBuilder.build(request)
 
     def get_sidebar_navigation(self, request: HttpRequest) -> list[dict[str, Any]]:
-        """ Return owner sidebar navigation for account administration.
+        """Return owner sidebar navigation for account administration.
 
         Args:
             request: Current admin request.
@@ -151,7 +155,7 @@ class OwnerAdminSite(BaseAdminSite):
         return OwnerTenantSidebarNavigationBuilder.build(request)
 
     def get_scripts(self, request: HttpRequest) -> list[str]:
-        """ Return owner-admin scripts including favicon post-processing.
+        """Return owner-admin scripts including favicon post-processing.
 
         Args:
             request: Current admin request.

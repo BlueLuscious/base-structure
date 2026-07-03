@@ -1,1 +1,1 @@
-""" Mail service test packages. """
+"""Mail service test packages."""

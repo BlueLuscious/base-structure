@@ -1,4 +1,4 @@
-""" Tests for tenant-aware mail base context resolution. """
+"""Tests for tenant-aware mail base context resolution."""
 
 from core.mail import TenantMailContextResolver
 from core.testing import LoggedSimpleTestCase
@@ -7,10 +7,10 @@ from tenancy.runtime import ActiveTenantContext
 
 
 class TestTenantMailContextResolver(LoggedSimpleTestCase):
-    """ Verify tenant-aware outbound mail context resolution. """
+    """Verify tenant-aware outbound mail context resolution."""
 
     def test_resolve_returns_neutral_values_when_no_tenant_is_active(self) -> None:
-        """ Verify mail context stays neutral when no active tenant exists. """
+        """Verify mail context stays neutral when no active tenant exists."""
         self.assertEqual(
             {
                 "product_name": None,
@@ -22,7 +22,7 @@ class TestTenantMailContextResolver(LoggedSimpleTestCase):
         )
 
     def test_resolve_prefers_branding_display_name_and_support_email(self) -> None:
-        """ Verify branding display data and tenant support channels become the preferred mail context. """
+        """Verify branding display data and tenant support channels become the preferred mail context."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",
@@ -52,7 +52,7 @@ class TestTenantMailContextResolver(LoggedSimpleTestCase):
             ActiveTenantContext.reset(tenant_token)
 
     def test_resolve_falls_back_to_tenant_name_and_business_email(self) -> None:
-        """ Verify mail context falls back to tenant name and business email when branding or support email are absent. """
+        """Verify mail context falls back to tenant name and business email when branding or support email are absent."""
         tenant = TenantModel(
             name="Example Company",
             slug="example-company",

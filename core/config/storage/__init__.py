@@ -1,10 +1,11 @@
-""" Public storage configuration API for media and static storage. """
+"""Public storage configuration API for media and static storage."""
 
 from core.config.storage.common import (
     build_extra_apps,
     build_remote_url,
     build_s3_compatible_storage_options,
-    normalize_location, parse_bool_env
+    normalize_location,
+    parse_bool_env,
 )
 from core.config.storage.media_storage import (
     BaseMediaStorageAdapter,

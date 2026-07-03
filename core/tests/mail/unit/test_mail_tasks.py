@@ -1,8 +1,9 @@
-""" Tests for project-wide asynchronous mail tasks. """
+"""Tests for project-wide asynchronous mail tasks."""
 
 from smtplib import SMTPException
 from unittest.mock import patch
 from uuid import uuid4
+
 from core.tasks.mail.tasks import (
     MAIL_TASK_AUTORETRY_EXCEPTIONS,
     MAIL_TASK_MAX_RETRIES,
@@ -15,10 +16,10 @@ from tenancy.models import TenantModel
 
 
 class TestMailTasks(LoggedTestCase):
-    """ Verify project-wide mail tasks rebuild payloads and delegate to mail services. """
+    """Verify project-wide mail tasks rebuild payloads and delegate to mail services."""
 
     def test_mail_tasks_configure_retry_for_transient_transport_errors(self) -> None:
-        """ Configure both mail tasks to retry transient transport failures with bounded backoff. """
+        """Configure both mail tasks to retry transient transport failures with bounded backoff."""
         self.assertEqual(MAIL_TASK_AUTORETRY_EXCEPTIONS, send_mail_message_task.autoretry_for)
         self.assertEqual(MAIL_TASK_AUTORETRY_EXCEPTIONS, send_templated_mail_task.autoretry_for)
         self.assertEqual((SMTPException, TimeoutError, ConnectionError), MAIL_TASK_AUTORETRY_EXCEPTIONS)
@@ -32,7 +33,7 @@ class TestMailTasks(LoggedTestCase):
         self.assertTrue(send_templated_mail_task.retry_jitter)
 
     def test_send_mail_message_task_rebuilds_the_payload_and_delegates_to_the_mail_service(self) -> None:
-        """ Rebuild one raw mail payload inside the task before delegating to the mail service. """
+        """Rebuild one raw mail payload inside the task before delegating to the mail service."""
         with (
             patch("core.tasks.mail.tasks.MailService.send", return_value=1) as send_mock,
             patch("core.tasks.mail.tasks.logger.info") as logger_info_mock,
@@ -59,8 +60,8 @@ class TestMailTasks(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_send_templated_mail_task_rebuilds_the_payload_and_delegates_to_the_templated_service(self) -> None:
-        """ Rebuild one templated mail payload inside the task before delegating to the templated mail service. """
-        tenant = TenantModel.objects.create(
+        """Rebuild one templated mail payload inside the task before delegating to the templated mail service."""
+        TenantModel.objects.create(
             name="Example Company",
             slug=f"example-company-{uuid4()}",
             business_email="hello@example.test",

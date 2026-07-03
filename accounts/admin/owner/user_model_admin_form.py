@@ -1,15 +1,16 @@
-""" Form used by the owner user admin change view. """
+"""Form used by the owner user admin change view."""
 
 from django.utils.translation import gettext_lazy as _
 from unfold.forms import UserChangeForm
+
 from accounts.models import UserModel
 
 
 class OwnerUserModelAdminForm(UserChangeForm):
-    """ Owner-facing form for editing support user accounts. """
+    """Owner-facing form for editing support user accounts."""
 
     class Meta(UserChangeForm.Meta):
-        """ Declarative field presentation for owner user editing. """
+        """Declarative field presentation for owner user editing."""
 
         model = UserModel
         fields = ("username", "first_name", "last_name", "email", "is_active", "is_staff", "groups")

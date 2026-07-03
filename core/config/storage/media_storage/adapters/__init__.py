@@ -1,7 +1,6 @@
-""" Media storage adapters grouped by provider. """
+"""Media storage adapters grouped by provider."""
 
-from .base_media_storage_adapter import BaseMediaStorageAdapter
-from .base_media_storage_adapter import MediaStorageConfig
+from .base_media_storage_adapter import BaseMediaStorageAdapter, MediaStorageConfig
 from .local_media_storage_adapter import LocalMediaStorageAdapter
 from .r2_media_storage_adapter import R2MediaStorageAdapter
 from .s3_media_storage_adapter import S3MediaStorageAdapter

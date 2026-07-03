@@ -1,15 +1,16 @@
-""" Tests for asynchronous raw mail service dispatch. """
+"""Tests for asynchronous raw mail service dispatch."""
 
 from unittest.mock import MagicMock, patch
+
 from core.mail import MailMessageDTO, MailRecipientDTO, MailService
 from core.testing import LoggedSimpleTestCase
 
 
 class TestMailServiceAsync(LoggedSimpleTestCase):
-    """ Verify raw mail services enqueue Celery tasks with serialized payloads. """
+    """Verify raw mail services enqueue Celery tasks with serialized payloads."""
 
     def test_send_async_serializes_the_message_and_dispatches_the_raw_mail_task(self) -> None:
-        """ Serialize one raw mail payload and enqueue the shared raw mail task. """
+        """Serialize one raw mail payload and enqueue the shared raw mail task."""
         message = MailMessageDTO(
             subject="Async test",
             to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],

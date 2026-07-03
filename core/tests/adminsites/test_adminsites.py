@@ -1,8 +1,10 @@
-""" Tests for custom admin site permissions. """
+"""Tests for custom admin site permissions."""
 
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory, override_settings
-from django.utils.translation import gettext as _, override
+from django.utils.translation import gettext as _
+from django.utils.translation import override
+
 from core.adminsites.sites.master_admin_site import MasterAdminSite
 from core.adminsites.sites.owner_admin_site import OwnerAdminSite
 from core.adminsites.unfold.admin_site_unfold_callbacks import AdminSiteUnfoldCallbacks
@@ -10,16 +12,16 @@ from core.testing.base import LoggedSimpleTestCase
 
 
 class TestAdminSites(LoggedSimpleTestCase):
-    """ Cover permission behavior for custom admin sites. """
+    """Cover permission behavior for custom admin sites."""
 
     def setUp(self) -> None:
-        """ Create the request factory and site instances used by the tests. """
+        """Create the request factory and site instances used by the tests."""
         self.request_factory = RequestFactory()
         self.master_admin_site = MasterAdminSite(name="test_master_admin")
         self.owner_admin_site = OwnerAdminSite(name="test_owner_admin")
 
     def test_master_admin_allows_active_superusers_only(self) -> None:
-        """ Verify the master admin only allows active superusers. """
+        """Verify the master admin only allows active superusers."""
         superuser = type("SuperUser", (), {"is_active": True, "is_superuser": True, "is_staff": True})()
         owner = type("OwnerUser", (), {"is_active": True, "is_superuser": False, "is_staff": True})()
 
@@ -32,7 +34,7 @@ class TestAdminSites(LoggedSimpleTestCase):
         self.assertFalse(self.master_admin_site.has_permission(owner_request))
 
     def test_owner_admin_allows_active_staff_users(self) -> None:
-        """ Verify the owner admin allows active staff users and superusers. """
+        """Verify the owner admin allows active staff users and superusers."""
         owner = type("OwnerUser", (), {"is_active": True, "is_superuser": False, "is_staff": True})()
         superuser = type("SuperUser", (), {"is_active": True, "is_superuser": True, "is_staff": True})()
         customer = type("CustomerUser", (), {"is_active": True, "is_superuser": False, "is_staff": False})()
@@ -49,7 +51,7 @@ class TestAdminSites(LoggedSimpleTestCase):
         self.assertFalse(self.owner_admin_site.has_permission(customer_request))
 
     def test_owner_admin_sidebar_navigation_includes_business_and_accounts_items_when_permissions_exist(self) -> None:
-        """ Verify the owner admin sidebar exposes Business settings together with Users and Groups. """
+        """Verify the owner admin sidebar exposes Business settings together with Users and Groups."""
         owner = type(
             "OwnerUser",
             (),
@@ -72,7 +74,7 @@ class TestAdminSites(LoggedSimpleTestCase):
         self.assertEqual([_("Settings"), _("Users"), _("Groups")], item_titles)
 
     def test_admin_sites_reject_anonymous_and_inactive_users(self) -> None:
-        """ Verify both admin sites reject anonymous or inactive users. """
+        """Verify both admin sites reject anonymous or inactive users."""
         anonymous_request = self.request_factory.get("/admin/")
         anonymous_request.user = AnonymousUser()
         inactive_staff = type("InactiveStaff", (), {"is_active": False, "is_superuser": False, "is_staff": True})()
@@ -85,7 +87,7 @@ class TestAdminSites(LoggedSimpleTestCase):
         self.assertFalse(self.owner_admin_site.has_permission(inactive_request))
 
     def test_unfold_language_navigation_uses_translated_language_labels(self) -> None:
-        """ Verify the Unfold language selector uses translated labels from settings. """
+        """Verify the Unfold language selector uses translated labels from settings."""
         request = self.request_factory.get("/owner-admin/")
 
         with override("es"):
@@ -100,7 +102,7 @@ class TestAdminSites(LoggedSimpleTestCase):
 
     @override_settings(ALLOWED_HOSTS=["testserver", "localhost", "127.0.0.1"])
     def test_admin_language_switcher_strips_spanish_prefix_when_returning_to_english(self) -> None:
-        """ Verify the custom language view returns to the unprefixed default admin URL. """
+        """Verify the custom language view returns to the unprefixed default admin URL."""
         response = self.client.post(
             "/i18n/admin-setlang/",
             {"language": "en", "next": "/es/owner-admin/"},
@@ -113,7 +115,7 @@ class TestAdminSites(LoggedSimpleTestCase):
 
     @override_settings(ALLOWED_HOSTS=["testserver", "localhost", "127.0.0.1"])
     def test_admin_language_switcher_adds_spanish_prefix_when_switching_from_english(self) -> None:
-        """ Verify the custom language view adds the /es/ prefix for Spanish admin URLs. """
+        """Verify the custom language view adds the /es/ prefix for Spanish admin URLs."""
         response = self.client.post(
             "/i18n/admin-setlang/",
             {"language": "es", "next": "/owner-admin/"},

@@ -1,4 +1,4 @@
-""" Owner-admin helpers for tenant business settings. """
+"""Owner-admin helpers for tenant business settings."""
 
 from tenancy.admin.owner.owner_tenant_settings_admin import OwnerTenantSettingsAdmin
 from tenancy.admin.owner.owner_tenant_settings_form import OwnerTenantSettingsForm

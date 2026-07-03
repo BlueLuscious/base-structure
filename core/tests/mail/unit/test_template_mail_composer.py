@@ -1,4 +1,4 @@
-""" Tests for the templated mail composer. """
+"""Tests for the templated mail composer."""
 
 from core.mail import MailRecipientDTO, TemplateMailComposer, TemplateMailRequestDTO
 from core.testing import LoggedSimpleTestCase
@@ -7,10 +7,10 @@ from tenancy.runtime import ActiveTenantContext
 
 
 class TestTemplateMailComposer(LoggedSimpleTestCase):
-    """ Verify templated mail requests compose into outbound mail DTOs. """
+    """Verify templated mail requests compose into outbound mail DTOs."""
 
     def test_compose_builds_one_rendered_mail_message(self) -> None:
-        """ Compose one templated request into one mail message DTO. """
+        """Compose one templated request into one mail message DTO."""
         message = TemplateMailComposer.compose(
             TemplateMailRequestDTO(
                 subject="Template composer",
@@ -29,7 +29,7 @@ class TestTemplateMailComposer(LoggedSimpleTestCase):
         self.assertIsNone(message.from_email)
 
     def test_compose_uses_an_explicit_tenant_without_leaking_runtime_context(self) -> None:
-        """ Compose one templated request using one explicit tenant and restore runtime context afterwards. """
+        """Compose one templated request using one explicit tenant and restore runtime context afterwards."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",

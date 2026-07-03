@@ -151,9 +151,14 @@ The base intentionally owns these optional-capability dependencies:
 `requirements.in`. The generated lock contains both `psycopg` and its binary
 implementation as resolved packages.
 
-The first development-only dependency is yamllint, which validates Compose and
-GitHub workflow YAML without becoming a runtime application dependency.
-Automated updates and security auditing remain Phase 4 quality-gate work.
+Current development-only dependencies are:
+
+- Ruff for formatting, imports, unused code, and selected correctness checks
+- mypy and Django stubs for incremental typed boundaries
+- yamllint for Compose and GitHub configuration
+- pip-audit for the pinned runtime dependency security gate
+
+These tools do not become runtime application dependencies.
 
 ## What Belongs In `core/config/`
 

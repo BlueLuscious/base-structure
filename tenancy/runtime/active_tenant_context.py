@@ -1,4 +1,4 @@
-""" Runtime context helpers for the active tenant. """
+"""Runtime context helpers for the active tenant."""
 
 from contextvars import ContextVar, Token
 from typing import TYPE_CHECKING
@@ -11,11 +11,11 @@ _CURRENT_TENANT: ContextVar["TenantModel | None"] = ContextVar("current_tenant",
 
 
 class ActiveTenantContext:
-    """ Manage the active tenant bound to the current execution context. """
+    """Manage the active tenant bound to the current execution context."""
 
     @classmethod
     def set(cls, tenant: "TenantModel | None") -> Token["TenantModel | None"]:
-        """ Store the active tenant in the current execution context.
+        """Store the active tenant in the current execution context.
 
         Args:
             tenant: Tenant that should be available during the active request flow.
@@ -27,7 +27,7 @@ class ActiveTenantContext:
 
     @classmethod
     def reset(cls, token: Token["TenantModel | None"]) -> None:
-        """ Restore the previous tenant value for the current execution context.
+        """Restore the previous tenant value for the current execution context.
 
         Args:
             token: Context token returned by :meth:`set`.
@@ -36,7 +36,7 @@ class ActiveTenantContext:
 
     @classmethod
     def get(cls) -> "TenantModel | None":
-        """ Return the active tenant stored in the current execution context.
+        """Return the active tenant stored in the current execution context.
 
         Returns:
             TenantModel | None: Active tenant for the current request flow, when present.

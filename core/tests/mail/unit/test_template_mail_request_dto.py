@@ -1,14 +1,14 @@
-""" Tests for the templated mail request DTO. """
+"""Tests for the templated mail request DTO."""
 
 from core.mail import MailRecipientDTO, TemplateMailRequestDTO
 from core.testing import LoggedSimpleTestCase
 
 
 class TestTemplateMailRequestDTO(LoggedSimpleTestCase):
-    """ Verify the templated mail request DTO validates and normalizes its payload. """
+    """Verify the templated mail request DTO validates and normalizes its payload."""
 
     def test_normalizes_subject_template_names_and_reply_to_values(self) -> None:
-        """ Normalize the main templated mail request fields into stable immutable values. """
+        """Normalize the main templated mail request fields into stable immutable values."""
         request = TemplateMailRequestDTO(
             subject="  Template request  ",
             to=[MailRecipientDTO(email="owner@example.com")],
@@ -25,7 +25,7 @@ class TestTemplateMailRequestDTO(LoggedSimpleTestCase):
         self.assertEqual({"mail_title": "Template request"}, request.context)
 
     def test_raises_when_the_template_names_are_empty(self) -> None:
-        """ Reject templated mail requests without explicit template paths. """
+        """Reject templated mail requests without explicit template paths."""
         with self.assertRaisesMessage(ValueError, "Templated mail requires a non-empty HTML template name."):
             TemplateMailRequestDTO(
                 subject="Template request",

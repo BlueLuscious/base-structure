@@ -1,4 +1,4 @@
-""" Tests for the mail template renderer. """
+"""Tests for the mail template renderer."""
 
 from core.mail.renderers import MailTemplateRenderer
 from core.testing import LoggedSimpleTestCase
@@ -7,10 +7,10 @@ from tenancy.runtime import ActiveTenantContext
 
 
 class TestMailTemplateRenderer(LoggedSimpleTestCase):
-    """ Verify mail templates render with the expected base context. """
+    """Verify mail templates render with the expected base context."""
 
     def test_render_text_keeps_the_output_neutral_when_no_branding_context_exists(self) -> None:
-        """ Render the text template without inventing product or support branding. """
+        """Render the text template without inventing product or support branding."""
         rendered_text = MailTemplateRenderer.render_text(
             "core/mail/messages/test_message.txt",
             {
@@ -26,7 +26,7 @@ class TestMailTemplateRenderer(LoggedSimpleTestCase):
         self.assertNotIn("---", rendered_text)
 
     def test_render_html_keeps_the_output_neutral_when_no_branding_context_exists(self) -> None:
-        """ Render the HTML template without inventing product or support branding. """
+        """Render the HTML template without inventing product or support branding."""
         rendered_html = MailTemplateRenderer.render_html(
             "core/mail/messages/test_message.html",
             {
@@ -44,7 +44,7 @@ class TestMailTemplateRenderer(LoggedSimpleTestCase):
         self.assertNotIn("border-top:1px solid #d9e0eb", rendered_html)
 
     def test_render_html_includes_branding_when_context_provides_it(self) -> None:
-        """ Render the HTML template with explicit product and support branding context. """
+        """Render the HTML template with explicit product and support branding context."""
         rendered_html = MailTemplateRenderer.render_html(
             "core/mail/messages/test_message.html",
             {
@@ -59,7 +59,7 @@ class TestMailTemplateRenderer(LoggedSimpleTestCase):
         self.assertIn("support@northwind.test", rendered_html)
 
     def test_render_text_includes_active_tenant_business_context(self) -> None:
-        """ Render the text template using the active tenant context when the caller does not override it. """
+        """Render the text template using the active tenant context when the caller does not override it."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",
@@ -92,7 +92,7 @@ class TestMailTemplateRenderer(LoggedSimpleTestCase):
         self.assertIn("Website: https://example.test", rendered_text)
 
     def test_render_html_allows_explicit_context_to_override_active_tenant_values(self) -> None:
-        """ Render the HTML template with explicit values taking precedence over the active tenant context. """
+        """Render the HTML template with explicit values taking precedence over the active tenant context."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",

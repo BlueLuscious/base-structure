@@ -1,15 +1,16 @@
-""" Owner-facing tenant settings form. """
+"""Owner-facing tenant settings form."""
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
+
 from tenancy.models import TenantModel
 
 
 class OwnerTenantSettingsForm(forms.ModelForm):
-    """ Minimal tenant form used by the owner business settings screen. """
+    """Minimal tenant form used by the owner business settings screen."""
 
     class Meta:
-        """ Declarative configuration for the tenant settings form. """
+        """Declarative configuration for the tenant settings form."""
 
         model = TenantModel
         fields: tuple[str, ...] = (

@@ -1,4 +1,4 @@
-""" Base types and shared contract for media storage adapters. """
+"""Base types and shared contract for media storage adapters."""
 
 import os
 from abc import ABC, abstractmethod
@@ -9,7 +9,7 @@ from typing import Any
 
 @dataclass(frozen=True)
 class MediaStorageConfig:
-    """ Represent resolved media storage settings for the current environment. """
+    """Represent resolved media storage settings for the current environment."""
 
     provider: str
     media_url: str
@@ -19,12 +19,12 @@ class MediaStorageConfig:
 
 
 class BaseMediaStorageAdapter(ABC):
-    """ Define the contract for media storage provider adapters. """
+    """Define the contract for media storage provider adapters."""
 
     provider: str
 
     def get_media_url(self) -> str:
-        """ Resolve the fallback media URL from environment variables.
+        """Resolve the fallback media URL from environment variables.
 
         Returns:
             str: The configured media URL or the default local value.
@@ -32,7 +32,7 @@ class BaseMediaStorageAdapter(ABC):
         return os.environ.get("MEDIA_URL", "/media/")
 
     def get_media_root(self, base_dir: Path) -> Path:
-        """ Resolve the media root path from environment variables.
+        """Resolve the media root path from environment variables.
 
         Args:
             base_dir: Project base directory used to resolve local paths.
@@ -44,7 +44,7 @@ class BaseMediaStorageAdapter(ABC):
 
     @abstractmethod
     def build(self, base_dir: Path) -> MediaStorageConfig:
-        """ Build the media storage configuration for this provider.
+        """Build the media storage configuration for this provider.
 
         Args:
             base_dir: Project base directory used to resolve local paths.

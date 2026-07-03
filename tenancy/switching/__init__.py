@@ -1,4 +1,4 @@
-""" Explicit active-tenant switching helpers. """
+"""Explicit active-tenant switching helpers."""
 
 from .active_tenant_switcher import ActiveTenantSwitcher
 

@@ -1,8 +1,10 @@
-""" Tests for the project mail service. """
+"""Tests for the project mail service."""
+
+from unittest.mock import patch
 
 from django.core import mail
 from django.test import override_settings
-from unittest.mock import patch
+
 from core.mail import MailMessageDTO, MailRecipientDTO, MailService
 from core.testing import LoggedSimpleTestCase
 
@@ -12,10 +14,10 @@ from core.testing import LoggedSimpleTestCase
     DEFAULT_FROM_EMAIL="noreply@example.com",
 )
 class TestMailService(LoggedSimpleTestCase):
-    """ Verify the project mail service sends outbound messages through Django. """
+    """Verify the project mail service sends outbound messages through Django."""
 
     def setUp(self) -> None:
-        """ Reset the local in-memory outbox before each test.
+        """Reset the local in-memory outbox before each test.
 
         Returns:
             None
@@ -24,7 +26,7 @@ class TestMailService(LoggedSimpleTestCase):
         mail.outbox = []
 
     def test_send_delivers_one_message_through_the_configured_backend(self) -> None:
-        """ Deliver one outbound message with plain and HTML bodies. """
+        """Deliver one outbound message with plain and HTML bodies."""
         message = MailMessageDTO(
             subject="Single message",
             to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],
@@ -43,7 +45,7 @@ class TestMailService(LoggedSimpleTestCase):
         logger_info_mock.assert_called_once()
 
     def test_send_many_reuses_one_backend_connection_for_multiple_messages(self) -> None:
-        """ Deliver multiple outbound messages through one shared service call. """
+        """Deliver multiple outbound messages through one shared service call."""
         first_message = MailMessageDTO(
             subject="First message",
             to=[MailRecipientDTO(email="first@example.com")],
@@ -65,7 +67,7 @@ class TestMailService(LoggedSimpleTestCase):
         logger_info_mock.assert_called_once()
 
     def test_send_many_returns_zero_when_the_message_list_is_empty(self) -> None:
-        """ Return zero instead of opening one backend flow for an empty batch. """
+        """Return zero instead of opening one backend flow for an empty batch."""
         delivered_count = MailService.send_many([])
 
         self.assertEqual(0, delivered_count)

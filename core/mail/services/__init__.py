@@ -1,4 +1,4 @@
-""" Public service exports for the mail package. """
+"""Public service exports for the mail package."""
 
 from core.mail.services.mail_service import MailService
 from core.mail.services.template_mail_service import TemplateMailService

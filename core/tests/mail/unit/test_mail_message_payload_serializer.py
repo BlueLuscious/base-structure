@@ -1,4 +1,4 @@
-""" Tests for the raw mail payload serializer. """
+"""Tests for the raw mail payload serializer."""
 
 from core.mail import (
     MailAttachmentDTO,
@@ -10,10 +10,10 @@ from core.testing import LoggedSimpleTestCase
 
 
 class TestMailMessagePayloadSerializer(LoggedSimpleTestCase):
-    """ Verify raw mail payloads can be serialized for Celery transport. """
+    """Verify raw mail payloads can be serialized for Celery transport."""
 
     def test_roundtrip_preserves_recipients_bodies_and_attachments(self) -> None:
-        """ Serialize and deserialize one raw mail message without losing payload data. """
+        """Serialize and deserialize one raw mail message without losing payload data."""
         message = MailMessageDTO(
             subject="Serializer test",
             to=[MailRecipientDTO(email="owner@example.com", name="Owner User")],

@@ -1,1 +1,1 @@
-""" Model tests for the tenancy app. """
+"""Model tests for the tenancy app."""

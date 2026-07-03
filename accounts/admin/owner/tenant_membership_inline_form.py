@@ -1,16 +1,17 @@
-""" Form used by the owner user admin tenant membership inline. """
+"""Form used by the owner user admin tenant membership inline."""
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
+
 from tenancy.choices import TenantRole
 from tenancy.models import TenantMembershipModel
 
 
 class TenantMembershipInlineForm(forms.ModelForm):
-    """ Owner-facing form for one tenant-scoped user membership. """
+    """Owner-facing form for one tenant-scoped user membership."""
 
     class Meta:
-        """ Declarative field presentation for owner membership editing. """
+        """Declarative field presentation for owner membership editing."""
 
         model = TenantMembershipModel
         fields = ("role", "is_active")
@@ -24,14 +25,14 @@ class TenantMembershipInlineForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs) -> None:
-        """ Limit editable tenant roles to owner-managed options.
+        """Limit editable tenant roles to owner-managed options.
 
         Args:
             *args: Positional form arguments.
             **kwargs: Keyword form arguments.
         """
         super().__init__(*args, **kwargs)
-        
+
         role_field = self.fields.get("role")
         if role_field is not None:
             role_field.initial = TenantRole.OPERATOR

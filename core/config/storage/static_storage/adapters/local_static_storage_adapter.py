@@ -1,16 +1,20 @@
-""" Local filesystem static storage adapter. """
+"""Local filesystem static storage adapter."""
 
 from pathlib import Path
-from core.config.storage.static_storage.adapters.base_static_storage_adapter import BaseStaticStorageAdapter, StaticStorageConfig
+
+from core.config.storage.static_storage.adapters.base_static_storage_adapter import (
+    BaseStaticStorageAdapter,
+    StaticStorageConfig,
+)
 
 
 class LocalStaticStorageAdapter(BaseStaticStorageAdapter):
-    """ Build static storage settings for local filesystem usage. """
+    """Build static storage settings for local filesystem usage."""
 
     provider = "local"
 
     def build(self, base_dir: Path) -> StaticStorageConfig:
-        """ Build local static storage configuration.
+        """Build local static storage configuration.
 
         Args:
             base_dir: Project base directory used to resolve local paths.

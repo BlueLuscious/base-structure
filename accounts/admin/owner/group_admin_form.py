@@ -1,4 +1,4 @@
-""" Form used by the owner group admin. """
+"""Form used by the owner group admin."""
 
 from django import forms
 from django.contrib.auth.models import Group
@@ -6,10 +6,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 class OwnerGroupAdminForm(forms.ModelForm):
-    """ Owner-facing form for tenant-scoped support groups. """
+    """Owner-facing form for tenant-scoped support groups."""
 
     class Meta:
-        """ Declarative field presentation for owner group editing. """
+        """Declarative field presentation for owner group editing."""
 
         model = Group
         fields = ("name", "permissions")

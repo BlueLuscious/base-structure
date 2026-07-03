@@ -1,1 +1,1 @@
-""" Tests for shared project form helpers. """
+"""Tests for shared project form helpers."""

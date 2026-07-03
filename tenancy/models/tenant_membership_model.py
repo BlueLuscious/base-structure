@@ -1,11 +1,13 @@
-""" Tenant-membership persistence model for user access inside one business. """
+"""Tenant-membership persistence model for user access inside one business."""
 
 from typing import TYPE_CHECKING
 from uuid import UUID
+
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+
 from tenancy.choices import TenantRole
 from tenancy.models.managers.tenant_membership_model_manager import TenantMembershipModelManager
 
@@ -15,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class TenantMembershipModel(models.Model):
-    """ Membership linking one user to one tenant with a scoped role. """
+    """Membership linking one user to one tenant with a scoped role."""
 
     tenant: "TenantModel" = models.ForeignKey(
         "tenancy.TenantModel",
@@ -58,7 +60,7 @@ class TenantMembershipModel(models.Model):
     tenant_id: UUID
 
     class Meta:
-        """ Declarative admin-facing metadata for tenant-membership persistence. """
+        """Declarative admin-facing metadata for tenant-membership persistence."""
 
         ordering = ("tenant__name", "user__username", "id")
         constraints = [
@@ -76,7 +78,7 @@ class TenantMembershipModel(models.Model):
         verbose_name_plural = _("Business access")
 
     def __str__(self) -> str:
-        """ Return the admin-friendly tenant membership label.
+        """Return the admin-friendly tenant membership label.
 
         Returns:
             str: Membership label.

@@ -1,18 +1,21 @@
-""" Access policy helpers for tenant-scoped accounts administration. """
+"""Access policy helpers for tenant-scoped accounts administration."""
 
 from typing import TYPE_CHECKING
+
 from django.apps import apps
 from django.http import HttpRequest
+
 from tenancy.access.tenant_access_policy import TenantAccessPolicy
 from tenancy.choices import TenantRole
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import Group
+
     from accounts.models import UserModel
 
 
 class AccountsAccessPolicy:
-    """ Resolve access to owner-managed users and groups inside one tenant. """
+    """Resolve access to owner-managed users and groups inside one tenant."""
 
     view_user_permission = "accounts.view_usermodel"
     add_user_permission = "accounts.add_usermodel"
@@ -26,7 +29,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_manage_accounts(cls, request: HttpRequest) -> bool:
-        """ Return whether the current request may manage tenant-scoped accounts.
+        """Return whether the current request may manage tenant-scoped accounts.
 
         Args:
             request: Current HTTP request.
@@ -38,7 +41,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_access_users(cls, request: HttpRequest) -> bool:
-        """ Return whether the current request may access tenant-scoped user flows.
+        """Return whether the current request may access tenant-scoped user flows.
 
         Args:
             request: Current HTTP request.
@@ -50,7 +53,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_add_user(cls, request: HttpRequest) -> bool:
-        """ Return whether the current request may create tenant-scoped users.
+        """Return whether the current request may create tenant-scoped users.
 
         Args:
             request: Current HTTP request.
@@ -62,7 +65,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_view_user(cls, request: HttpRequest, user: "UserModel | None") -> bool:
-        """ Return whether one target user should be visible in owner accounts admin.
+        """Return whether one target user should be visible in owner accounts admin.
 
         Args:
             request: Current HTTP request.
@@ -88,7 +91,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_change_user(cls, request: HttpRequest, user: "UserModel | None") -> bool:
-        """ Return whether one target user may be edited in owner accounts admin.
+        """Return whether one target user may be edited in owner accounts admin.
 
         Args:
             request: Current HTTP request.
@@ -104,7 +107,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_delete_user(cls, request: HttpRequest, user: "UserModel | None") -> bool:
-        """ Return whether one target user may be deleted in owner accounts admin.
+        """Return whether one target user may be deleted in owner accounts admin.
 
         Args:
             request: Current HTTP request.
@@ -120,7 +123,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_access_groups(cls, request: HttpRequest) -> bool:
-        """ Return whether the current request may access tenant-scoped group flows.
+        """Return whether the current request may access tenant-scoped group flows.
 
         Args:
             request: Current HTTP request.
@@ -132,7 +135,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_add_group(cls, request: HttpRequest) -> bool:
-        """ Return whether the current request may create tenant-scoped groups.
+        """Return whether the current request may create tenant-scoped groups.
 
         Args:
             request: Current HTTP request.
@@ -144,7 +147,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_view_group(cls, request: HttpRequest, group: "Group | None") -> bool:
-        """ Return whether one target group should be visible in owner accounts admin.
+        """Return whether one target group should be visible in owner accounts admin.
 
         Args:
             request: Current HTTP request.
@@ -163,7 +166,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_change_group(cls, request: HttpRequest, group: "Group | None") -> bool:
-        """ Return whether one target group may be edited in owner accounts admin.
+        """Return whether one target group may be edited in owner accounts admin.
 
         Args:
             request: Current HTTP request.
@@ -179,7 +182,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def can_delete_group(cls, request: HttpRequest, group: "Group | None") -> bool:
-        """ Return whether one target group may be deleted in owner accounts admin.
+        """Return whether one target group may be deleted in owner accounts admin.
 
         Args:
             request: Current HTTP request.
@@ -195,7 +198,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def _can_access_with_permission(cls, request: HttpRequest, permission: str) -> bool:
-        """ Return whether the request passes the base tenant and Django permission checks.
+        """Return whether the request passes the base tenant and Django permission checks.
 
         Args:
             request: Current HTTP request.
@@ -208,7 +211,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def _can_access_user_object(cls, request: HttpRequest, user: "UserModel | None") -> bool:
-        """ Return whether one user stays visible in the active tenant scope.
+        """Return whether one user stays visible in the active tenant scope.
 
         Args:
             request: Current HTTP request.
@@ -228,7 +231,7 @@ class AccountsAccessPolicy:
 
     @classmethod
     def _can_access_group_object(cls, request: HttpRequest, group: "Group | None") -> bool:
-        """ Return whether one group stays visible in the active tenant scope.
+        """Return whether one group stays visible in the active tenant scope.
 
         Args:
             request: Current HTTP request.

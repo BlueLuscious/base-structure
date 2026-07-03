@@ -1,1 +1,1 @@
-""" Tenancy app package. """
+"""Tenancy app package."""

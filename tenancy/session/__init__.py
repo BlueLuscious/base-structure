@@ -1,4 +1,4 @@
-""" Session-backed tenant state helpers. """
+"""Session-backed tenant state helpers."""
 
 from .active_tenant_session_store import ActiveTenantSessionStore
 

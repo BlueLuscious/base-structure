@@ -1,9 +1,10 @@
-""" URL configuration for core project. """
+"""URL configuration for core project."""
 
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
-from django.urls import path, include
+from django.urls import include, path
+
 from core.adminsites.site_instances import master_admin_site, owner_admin_site
 from core.i18n.views import SetAdminLanguageView
 

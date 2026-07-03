@@ -1,8 +1,9 @@
-""" DTO representing one outbound templated mail request. """
+"""DTO representing one outbound templated mail request."""
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
+
 from core.mail.dtos.mail_attachment_dto import MailAttachmentDTO
 from core.mail.dtos.mail_recipient_dto import MailRecipientDTO
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class TemplateMailRequestDTO:
-    """ Represent one outbound templated mail request.
+    """Represent one outbound templated mail request.
 
     Args:
         subject: Mail subject line.
@@ -43,7 +44,7 @@ class TemplateMailRequestDTO:
     attachments: Sequence[MailAttachmentDTO] = field(default_factory=tuple)
 
     def __post_init__(self) -> None:
-        """ Validate and normalize the outbound templated request payload.
+        """Validate and normalize the outbound templated request payload.
 
         Returns:
             None

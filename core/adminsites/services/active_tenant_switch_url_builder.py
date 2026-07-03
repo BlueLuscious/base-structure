@@ -1,7 +1,8 @@
-""" Service for building active-tenant switch URLs. """
+"""Service for building active-tenant switch URLs."""
 
 import logging
 from typing import TYPE_CHECKING
+
 from django.http import HttpRequest
 from django.urls import NoReverseMatch, ResolverMatch, reverse
 from django.utils.http import urlencode
@@ -13,11 +14,11 @@ logger = logging.getLogger(__name__)
 
 
 class ActiveTenantSwitchUrlBuilder:
-    """ Build safe active-tenant switch URLs for the current request context. """
+    """Build safe active-tenant switch URLs for the current request context."""
 
     @classmethod
     def build(cls, request: HttpRequest, tenant: "TenantModel") -> str:
-        """ Build one tenant switch URL including one safe return target.
+        """Build one tenant switch URL including one safe return target.
 
         Args:
             request: Current admin request.
@@ -28,8 +29,7 @@ class ActiveTenantSwitchUrlBuilder:
         """
         next_path = cls._build_next_path(request, tenant)
         switch_url = (
-            f"{reverse('switch-active-tenant', kwargs={'tenant_id': tenant.pk})}"
-            f"?{urlencode({'next': next_path})}"
+            f"{reverse('switch-active-tenant', kwargs={'tenant_id': tenant.pk})}?{urlencode({'next': next_path})}"
         )
         logger.info(
             "Built active-tenant switch url target_tenant_id=%s next_path=%r",
@@ -40,7 +40,7 @@ class ActiveTenantSwitchUrlBuilder:
 
     @classmethod
     def _build_next_path(cls, request: HttpRequest, tenant: "TenantModel") -> str:
-        """ Build one portable ``next`` path for the target tenant.
+        """Build one portable ``next`` path for the target tenant.
 
         Args:
             request: Current admin request.
@@ -69,8 +69,10 @@ class ActiveTenantSwitchUrlBuilder:
         return request.get_full_path()
 
     @classmethod
-    def _build_tenant_change_path(cls, request: HttpRequest, resolver_match: ResolverMatch, tenant: "TenantModel") -> str | None:
-        """ Rebuild the active-tenant business settings screen for the target tenant.
+    def _build_tenant_change_path(
+        cls, request: HttpRequest, resolver_match: ResolverMatch, tenant: "TenantModel"
+    ) -> str | None:
+        """Rebuild the active-tenant business settings screen for the target tenant.
 
         Args:
             request: Current admin request.
@@ -98,7 +100,7 @@ class ActiveTenantSwitchUrlBuilder:
 
     @classmethod
     def _build_change_view_fallback_path(cls, resolver_match: ResolverMatch) -> str | None:
-        """ Build one portable fallback for non-tenant admin change views.
+        """Build one portable fallback for non-tenant admin change views.
 
         Args:
             resolver_match: Resolved route metadata for the current request.

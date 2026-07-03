@@ -1,16 +1,16 @@
-""" Manager tests for tenant membership access helpers. """
+"""Manager tests for tenant membership access helpers."""
 
-from core.testing.base import LoggedTestCase
 from accounts.models import UserModel
+from core.testing.base import LoggedTestCase
 from tenancy.choices import TenantRole
 from tenancy.models import TenantMembershipModel, TenantModel
 
 
 class TestTenantMembershipModelManager(LoggedTestCase):
-    """ Verify the tenant membership manager exposes the expected shortcuts. """
+    """Verify the tenant membership manager exposes the expected shortcuts."""
 
     def setUp(self) -> None:
-        """ Create reusable memberships for manager tests. """
+        """Create reusable memberships for manager tests."""
         self.user = UserModel.objects.create_user(username="lucio", password="test-pass")
         self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
         self.owner_membership = TenantMembershipModel.objects.create(
@@ -22,27 +22,27 @@ class TestTenantMembershipModelManager(LoggedTestCase):
         )
 
     def test_active_returns_only_active_memberships(self) -> None:
-        """ Verify the membership manager exposes the active queryset shortcut. """
+        """Verify the membership manager exposes the active queryset shortcut."""
         self.assertEqual([self.owner_membership], list(TenantMembershipModel.objects.active()))
 
     def test_for_user_returns_related_memberships(self) -> None:
-        """ Verify the membership manager exposes the user-scoped queryset shortcut. """
+        """Verify the membership manager exposes the user-scoped queryset shortcut."""
         self.assertEqual([self.owner_membership], list(TenantMembershipModel.objects.for_user(self.user)))
 
     def test_for_tenant_returns_related_memberships(self) -> None:
-        """ Verify the membership manager exposes the tenant-scoped queryset shortcut. """
+        """Verify the membership manager exposes the tenant-scoped queryset shortcut."""
         self.assertEqual([self.owner_membership], list(TenantMembershipModel.objects.for_tenant(self.tenant)))
 
     def test_primary_returns_primary_memberships(self) -> None:
-        """ Verify the membership manager exposes the primary queryset shortcut. """
+        """Verify the membership manager exposes the primary queryset shortcut."""
         self.assertEqual([self.owner_membership], list(TenantMembershipModel.objects.primary()))
 
     def test_owners_returns_owner_memberships(self) -> None:
-        """ Verify the membership manager exposes the owner-role queryset shortcut. """
+        """Verify the membership manager exposes the owner-role queryset shortcut."""
         self.assertEqual([self.owner_membership], list(TenantMembershipModel.objects.owners()))
 
     def test_for_user_active_tenants_returns_active_memberships_for_active_tenants(self) -> None:
-        """ Verify the membership manager exposes the user active-tenant shortcut. """
+        """Verify the membership manager exposes the user active-tenant shortcut."""
         active_secondary_tenant = TenantModel.objects.create(name="Other Center", slug="other-center")
         inactive_tenant = TenantModel.objects.create(
             name="Inactive Center",
@@ -68,7 +68,7 @@ class TestTenantMembershipModelManager(LoggedTestCase):
         )
 
     def test_ordered_for_active_tenant_resolution_returns_primary_first(self) -> None:
-        """ Verify the membership manager exposes the active-tenant ordering shortcut. """
+        """Verify the membership manager exposes the active-tenant ordering shortcut."""
         other_tenant = TenantModel.objects.create(name="Alpha Center", slug="alpha-center")
         secondary_membership = TenantMembershipModel.objects.create(
             tenant=other_tenant,
@@ -80,7 +80,5 @@ class TestTenantMembershipModelManager(LoggedTestCase):
 
         self.assertEqual(
             [self.owner_membership, secondary_membership],
-            list(
-                TenantMembershipModel.objects.for_user(self.user).ordered_for_active_tenant_resolution()
-            ),
+            list(TenantMembershipModel.objects.for_user(self.user).ordered_for_active_tenant_resolution()),
         )

@@ -1,4 +1,4 @@
-""" Tenant-aware media storage backends. """
+"""Tenant-aware media storage backends."""
 
 from .tenant_aware_media_storage_mixin import TenantAwareMediaStorageMixin
 from .tenant_file_system_storage import TenantFileSystemStorage

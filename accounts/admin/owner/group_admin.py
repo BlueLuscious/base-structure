@@ -1,16 +1,19 @@
-""" Group admin registration for the owner admin site. """
+"""Group admin registration for the owner admin site."""
 
 import logging
+
+from django.apps import apps
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import Group, Permission
-from django.apps import apps
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.text import capfirst
-from django.utils.translation import gettext, gettext_lazy as _
-from accounts.access import AccountsAccessPolicy
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
+
+from accounts.access import AccountsAccessPolicy
 from accounts.admin.owner.group_admin_form import OwnerGroupAdminForm
 from accounts.services.owner_delegable_permission_resolver import OwnerDelegablePermissionResolver
 from core.adminsites.site_instances import owner_admin_site
@@ -21,10 +24,10 @@ logger = logging.getLogger(__name__)
 
 @admin.register(Group, site=owner_admin_site)
 class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
-    """ Guided group admin scoped to the active tenant. """
+    """Guided group admin scoped to the active tenant."""
 
     class Media:
-        """ Owner admin assets for small layout refinements. """
+        """Owner admin assets for small layout refinements."""
 
         css = {
             "all": ("accounts/admin/owner/group_admin.css",),
@@ -56,7 +59,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
     )
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Group]:
-        """ Return only groups bound to the active tenant.
+        """Return only groups bound to the active tenant.
 
         Args:
             request: Current admin request.
@@ -80,7 +83,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         return tenant_queryset
 
     def formfield_for_manytomany(self, db_field, request: HttpRequest, **kwargs):
-        """ Filter delegated permissions to the current owner's effective permissions.
+        """Filter delegated permissions to the current owner's effective permissions.
 
         Args:
             db_field: Django model field being converted into a form field.
@@ -110,7 +113,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
 
     @staticmethod
     def _build_permission_label(permission: Permission) -> str:
-        """ Return one translated label for the permission chooser widget.
+        """Return one translated label for the permission chooser widget.
 
         Args:
             permission: Permission option being rendered in the admin widget.
@@ -137,7 +140,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
 
     @staticmethod
     def _build_permission_action_label(permission: Permission, model_label: str) -> str:
-        """ Return one translated action label for a permission option.
+        """Return one translated action label for a permission option.
 
         Args:
             permission: Permission option being rendered in the admin widget.
@@ -161,7 +164,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         return template % {"name": sentence_model_label}
 
     def save_model(self, request: HttpRequest, obj: Group, form: OwnerGroupAdminForm, change: bool) -> None:
-        """ Persist one tenant-scoped group and create its tenant binding on add.
+        """Persist one tenant-scoped group and create its tenant binding on add.
 
         Args:
             request: Current admin request.
@@ -186,7 +189,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         )
 
     def has_module_permission(self, request: HttpRequest) -> bool:
-        """ Require an active tenant before exposing the owner group module.
+        """Require an active tenant before exposing the owner group module.
 
         Args:
             request: Current admin request.
@@ -197,7 +200,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_access_groups(request) and super().has_module_permission(request)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
-        """ Require an active tenant before allowing group creation.
+        """Require an active tenant before allowing group creation.
 
         Args:
             request: Current admin request.
@@ -208,7 +211,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_add_group(request) and super().has_add_permission(request)
 
     def has_view_permission(self, request: HttpRequest, obj: Group | None = None) -> bool:
-        """ Restrict group visibility to the active tenant scope.
+        """Restrict group visibility to the active tenant scope.
 
         Args:
             request: Current admin request.
@@ -229,7 +232,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_view_group(request, obj)
 
     def has_change_permission(self, request: HttpRequest, obj: Group | None = None) -> bool:
-        """ Restrict group editing to the active tenant scope.
+        """Restrict group editing to the active tenant scope.
 
         Args:
             request: Current admin request.
@@ -250,7 +253,7 @@ class OwnerGroupAdmin(BaseGroupAdmin, ModelAdmin):
         return AccountsAccessPolicy.can_view_group(request, obj)
 
     def has_delete_permission(self, request: HttpRequest, obj: Group | None = None) -> bool:
-        """ Restrict group deletion to the active tenant scope.
+        """Restrict group deletion to the active tenant scope.
 
         Args:
             request: Current admin request.

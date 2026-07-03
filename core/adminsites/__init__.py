@@ -1,4 +1,4 @@
-""" Project admin site package. """
+"""Project admin site package."""
 
 from .admin_namespace import AdminNamespace
 

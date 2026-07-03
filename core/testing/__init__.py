@@ -1,4 +1,4 @@
-""" Shared testing utilities for the project. """
+"""Shared testing utilities for the project."""
 
 from core.testing.base import LoggedSimpleTestCase, LoggedTestCase, LoggedTransactionTestCase
 

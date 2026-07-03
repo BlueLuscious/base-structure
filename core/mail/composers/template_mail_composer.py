@@ -1,7 +1,8 @@
-""" Compose templated outbound mail into transport-ready DTOs. """
+"""Compose templated outbound mail into transport-ready DTOs."""
 
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Iterator
+
 from core.mail.dtos import MailMessageDTO, TemplateMailRequestDTO
 from core.mail.factories import TemplateMailMessageFactory
 from core.mail.policies import SystemMailSenderPolicy
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class TemplateMailComposer:
-    """ Compose one templated outbound mail request into one mail message DTO. """
+    """Compose one templated outbound mail request into one mail message DTO."""
 
     message_factory_class = TemplateMailMessageFactory
     tenant_context_class = ActiveTenantContext
@@ -20,7 +21,7 @@ class TemplateMailComposer:
 
     @classmethod
     def compose(cls, request: TemplateMailRequestDTO) -> MailMessageDTO:
-        """ Compose one templated mail request into one transport-ready payload.
+        """Compose one templated mail request into one transport-ready payload.
 
         Args:
             request: Templated outbound mail request.
@@ -42,7 +43,7 @@ class TemplateMailComposer:
     @classmethod
     @contextmanager
     def _use_tenant_context(cls, tenant: "TenantModel | None") -> Iterator[None]:
-        """ Temporarily bind one explicit tenant to the current mail composition flow.
+        """Temporarily bind one explicit tenant to the current mail composition flow.
 
         Args:
             tenant: Tenant to bind while the mail payload is composed.

@@ -1,20 +1,22 @@
-""" Tenant persistence model for business roots and cross-domain scoping. """
+"""Tenant persistence model for business roots and cross-domain scoping."""
 
 from typing import TYPE_CHECKING
 from uuid import uuid4
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from tenancy.models.managers.tenant_model_manager import TenantModelManager
 
 if TYPE_CHECKING:
     from django.db.models.manager import RelatedManager
+
     from accounts.models import UserModel
-    from tenancy.models import TenantBrandingModel
-    from tenancy.models import TenantGroupModel, TenantMembershipModel
+    from tenancy.models import TenantBrandingModel, TenantGroupModel, TenantMembershipModel
 
 
 class TenantModel(models.Model):
-    """ Root tenant entity used to scope business data across the project. """
+    """Root tenant entity used to scope business data across the project."""
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(
@@ -65,14 +67,14 @@ class TenantModel(models.Model):
     users: "RelatedManager[UserModel]"
 
     class Meta:
-        """ Declarative admin-facing metadata for tenant persistence. """
+        """Declarative admin-facing metadata for tenant persistence."""
 
         ordering = ("name",)
         verbose_name = _("Business")
         verbose_name_plural = _("Businesses")
 
     def __str__(self) -> str:
-        """ Return the admin-friendly tenant label.
+        """Return the admin-friendly tenant label.
 
         Returns:
             str: Tenant name.

@@ -1,1 +1,1 @@
-""" Integration tests for storage backends. """
+"""Integration tests for storage backends."""

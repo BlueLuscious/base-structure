@@ -1,1 +1,1 @@
-""" Storage integration tests package. """
+"""Storage integration tests package."""

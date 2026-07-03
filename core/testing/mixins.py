@@ -1,14 +1,14 @@
-""" Shared mixins for project tests. """
+"""Shared mixins for project tests."""
 
 
 class LoggedTestMixin:
-    """ Print a success log line for each passing test method. """
+    """Print a success log line for each passing test method."""
 
     _testMethodName: str
 
     @staticmethod
     def capture_result_counts(result: object) -> dict[str, int]:
-        """ Capture relevant counters from a unittest result object.
+        """Capture relevant counters from a unittest result object.
 
         Args:
             result: Result object being updated by the runner.
@@ -26,7 +26,7 @@ class LoggedTestMixin:
 
     @staticmethod
     def did_test_pass(before: dict[str, int], after: dict[str, int]) -> bool:
-        """ Decide whether the current test completed successfully.
+        """Decide whether the current test completed successfully.
 
         Args:
             before: Counter snapshot before the test run.
@@ -44,7 +44,7 @@ class LoggedTestMixin:
         )
 
     def build_success_log_message(self) -> str:
-        """ Build the formatted success log line for the current test.
+        """Build the formatted success log line for the current test.
 
         Returns:
             str: Success log line in the agreed format.
@@ -55,7 +55,7 @@ class LoggedTestMixin:
         return f"TEST | {case_name} | {method_name} | {info_message}"
 
     def resolve_info_message(self) -> str:
-        """ Resolve the log message from the current test method docstring.
+        """Resolve the log message from the current test method docstring.
 
         Returns:
             str: Human-readable info message for the test.

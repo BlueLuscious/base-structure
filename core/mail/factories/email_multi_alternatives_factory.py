@@ -1,18 +1,20 @@
-""" Factory that builds Django outbound email objects from DTOs. """
+"""Factory that builds Django outbound email objects from DTOs."""
 
 from collections.abc import Sequence
+
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail.backends.base import BaseEmailBackend
+
 from core.mail.dtos import MailMessageDTO, MailRecipientDTO
 
 
 class EmailMultiAlternativesFactory:
-    """ Build ``EmailMultiAlternatives`` instances from mail DTOs. """
+    """Build ``EmailMultiAlternatives`` instances from mail DTOs."""
 
     @classmethod
     def build(cls, message: MailMessageDTO, connection: BaseEmailBackend | None = None) -> EmailMultiAlternatives:
-        """ Build one Django email object from one outbound message DTO.
+        """Build one Django email object from one outbound message DTO.
 
         Args:
             message: Outbound mail payload.
@@ -43,7 +45,7 @@ class EmailMultiAlternativesFactory:
 
     @staticmethod
     def _build_address_list(recipients: Sequence[MailRecipientDTO]) -> list[str]:
-        """ Convert one recipient sequence into a Django-compatible address list.
+        """Convert one recipient sequence into a Django-compatible address list.
 
         Args:
             recipients: Recipients to format.

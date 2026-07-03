@@ -1,1 +1,1 @@
-""" Middleware tests for tenancy flows. """
+"""Middleware tests for tenancy flows."""

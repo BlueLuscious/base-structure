@@ -1,15 +1,15 @@
-""" Build the project-wide Django logging configuration. """
+"""Build the project-wide Django logging configuration."""
 
 import os
 from typing import Any
 
 
 class LoggingConfigBuilder:
-    """ Build one reusable logging configuration for the whole project. """
+    """Build one reusable logging configuration for the whole project."""
 
     @classmethod
     def build(cls, *, debug: bool, project_apps: list[str]) -> dict[str, Any]:
-        """ Build the Django `LOGGING` setting for the current environment.
+        """Build the Django `LOGGING` setting for the current environment.
 
         Args:
             debug: Whether Django is running in debug mode.
@@ -77,7 +77,7 @@ class LoggingConfigBuilder:
 
     @staticmethod
     def _resolve_log_level(*, env_name: str, default: str) -> str:
-        """ Resolve one environment-driven logging level.
+        """Resolve one environment-driven logging level.
 
         Args:
             env_name: Environment variable name to inspect.
@@ -90,7 +90,7 @@ class LoggingConfigBuilder:
 
     @staticmethod
     def _resolve_project_logger_namespaces(project_apps: list[str]) -> tuple[str, ...]:
-        """ Resolve the project logger namespaces from the current installed apps.
+        """Resolve the project logger namespaces from the current installed apps.
 
         Args:
             project_apps: Project-owned Django apps active in the current runtime.

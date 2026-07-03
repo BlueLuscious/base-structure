@@ -1,4 +1,4 @@
-""" Shared form fields and widgets used across project apps. """
+"""Shared form fields and widgets used across project apps."""
 
 from core.forms.fields import JsonKeyValueField, NestedJsonKeyValueField
 from core.forms.widgets import ActionInputWidget, JsonKeyValueWidget, NestedJsonKeyValueWidget

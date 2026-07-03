@@ -1,1 +1,1 @@
-""" Test package for core configuration and platform concerns. """
+"""Test package for core configuration and platform concerns."""

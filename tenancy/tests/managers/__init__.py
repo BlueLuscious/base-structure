@@ -1,1 +1,1 @@
-""" Manager tests for the tenancy app. """
+"""Manager tests for the tenancy app."""

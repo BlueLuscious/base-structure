@@ -1,4 +1,4 @@
-""" Mail factory exports. """
+"""Mail factory exports."""
 
 from core.mail.factories.email_multi_alternatives_factory import EmailMultiAlternativesFactory
 from core.mail.factories.template_mail_message_factory import TemplateMailMessageFactory

@@ -1,4 +1,4 @@
-""" Custom querysets for the accounts app. """
+"""Custom querysets for the accounts app."""
 
 from accounts.models.querysets.user_model_queryset import UserModelQuerySet
 

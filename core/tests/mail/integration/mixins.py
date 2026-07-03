@@ -1,13 +1,16 @@
-""" Shared mixins for MailHog-backed mail integration tests. """
+"""Shared mixins for MailHog-backed mail integration tests."""
 
-import json, os, time
+import json
+import os
+import time
 from urllib.request import urlopen
+
 from core.config.environment import EnvironmentValueParser
 from core.mail import MailMessageDTO, MailRecipientDTO
 
 
 class MailIntegrationAssertionsMixin:
-    """ Define shared MailHog-backed assertions and polling helpers for mail integration tests. """
+    """Define shared MailHog-backed assertions and polling helpers for mail integration tests."""
 
     mailhog_messages_url = os.environ.get("MAILHOG_MESSAGES_API_URL", "http://127.0.0.1:8025/api/v2/messages")
     mailhog_wait_timeout_seconds = EnvironmentValueParser.get_positive_float(
@@ -21,7 +24,7 @@ class MailIntegrationAssertionsMixin:
 
     @classmethod
     def fetch_mailhog_messages(cls) -> list[dict[str, object]]:
-        """ Fetch the current MailHog message list through its HTTP API.
+        """Fetch the current MailHog message list through its HTTP API.
 
         Returns:
             list[dict[str, object]]: MailHog message payloads.
@@ -33,7 +36,7 @@ class MailIntegrationAssertionsMixin:
 
     @classmethod
     def build_unique_message(cls, subject: str, body: str) -> MailMessageDTO:
-        """ Build one integration mail payload with a unique recipient target.
+        """Build one integration mail payload with a unique recipient target.
 
         Args:
             subject: Unique subject for the integration mail.
@@ -50,7 +53,7 @@ class MailIntegrationAssertionsMixin:
 
     @classmethod
     def mailhog_contains_subject(cls, subject: str) -> bool:
-        """ Return whether MailHog currently stores one message with the target subject.
+        """Return whether MailHog currently stores one message with the target subject.
 
         Args:
             subject: Subject to find in MailHog.
@@ -70,7 +73,7 @@ class MailIntegrationAssertionsMixin:
 
     @classmethod
     def mailhog_subject_count(cls, subject: str) -> int:
-        """ Count how many captured MailHog messages match one subject.
+        """Count how many captured MailHog messages match one subject.
 
         Args:
             subject: Subject to count.
@@ -92,7 +95,7 @@ class MailIntegrationAssertionsMixin:
 
     @classmethod
     def mailhog_contains_text(cls, text: str) -> bool:
-        """ Return whether one raw MailHog payload currently contains a target text fragment.
+        """Return whether one raw MailHog payload currently contains a target text fragment.
 
         Args:
             text: Text fragment expected somewhere in the captured MailHog payload.
@@ -105,7 +108,7 @@ class MailIntegrationAssertionsMixin:
 
     @classmethod
     def wait_for_mailhog_subject(cls, subject: str) -> None:
-        """ Wait until MailHog captures one message with the given subject.
+        """Wait until MailHog captures one message with the given subject.
 
         Args:
             subject: Subject expected in MailHog.
@@ -118,11 +121,13 @@ class MailIntegrationAssertionsMixin:
 
             time.sleep(cls.mailhog_poll_interval_seconds)
 
-        raise AssertionError(f"MailHog did not capture subject '{subject}' within {cls.mailhog_wait_timeout_seconds} seconds.")
+        raise AssertionError(
+            f"MailHog did not capture subject '{subject}' within {cls.mailhog_wait_timeout_seconds} seconds."
+        )
 
     @classmethod
     def wait_for_mailhog_text(cls, text: str) -> None:
-        """ Wait until MailHog captures one message containing the given text fragment.
+        """Wait until MailHog captures one message containing the given text fragment.
 
         Args:
             text: Text fragment expected in MailHog.
@@ -135,4 +140,6 @@ class MailIntegrationAssertionsMixin:
 
             time.sleep(cls.mailhog_poll_interval_seconds)
 
-        raise AssertionError(f"MailHog did not capture text '{text}' within {cls.mailhog_wait_timeout_seconds} seconds.")
+        raise AssertionError(
+            f"MailHog did not capture text '{text}' within {cls.mailhog_wait_timeout_seconds} seconds."
+        )

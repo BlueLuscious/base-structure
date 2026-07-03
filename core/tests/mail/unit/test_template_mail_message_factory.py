@@ -1,4 +1,4 @@
-""" Tests for the templated mail message factory. """
+"""Tests for the templated mail message factory."""
 
 from core.mail import MailRecipientDTO, TemplateMailRequestDTO
 from core.mail.factories import TemplateMailMessageFactory
@@ -8,10 +8,10 @@ from tenancy.runtime import ActiveTenantContext
 
 
 class TestTemplateMailMessageFactory(LoggedSimpleTestCase):
-    """ Verify one template pair is converted into one outbound mail DTO. """
+    """Verify one template pair is converted into one outbound mail DTO."""
 
     def test_build_renders_text_html_and_keeps_routing_metadata(self) -> None:
-        """ Build one outbound DTO preserving rendered bodies and reply metadata. """
+        """Build one outbound DTO preserving rendered bodies and reply metadata."""
         message = TemplateMailMessageFactory.build(
             request=TemplateMailRequestDTO(
                 subject="Template factory",
@@ -38,7 +38,7 @@ class TestTemplateMailMessageFactory(LoggedSimpleTestCase):
         self.assertEqual({"X-Test": "factory"}, message.headers)
 
     def test_build_uses_active_tenant_context_when_no_explicit_branding_values_exist(self) -> None:
-        """ Build one outbound DTO using the active tenant mail context as the base layer. """
+        """Build one outbound DTO using the active tenant mail context as the base layer."""
         tenant = TenantModel(
             name="Example Company",
             slug="example-company",

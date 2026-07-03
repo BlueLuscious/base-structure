@@ -1,18 +1,19 @@
-""" Project-level outbound templated mail service. """
+"""Project-level outbound templated mail service."""
 
 import logging
+
 from celery.result import AsyncResult
+
 from core.mail.composers import TemplateMailComposer
 from core.mail.dtos import TemplateMailRequestDTO
 from core.mail.serializers import TemplateMailRequestPayloadSerializer
 from core.mail.services.mail_service import MailService
 
-
 logger = logging.getLogger(__name__)
 
 
 class TemplateMailService:
-    """ Send outbound mail rendered from Django templates. """
+    """Send outbound mail rendered from Django templates."""
 
     composer_class = TemplateMailComposer
     mail_service_class = MailService
@@ -20,7 +21,7 @@ class TemplateMailService:
 
     @classmethod
     def send(cls, request: TemplateMailRequestDTO, fail_silently: bool = False) -> int:
-        """ Render one template pair and send the resulting outbound message.
+        """Render one template pair and send the resulting outbound message.
 
         Args:
             request: Templated outbound mail request.
@@ -43,7 +44,7 @@ class TemplateMailService:
 
     @classmethod
     def send_async(cls, request: TemplateMailRequestDTO, fail_silently: bool = False) -> AsyncResult:
-        """ Enqueue one templated mail request for asynchronous delivery.
+        """Enqueue one templated mail request for asynchronous delivery.
 
         Args:
             request: Templated outbound mail request.

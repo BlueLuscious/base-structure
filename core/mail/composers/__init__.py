@@ -1,4 +1,4 @@
-""" Public composer exports for the mail package. """
+"""Public composer exports for the mail package."""
 
 from core.mail.composers.template_mail_composer import TemplateMailComposer
 

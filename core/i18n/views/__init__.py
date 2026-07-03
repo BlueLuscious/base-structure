@@ -1,4 +1,4 @@
-""" Internationalization views shared across the project. """
+"""Internationalization views shared across the project."""
 
 from .set_admin_language_view import SetAdminLanguageView
 

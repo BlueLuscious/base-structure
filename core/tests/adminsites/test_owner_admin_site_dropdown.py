@@ -1,21 +1,23 @@
-""" Tests for the owner admin tenant switcher dropdown. """
+"""Tests for the owner admin tenant switcher dropdown."""
 
-from urllib.parse import parse_qs, urlparse
-from django.urls import resolve, reverse
-from django.test import RequestFactory
-from django.utils.translation import gettext as _
 from unittest.mock import patch
+from urllib.parse import parse_qs, urlparse
+
+from django.test import RequestFactory
+from django.urls import resolve, reverse
+from django.utils.translation import gettext as _
+
+from accounts.models import UserModel
 from core.adminsites.site_instances import owner_admin_site
 from core.testing.base import LoggedTestCase
-from accounts.models import UserModel
 from tenancy.models import TenantMembershipModel, TenantModel
 
 
 class TestOwnerAdminSiteDropdown(LoggedTestCase):
-    """ Verify the owner admin site exposes a tenant switcher for active memberships. """
+    """Verify the owner admin site exposes a tenant switcher for active memberships."""
 
     def setUp(self) -> None:
-        """ Create reusable users and tenants for owner admin dropdown coverage. """
+        """Create reusable users and tenants for owner admin dropdown coverage."""
         self.request_factory = RequestFactory()
         self.user = UserModel.objects.create_user(
             username="owner-user",
@@ -37,7 +39,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         )
 
     def test_get_site_dropdown_returns_active_tenant_switch_links(self) -> None:
-        """ Verify the owner admin site exposes one switch link per active tenant membership. """
+        """Verify the owner admin site exposes one switch link per active tenant membership."""
         request = self.request_factory.get("/owner-admin/")
         request.user = self.user
         request.tenant = self.primary_tenant
@@ -55,7 +57,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_get_site_dropdown_returns_empty_list_for_anonymous_like_users(self) -> None:
-        """ Verify the owner admin dropdown stays empty when the user is not authenticated. """
+        """Verify the owner admin dropdown stays empty when the user is not authenticated."""
         request = self.request_factory.get("/owner-admin/")
         request.user = type("AnonymousUserLike", (), {"is_authenticated": False})()
         request.tenant = None
@@ -66,7 +68,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         logger_info_mock.assert_called_once()
 
     def test_get_site_dropdown_rebuilds_tenant_change_next_for_target_tenant(self) -> None:
-        """ Verify tenant settings links keep the business settings screen for the target tenant. """
+        """Verify tenant settings links keep the business settings screen for the target tenant."""
         current_change_path = reverse(
             "owner_admin:tenancy_tenantmodel_change",
             kwargs={"object_id": str(self.primary_tenant.pk)},
@@ -89,7 +91,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
         )
 
     def test_get_site_dropdown_falls_back_to_group_changelist_from_group_change_view(self) -> None:
-        """ Verify non-tenant change screens fall back to the model changelist after switching. """
+        """Verify non-tenant change screens fall back to the model changelist after switching."""
         current_group_change_path = reverse("owner_admin:auth_group_change", args=(1,))
         request = self.request_factory.get(current_group_change_path)
         request.user = self.user

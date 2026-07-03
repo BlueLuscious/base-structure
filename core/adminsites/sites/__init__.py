@@ -1,4 +1,4 @@
-""" Admin site class exports. """
+"""Admin site class exports."""
 
 from .base_admin_site import BaseAdminSite
 from .master_admin_site import MasterAdminSite

@@ -1,19 +1,20 @@
-""" Serialize templated mail request DTOs into Celery-safe payloads. """
+"""Serialize templated mail request DTOs into Celery-safe payloads."""
 
 from collections.abc import Mapping
 from typing import Any
+
 from core.mail.dtos import MailAttachmentDTO, MailRecipientDTO, TemplateMailRequestDTO
 from core.mail.resolvers import MailTemplateBaseContextBuilder
 
 
 class TemplateMailRequestPayloadSerializer:
-    """ Convert templated mail request DTOs to and from plain Celery-safe payload dictionaries. """
+    """Convert templated mail request DTOs to and from plain Celery-safe payload dictionaries."""
 
     base_context_builder_class = MailTemplateBaseContextBuilder
 
     @classmethod
     def serialize(cls, request: TemplateMailRequestDTO) -> dict[str, Any]:
-        """ Serialize one templated mail request DTO.
+        """Serialize one templated mail request DTO.
 
         Args:
             request: Templated mail request DTO.
@@ -37,7 +38,7 @@ class TemplateMailRequestPayloadSerializer:
 
     @classmethod
     def deserialize(cls, payload: Mapping[str, Any]) -> TemplateMailRequestDTO:
-        """ Deserialize one plain payload into one templated mail request DTO.
+        """Deserialize one plain payload into one templated mail request DTO.
 
         Args:
             payload: Serialized templated mail request payload.
@@ -62,7 +63,7 @@ class TemplateMailRequestPayloadSerializer:
 
     @staticmethod
     def _serialize_recipient(recipient: MailRecipientDTO) -> dict[str, str | None]:
-        """ Serialize one recipient DTO.
+        """Serialize one recipient DTO.
 
         Args:
             recipient: Recipient DTO to serialize.
@@ -77,7 +78,7 @@ class TemplateMailRequestPayloadSerializer:
 
     @staticmethod
     def _deserialize_recipient(payload: Mapping[str, Any]) -> MailRecipientDTO:
-        """ Deserialize one recipient payload.
+        """Deserialize one recipient payload.
 
         Args:
             payload: Plain recipient payload.
@@ -92,7 +93,7 @@ class TemplateMailRequestPayloadSerializer:
 
     @staticmethod
     def _serialize_attachment(attachment: MailAttachmentDTO) -> dict[str, Any]:
-        """ Serialize one attachment DTO.
+        """Serialize one attachment DTO.
 
         Args:
             attachment: Attachment DTO to serialize.
@@ -108,7 +109,7 @@ class TemplateMailRequestPayloadSerializer:
 
     @staticmethod
     def _deserialize_attachment(payload: Mapping[str, Any]) -> MailAttachmentDTO:
-        """ Deserialize one attachment payload.
+        """Deserialize one attachment payload.
 
         Args:
             payload: Plain attachment payload.
@@ -124,7 +125,7 @@ class TemplateMailRequestPayloadSerializer:
 
     @classmethod
     def _serialize_context(cls, request: TemplateMailRequestDTO) -> dict[str, Any]:
-        """ Serialize one request context together with its tenant-aware base snapshot.
+        """Serialize one request context together with its tenant-aware base snapshot.
 
         Args:
             request: Templated mail request DTO.

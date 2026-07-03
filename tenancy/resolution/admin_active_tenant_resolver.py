@@ -1,8 +1,10 @@
-""" Active-tenant resolver used by the current admin runtime. """
+"""Active-tenant resolver used by the current admin runtime."""
 
 import logging
+
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest
+
 from tenancy.models import TenantModel
 from tenancy.resolution.composite_tenant_resolver import CompositeTenantResolver
 from tenancy.resolution.strategies.membership_tenant_resolution_strategy import MembershipTenantResolutionStrategy
@@ -13,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class AdminActiveTenantResolver(CompositeTenantResolver):
-    """ Resolve the active tenant for the current admin flow.
+    """Resolve the active tenant for the current admin flow.
 
     Resolution order:
     1. Active tenant stored in session, when the user still belongs to it.
@@ -29,7 +31,7 @@ class AdminActiveTenantResolver(CompositeTenantResolver):
 
     @classmethod
     def resolve(cls, request: HttpRequest) -> TenantModel | None:
-        """ Resolve the active tenant for the current admin request.
+        """Resolve the active tenant for the current admin request.
 
         Args:
             request: Current HTTP request.

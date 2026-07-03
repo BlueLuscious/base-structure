@@ -1,6 +1,7 @@
-""" URL configuration for tenancy flows. """
+"""URL configuration for tenancy flows."""
 
 from django.urls import path
+
 from tenancy.views import SwitchActiveTenantView
 
 urlpatterns = [

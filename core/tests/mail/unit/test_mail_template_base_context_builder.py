@@ -1,4 +1,4 @@
-""" Tests for the shared mail template base context builder. """
+"""Tests for the shared mail template base context builder."""
 
 from core.mail.resolvers import MailTemplateBaseContextBuilder
 from core.testing import LoggedSimpleTestCase
@@ -7,10 +7,10 @@ from tenancy.runtime import ActiveTenantContext
 
 
 class TestMailTemplateBaseContextBuilder(LoggedSimpleTestCase):
-    """ Verify the shared mail template base context builder stays consistent across sync and async flows. """
+    """Verify the shared mail template base context builder stays consistent across sync and async flows."""
 
     def test_build_uses_the_active_tenant_context_when_no_explicit_tenant_is_provided(self) -> None:
-        """ Build one mail base context from the active tenant when the caller does not pass an explicit tenant. """
+        """Build one mail base context from the active tenant when the caller does not pass an explicit tenant."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",
@@ -35,7 +35,7 @@ class TestMailTemplateBaseContextBuilder(LoggedSimpleTestCase):
         self.assertEqual("Builder test", built_context["mail_title"])
 
     def test_build_uses_one_explicit_tenant_snapshot_without_requiring_runtime_context(self) -> None:
-        """ Build one mail base context from one explicit tenant snapshot without touching the ambient tenant context. """
+        """Build one mail base context from one explicit tenant snapshot without touching the ambient tenant context."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",
@@ -52,7 +52,7 @@ class TestMailTemplateBaseContextBuilder(LoggedSimpleTestCase):
         self.assertEqual("Builder test", built_context["mail_title"])
 
     def test_build_allows_caller_values_to_override_the_tenant_defaults(self) -> None:
-        """ Build one mail base context with caller values taking precedence over tenant-derived defaults. """
+        """Build one mail base context with caller values taking precedence over tenant-derived defaults."""
         tenant = TenantModel(
             name="Example Company Legal",
             slug="example-company-legal",

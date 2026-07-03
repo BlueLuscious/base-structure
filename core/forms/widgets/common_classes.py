@@ -1,4 +1,4 @@
-""" Common CSS class contracts for custom form widgets. """
+"""Common CSS class contracts for custom form widgets."""
 
 UNFOLD_READONLY_VALUE_CLASSES: tuple[str, ...] = (
     "readonly",

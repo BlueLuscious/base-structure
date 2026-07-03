@@ -1,1 +1,1 @@
-""" Test package for the tenancy app. """
+"""Test package for the tenancy app."""

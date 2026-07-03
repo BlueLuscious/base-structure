@@ -1,15 +1,17 @@
-""" Shared base test classes built on top of reusable testing mixins. """
+"""Shared base test classes built on top of reusable testing mixins."""
 
 from unittest import TestResult
+
 from django.test import SimpleTestCase, TestCase, TransactionTestCase
+
 from core.testing.mixins import LoggedTestMixin
 
 
 class LoggedTestCase(LoggedTestMixin, TestCase):
-    """ Django database test case with automatic success logging. """
+    """Django database test case with automatic success logging."""
 
     def run(self, result: TestResult | None = None) -> TestResult | None:
-        """ Run the test and print a formatted success log when it passes.
+        """Run the test and print a formatted success log when it passes.
 
         Args:
             result: Optional unittest result collector.
@@ -29,10 +31,10 @@ class LoggedTestCase(LoggedTestMixin, TestCase):
 
 
 class LoggedSimpleTestCase(LoggedTestMixin, SimpleTestCase):
-    """ Django simple test case with automatic success logging. """
+    """Django simple test case with automatic success logging."""
 
     def run(self, result: TestResult | None = None) -> TestResult | None:
-        """ Run the test and print a formatted success log when it passes.
+        """Run the test and print a formatted success log when it passes.
 
         Args:
             result: Optional unittest result collector.
@@ -52,10 +54,10 @@ class LoggedSimpleTestCase(LoggedTestMixin, SimpleTestCase):
 
 
 class LoggedTransactionTestCase(LoggedTestMixin, TransactionTestCase):
-    """ Django transaction test case with automatic success logging. """
+    """Django transaction test case with automatic success logging."""
 
     def run(self, result: TestResult | None = None) -> TestResult | None:
-        """ Run the test and print a formatted success log when it passes.
+        """Run the test and print a formatted success log when it passes.
 
         Args:
             result: Optional unittest result collector.

@@ -1,7 +1,9 @@
-""" Membership-backed fallback strategy for active-tenant resolution. """
+"""Membership-backed fallback strategy for active-tenant resolution."""
 
 import logging
+
 from django.http import HttpRequest
+
 from tenancy.models import TenantMembershipModel, TenantModel
 from tenancy.resolution.strategies.tenant_resolution_strategy import TenantResolutionStrategy
 from tenancy.session import ActiveTenantSessionStore
@@ -10,14 +12,14 @@ logger = logging.getLogger(__name__)
 
 
 class MembershipTenantResolutionStrategy(TenantResolutionStrategy):
-    """ Resolve the active tenant from the user's active memberships. """
+    """Resolve the active tenant from the user's active memberships."""
 
     membership_model = TenantMembershipModel
     session_store_class = ActiveTenantSessionStore
 
     @classmethod
     def resolve(cls, request: HttpRequest) -> TenantModel | None:
-        """ Return the primary or first active tenant membership for the user.
+        """Return the primary or first active tenant membership for the user.
 
         Args:
             request: Current HTTP request.

@@ -110,11 +110,50 @@ The separate `YAML` job installs the pinned development-tool lock and validates:
 
 - `.yamllint.yaml`
 - `docker-compose.yml`
-- `.github/workflows/`
+- `.github/`
 
 Line endings are intentionally not enforced because the repository is used
 from both Windows and Linux. Syntax, indentation, duplicate keys, trailing
 spaces, and the other enabled yamllint rules remain enforced.
+
+## Python Quality Gate
+
+The `Python quality` job installs both runtime and development locks.
+
+Ruff checks every Python file in the repository for formatting, import
+ordering, unused imports, and selected correctness rules. The repository-wide
+baseline is formatted once and CI prevents later drift.
+
+Numbered files under Django `migrations/` folders are excluded because Django
+generates and owns their formatting. Migration-package `__init__.py` files
+remain part of the Ruff baseline. Project packages such as `accounts`, `core`,
+and `tenancy` are explicitly classified as first-party imports.
+
+Mypy remains incremental and validates the typed configuration boundaries and
+Markdown validator. Its scope can expand as other modules establish a clean
+typing baseline.
+
+The Markdown validator checks local file targets in `README.md` and `docs/`.
+It ignores external URLs and fenced code examples so network availability and
+example placeholders do not make CI unstable.
+
+## Dependency Security Gate
+
+The `Dependencies` job audits the pinned runtime lock with pip-audit.
+
+The first audit identified vulnerable Django, Pillow, and urllib3 versions.
+The runtime lock now uses:
+
+- Django 5.2.15
+- Pillow 12.2.0
+- urllib3 2.7.0
+
+The gate fails when the Python advisory database reports a known vulnerability
+with the selected lock.
+
+Dependabot checks Python and GitHub Actions dependencies weekly and opens
+reviewable pull requests against `develop`. Updates are never merged
+automatically.
 
 ## External Integration Boundary
 
@@ -137,12 +176,8 @@ and testing documents.
 
 ## Planned Gates
 
-Later Phase 4 stages will add separate jobs for:
-
-- formatting, linting, and import ordering
-- incremental typing
-- Markdown and local-link validation
-- dependency security auditing
+Later Phase 4 stages may add broader mypy coverage and additional documentation
+validation that proves stable.
 
 Each job should remain independently diagnosable and should be enabled only
 after the repository has a clean reproducible baseline for that gate.
@@ -171,3 +206,6 @@ observer and must not control whether code can be merged.
 
 After their first successful remote run, `Spanish translations` and `YAML`
 should also become required checks.
+
+After their first successful remote run, `Python quality` and `Dependencies`
+should become required checks as well.

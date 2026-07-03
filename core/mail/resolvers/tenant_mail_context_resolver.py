@@ -1,7 +1,9 @@
-""" Tenant-aware base context helpers for outbound mail templates. """
+"""Tenant-aware base context helpers for outbound mail templates."""
 
 from typing import TYPE_CHECKING, Any
+
 from django.core.exceptions import ObjectDoesNotExist
+
 from tenancy.runtime import ActiveTenantContext
 
 if TYPE_CHECKING:
@@ -9,13 +11,13 @@ if TYPE_CHECKING:
 
 
 class TenantMailContextResolver:
-    """ Resolve tenant-aware base context values for outbound mail templates. """
+    """Resolve tenant-aware base context values for outbound mail templates."""
 
     context_class = ActiveTenantContext
 
     @classmethod
     def resolve(cls) -> dict[str, Any]:
-        """ Build one tenant-aware base context for mail rendering.
+        """Build one tenant-aware base context for mail rendering.
 
         Returns:
             dict[str, Any]: Mail base context derived from the active tenant when one exists.
@@ -32,7 +34,7 @@ class TenantMailContextResolver:
 
     @staticmethod
     def get_branding(tenant: "TenantModel | None") -> "TenantBrandingModel | None":
-        """ Return branding for one tenant when it is available.
+        """Return branding for one tenant when it is available.
 
         Args:
             tenant: Active tenant bound to the current runtime context.
@@ -60,7 +62,7 @@ class TenantMailContextResolver:
         tenant: "TenantModel | None",
         branding: "TenantBrandingModel | None",
     ) -> str | None:
-        """ Return the preferred product or business name for one mail context.
+        """Return the preferred product or business name for one mail context.
 
         Args:
             tenant: Active tenant bound to the current runtime context.
@@ -81,7 +83,7 @@ class TenantMailContextResolver:
 
     @staticmethod
     def get_support_email(tenant: "TenantModel | None") -> str | None:
-        """ Return the preferred support email for one mail context.
+        """Return the preferred support email for one mail context.
 
         Args:
             tenant: Active tenant bound to the current runtime context.
@@ -101,7 +103,7 @@ class TenantMailContextResolver:
 
     @staticmethod
     def get_phone_number(tenant: "TenantModel | None") -> str | None:
-        """ Return the phone number for one mail context when present.
+        """Return the phone number for one mail context when present.
 
         Args:
             tenant: Active tenant bound to the current runtime context.
@@ -114,7 +116,7 @@ class TenantMailContextResolver:
 
     @staticmethod
     def get_website_url(tenant: "TenantModel | None") -> str | None:
-        """ Return the website URL for one mail context when present.
+        """Return the website URL for one mail context when present.
 
         Args:
             tenant: Active tenant bound to the current runtime context.

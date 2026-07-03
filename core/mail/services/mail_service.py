@@ -1,25 +1,26 @@
-""" Project-level outbound mail service. """
+"""Project-level outbound mail service."""
 
 import logging
 from collections.abc import Sequence
+
 from celery.result import AsyncResult
+
 from core.mail.backends import DjangoMailDeliveryBackend
 from core.mail.dtos import MailMessageDTO
 from core.mail.serializers import MailMessagePayloadSerializer
-
 
 logger = logging.getLogger(__name__)
 
 
 class MailService:
-    """ Send outbound mail through the project's current delivery backend. """
+    """Send outbound mail through the project's current delivery backend."""
 
     delivery_backend_class = DjangoMailDeliveryBackend
     payload_serializer_class = MailMessagePayloadSerializer
 
     @classmethod
     def send(cls, message: MailMessageDTO, fail_silently: bool = False) -> int:
-        """ Send one outbound message.
+        """Send one outbound message.
 
         Args:
             message: Outbound mail payload.
@@ -40,7 +41,7 @@ class MailService:
 
     @classmethod
     def send_many(cls, messages: Sequence[MailMessageDTO], fail_silently: bool = False) -> int:
-        """ Send multiple outbound messages.
+        """Send multiple outbound messages.
 
         Args:
             messages: Outbound mail payloads.
@@ -60,7 +61,7 @@ class MailService:
 
     @classmethod
     def send_async(cls, message: MailMessageDTO, fail_silently: bool = False) -> AsyncResult:
-        """ Enqueue one outbound message for asynchronous delivery.
+        """Enqueue one outbound message for asynchronous delivery.
 
         Args:
             message: Outbound mail payload.
