@@ -28,6 +28,7 @@ part of the current tree. They may appear only as clearly labeled examples.
 ## Project Entry Documents
 
 - Repository setup and development workflow: `README.md`
+- Clean-clone verification procedure: `docs/clone-readiness.md`
 - Capability status by implementation stage: `docs/capability-status.md`
 - Continuous integration quality gates: `docs/github/workflows/ci.md`
 - Optional Discord repository notifications: `docs/github/workflows/discord.md`
@@ -58,6 +59,7 @@ part of the current tree. They may appear only as clearly labeled examples.
 - Accounts app: `docs/accounts/accounts.md`
 - Front app and future public UI direction: `docs/front/front.md`
 - Tenancy app: `docs/tenancy/tenancy.md`
+- Initial tenant and owner setup: `docs/tenancy/setup.md`
 - Tenancy runtime behavior: `docs/tenancy/runtime.md`
 - Tenancy access policies: `docs/tenancy/access.md`
 - Tenancy resolution layer: `docs/tenancy/resolution.md`
@@ -140,6 +142,7 @@ To avoid repeating the same explanation in multiple places:
 - `docs/accounts/accounts.md` owns the accounts domain
 - `docs/front/front.md` owns the designed future frontend direction
 - `docs/tenancy/tenancy.md` owns tenant persistence and the app boundary
+- `docs/tenancy/setup.md` owns initial tenant and owner setup
 - `docs/tenancy/runtime.md` owns request-time tenant behavior
 - `docs/tenancy/access.md` owns tenant access policy
 - `docs/tenancy/resolution.md` owns tenant resolution strategies
@@ -147,6 +150,7 @@ To avoid repeating the same explanation in multiple places:
 - `docs/github/workflows/discord.md` owns optional Discord workflow operation
 - `docs/vscode/tasks.md` owns finite local tasks and Compose command usage
 - `docs/vscode/launch.md` owns debugger and long-running process usage
+- `docs/clone-readiness.md` owns clean-clone verification
 
 When one topic depends on another, link to the owning document instead of
 duplicating its full contract.

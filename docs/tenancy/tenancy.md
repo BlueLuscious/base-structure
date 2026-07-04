@@ -8,6 +8,7 @@ See also:
 - `docs/tenancy/runtime.md`
 - `docs/tenancy/access.md`
 - `docs/tenancy/resolution.md`
+- `docs/tenancy/setup.md`
 - `docs/core/core.md`
 - `docs/core/adminsites/adminsites.md`
 - `docs/core/config/storage/storage.md`
@@ -271,6 +272,8 @@ Current test areas:
 
 Use these documents together:
 
+- `docs/tenancy/setup.md`
+  - manual first-tenant, owner-user, and primary-membership setup
 - `docs/tenancy/runtime.md`
   - request-time tenant context, switching, owner-admin runtime behavior
 - `docs/tenancy/access.md`

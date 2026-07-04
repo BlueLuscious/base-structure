@@ -10,6 +10,7 @@ See also:
 - `docs/tenancy/tenancy.md`
 - `docs/tenancy/runtime.md`
 - `docs/tenancy/access.md`
+- `docs/tenancy/setup.md`
 - `docs/core/adminsites/owner-managed-apps.md`
 
 ## Goal
@@ -183,12 +184,9 @@ This keeps:
 
 The technical admin at `/admin/` requires an active superuser.
 
-The tenant-aware owner admin at `/owner-admin/` requires this minimum setup:
-
-1. create an active tenant through the technical admin
-2. create an active staff user
-3. create an active owner membership linking the user to the tenant
-4. mark the membership as primary when it should be the automatic fallback
+The tenant-aware owner admin at `/owner-admin/` requires an active staff user
+with an active tenant membership. The complete first-tenant and owner setup is
+documented in `docs/tenancy/setup.md`.
 
 Standard Django permissions continue to control access to owner-managed model
 sections. The owner role alone does not grant every model permission.

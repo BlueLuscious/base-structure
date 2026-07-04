@@ -88,14 +88,17 @@ active superuser. The tenant-aware owner administration site is available at
 `/owner-admin/`.
 
 See the
-[admin site documentation](docs/core/adminsites/adminsites.md)
-for initial tenant and owner access.
+[initial tenant setup](docs/tenancy/setup.md)
+for initial tenant and owner access. Use the
+[clone-readiness procedure](docs/clone-readiness.md)
+when validating a derived project from empty local state.
 
 ## Documentation
 
 Start with:
 
 - [project structure and documentation map](docs/project.md)
+- [clean-clone verification](docs/clone-readiness.md)
 - [capability status](docs/capability-status.md)
 - [project configuration](docs/core/config/config.md)
 - [Celery runtime](docs/core/celery/celery.md)
