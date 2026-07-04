@@ -69,7 +69,7 @@ The job runs:
 ```bash
 python manage.py check
 python manage.py makemigrations --check --dry-run
-python manage.py test accounts.tests core.tests tenancy.tests
+python manage.py test
 ```
 
 Explicit test labels avoid accidental discovery outside the three tracked
@@ -126,12 +126,13 @@ baseline is formatted once and CI prevents later drift.
 
 Numbered files under Django `migrations/` folders are excluded because Django
 generates and owns their formatting. Migration-package `__init__.py` files
-remain part of the Ruff baseline. Project packages such as `accounts`, `core`,
-and `tenancy` are explicitly classified as first-party imports.
+remain part of the Ruff baseline. The repository root is Ruff's source root,
+so current and future top-level project packages are classified as first-party
+imports.
 
 Mypy remains incremental and validates the typed configuration boundaries and
-Markdown validator. Its scope can expand as other modules establish a clean
-typing baseline.
+the complete `core/development/commands/` boundary. Its scope can expand as
+other modules establish a clean typing baseline.
 
 The Markdown validator checks local file targets in `README.md` and `docs/`.
 It ignores external URLs and fenced code examples so network availability and
@@ -182,12 +183,16 @@ validation that proves stable.
 Each job should remain independently diagnosable and should be enabled only
 after the repository has a clean reproducible baseline for that gate.
 
-## Required Check
+## Required Checks
 
-Repository branch rules should require the successful check named:
+Repository branch rules require these successful checks:
 
 ```text
 Django / Python 3.11
+Spanish translations
+YAML
+Python quality
+Dependencies
 ```
 
 Apply it to pull requests targeting `master` and `develop`.
@@ -198,14 +203,8 @@ When configuring this in GitHub:
 2. inspect existing rulesets or classic branch protection rules
 3. edit the applicable `master` and `develop` rules instead of replacing them
 4. enable required status checks
-5. select `Django / Python 3.11`
+5. select all five check names listed above
 6. save the rule and confirm one pull request is blocked when the check fails
 
 Do not require the Discord notification workflow. Discord is an optional
 observer and must not control whether code can be merged.
-
-After their first successful remote run, `Spanish translations` and `YAML`
-should also become required checks.
-
-After their first successful remote run, `Python quality` and `Dependencies`
-should become required checks as well.

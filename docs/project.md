@@ -31,6 +31,8 @@ part of the current tree. They may appear only as clearly labeled examples.
 - Capability status by implementation stage: `docs/capability-status.md`
 - Continuous integration quality gates: `docs/github/workflows/ci.md`
 - Optional Discord repository notifications: `docs/github/workflows/discord.md`
+- VS Code finite task ownership: `docs/vscode/tasks.md`
+- VS Code debugger and long-running launch ownership: `docs/vscode/launch.md`
 
 ## Core Documentation
 
@@ -40,6 +42,7 @@ part of the current tree. They may appear only as clearly labeled examples.
 - Project admin infrastructure: `docs/core/adminsites/adminsites.md`
 - Future owner-managed app wiring: `docs/core/adminsites/owner-managed-apps.md`
 - Project configuration overview: `docs/core/config/config.md`
+- Project development commands: `docs/core/development/commands/commands.md`
 - Project logging configuration: `docs/core/config/logging/logging.md`
 - Logging usage rules: `docs/core/config/logging/usage.md`
 - Reusable form fields and widgets: `docs/core/forms/forms.md`
@@ -124,6 +127,7 @@ To avoid repeating the same explanation in multiple places:
 - `docs/core/adminsites/adminsites.md` owns shared admin infrastructure
 - `docs/core/adminsites/owner-managed-apps.md` owns future app wiring rules
 - `docs/core/config/config.md` owns the configuration boundary
+- `docs/core/development/commands/commands.md` owns project development command behavior
 - `docs/core/config/logging/logging.md` owns logging construction
 - `docs/core/config/logging/usage.md` owns runtime logging rules
 - `docs/core/config/storage/storage.md` owns storage provider configuration
@@ -141,6 +145,8 @@ To avoid repeating the same explanation in multiple places:
 - `docs/tenancy/resolution.md` owns tenant resolution strategies
 - `docs/github/workflows/ci.md` owns automated project quality gates
 - `docs/github/workflows/discord.md` owns optional Discord workflow operation
+- `docs/vscode/tasks.md` owns finite local tasks and Compose command usage
+- `docs/vscode/launch.md` owns debugger and long-running process usage
 
 When one topic depends on another, link to the owning document instead of
 duplicating its full contract.

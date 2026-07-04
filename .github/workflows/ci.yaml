@@ -104,7 +104,7 @@ jobs:
         run: python manage.py compilemessages --locale es
 
       - name: Run default test suite
-        run: python manage.py test accounts.tests core.tests tenancy.tests
+        run: python manage.py test
 
   translations:
     name: Spanish translations
@@ -278,10 +278,10 @@ jobs:
           python -m mypy
           core/config/environment
           core/config/logging
-          scripts/validate_markdown_links.py
+          core/development/commands
 
       - name: Check local Markdown links
-        run: python scripts/validate_markdown_links.py
+        run: python core/development/commands/markdown_local_link_validator.py
 
   security:
     name: Dependencies

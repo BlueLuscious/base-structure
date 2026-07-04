@@ -1,4 +1,4 @@
-"""Validate local file targets in tracked project Markdown documents."""
+"""Validate local file targets in repository Markdown documents."""
 
 import re
 import sys
@@ -21,6 +21,26 @@ class MarkdownLocalLinkValidator:
         """
         self.repository_root = repository_root.resolve()
 
+    @staticmethod
+    def discover_repository_root(start_path: Path) -> Path:
+        """Find the project root that owns the command module.
+
+        Args:
+            start_path: File or directory located inside the repository.
+
+        Returns:
+            Path: Repository root containing `manage.py` and `README.md`.
+
+        Raises:
+            ValueError: When no repository root can be found.
+        """
+        resolved_path = start_path.resolve()
+        search_paths = (resolved_path, *resolved_path.parents) if resolved_path.is_dir() else resolved_path.parents
+        for candidate in search_paths:
+            if (candidate / "manage.py").is_file() and (candidate / "README.md").is_file():
+                return candidate
+        raise ValueError(f"Could not find the repository root from {start_path}.")
+
     def validate(self) -> list[str]:
         """Validate every local Markdown target.
 
@@ -37,7 +57,7 @@ class MarkdownLocalLinkValidator:
         return errors
 
     def _iter_documents(self) -> Iterator[Path]:
-        """Yield versioned project Markdown documents.
+        """Yield repository Markdown documents.
 
         Returns:
             Iterator[Path]: README and documentation Markdown paths.
@@ -93,7 +113,8 @@ def main() -> int:
     Returns:
         int: Zero when all local targets exist, otherwise one.
     """
-    validator = MarkdownLocalLinkValidator(Path(__file__).resolve().parents[1])
+    repository_root = MarkdownLocalLinkValidator.discover_repository_root(Path(__file__))
+    validator = MarkdownLocalLinkValidator(repository_root)
     errors = validator.validate()
     if errors:
         print("\n".join(errors))

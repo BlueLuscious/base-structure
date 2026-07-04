@@ -119,7 +119,7 @@ Dependency ownership is split between:
 Compile the lock after reviewing direct dependency changes:
 
 ```bash
-python -m pip install pip-tools
+python -m pip install -r requirements.txt -r requirements-dev.txt
 python -m piptools compile --output-file=requirements.txt requirements.in
 ```
 
@@ -157,6 +157,7 @@ Current development-only dependencies are:
 - mypy and Django stubs for incremental typed boundaries
 - yamllint for Compose and GitHub configuration
 - pip-audit for the pinned runtime dependency security gate
+- pip-tools for reproducible runtime and development lock generation
 
 These tools do not become runtime application dependencies.
 

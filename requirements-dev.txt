@@ -12,12 +12,23 @@ ast-serialize==0.6.0
     # via mypy
 boolean-py==5.0
     # via license-expression
+build==1.5.0
+    # via pip-tools
 cachecontrol[filecache]==0.14.4
     # via pip-audit
 certifi==2026.6.17
     # via requests
 charset-normalizer==3.4.7
     # via requests
+click==8.3.2
+    # via
+    #   -c requirements.txt
+    #   pip-tools
+colorama==0.4.6
+    # via
+    #   -c requirements.txt
+    #   build
+    #   click
 cyclonedx-python-lib==11.11.0
     # via pip-audit
 defusedxml==0.7.1
@@ -54,8 +65,10 @@ packageurl-python==0.17.6
 packaging==26.0
     # via
     #   -c requirements.txt
+    #   build
     #   pip-audit
     #   pip-requirements-parser
+    #   wheel
 pathspec==1.1.1
     # via
     #   mypy
@@ -66,6 +79,8 @@ pip-audit==2.10.1
     # via -r requirements-dev.in
 pip-requirements-parser==32.0.1
     # via pip-audit
+pip-tools==7.5.3
+    # via -r requirements-dev.in
 platformdirs==4.10.0
     # via pip-audit
 py-serializable==2.1.0
@@ -74,6 +89,10 @@ pygments==2.20.0
     # via rich
 pyparsing==3.3.2
     # via pip-requirements-parser
+pyproject-hooks==1.2.0
+    # via
+    #   build
+    #   pip-tools
 pyyaml==6.0.3
     # via yamllint
 requests==2.34.2
@@ -111,8 +130,11 @@ urllib3==2.7.0
     # via
     #   -c requirements.txt
     #   requests
+wheel==0.47.0
+    # via pip-tools
 yamllint==1.38.0
     # via -r requirements-dev.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
+# setuptools

@@ -1,0 +1,719 @@
+{
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "environmentFile",
+            "type": "promptString",
+            "description": "Environment file used by Django commands",
+            "default": ".env"
+        },
+        {
+            "id": "djangoTestTarget",
+            "type": "promptString",
+            "description": "Django test target",
+            "default": "core.tests"
+        },
+        {
+            "id": "djangoMigrationAppLabel",
+            "type": "promptString",
+            "description": "App label to migrate",
+            "default": "tenancy"
+        },
+        {
+            "id": "djangoMigrationTarget",
+            "type": "promptString",
+            "description": "Migration target or zero",
+            "default": "zero"
+        },
+        {
+            "id": "djangoSquashAppLabel",
+            "type": "promptString",
+            "description": "App label whose migrations will be squashed",
+            "default": "tenancy"
+        },
+        {
+            "id": "djangoSquashMigrationStart",
+            "type": "promptString",
+            "description": "Starting migration name",
+            "default": "0002"
+        },
+        {
+            "id": "djangoSquashMigrationTarget",
+            "type": "promptString",
+            "description": "Final migration name",
+            "default": "0006"
+        },
+        {
+            "id": "djangoSquashedName",
+            "type": "promptString",
+            "description": "Name for the squashed migration",
+            "default": "squashed_cleanup"
+        },
+        {
+            "id": "djangoI18nLanguage",
+            "type": "pickString",
+            "description": "Translation language",
+            "options": [
+                "es",
+                "en"
+            ],
+            "default": "es"
+        },
+        {
+            "id": "djangoI18nDomain",
+            "type": "pickString",
+            "description": "Translation domain",
+            "options": [
+                "django",
+                "djangojs"
+            ],
+            "default": "django"
+        },
+        {
+            "id": "djangoCollectStaticIgnorePattern",
+            "type": "promptString",
+            "description": "One collectstatic ignore pattern",
+            "default": "*.map"
+        },
+        {
+            "id": "composeProjectName",
+            "type": "promptString",
+            "description": "Docker Compose project name",
+            "default": "django-base"
+        },
+        {
+            "id": "composeEnvFile",
+            "type": "promptString",
+            "description": "Docker Compose environment file",
+            "default": ".env"
+        },
+        {
+            "id": "composeLogTail",
+            "type": "promptString",
+            "description": "Number of log lines shown before following",
+            "default": "100"
+        }
+    ],
+    "tasks": [
+        {
+            "label": "Django: Check",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "check"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Create Superuser",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "createsuperuser"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Show Migrations",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "showmigrations"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Make Migrations",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "makemigrations"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Check Migration Drift",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "makemigrations",
+                "--check",
+                "--dry-run"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Migrate",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "migrate"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Migrate Target",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "migrate",
+                "${input:djangoMigrationAppLabel}",
+                "${input:djangoMigrationTarget}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Squash Migrations",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "squashmigrations",
+                "${input:djangoSquashAppLabel}",
+                "${input:djangoSquashMigrationTarget}",
+                "--squashed-name",
+                "${input:djangoSquashedName}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Squash Migrations From Start",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "squashmigrations",
+                "${input:djangoSquashAppLabel}",
+                "${input:djangoSquashMigrationStart}",
+                "${input:djangoSquashMigrationTarget}",
+                "--squashed-name",
+                "${input:djangoSquashedName}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Make Messages",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "makemessages",
+                "-l",
+                "${input:djangoI18nLanguage}",
+                "-d",
+                "${input:djangoI18nDomain}",
+                "--ignore",
+                ".venv/*",
+                "--ignore",
+                "locale/*",
+                "--ignore",
+                "*.md",
+                "--ignore",
+                "**/*.md",
+                "--ignore",
+                "*.txt",
+                "--ignore",
+                "**/*.txt",
+                "--ignore",
+                "staticfiles/*",
+                "--ignore",
+                "**/__pycache__/*"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Update Messages",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "makemessages",
+                "-a",
+                "-d",
+                "${input:djangoI18nDomain}",
+                "--ignore",
+                ".venv/*",
+                "--ignore",
+                "locale/*",
+                "--ignore",
+                "*.md",
+                "--ignore",
+                "**/*.md",
+                "--ignore",
+                "*.txt",
+                "--ignore",
+                "**/*.txt",
+                "--ignore",
+                "staticfiles/*",
+                "--ignore",
+                "**/__pycache__/*"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Compile Messages",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "compilemessages",
+                "-l",
+                "${input:djangoI18nLanguage}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Collect Static Dry Run",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "collectstatic",
+                "--noinput",
+                "--ignore",
+                "${input:djangoCollectStaticIgnorePattern}",
+                "--dry-run",
+                "--clear"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Collect Static",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "collectstatic",
+                "--noinput",
+                "--ignore",
+                "${input:djangoCollectStaticIgnorePattern}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Test",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "test",
+                "${input:djangoTestTarget}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Test All",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/environment_file_command_runner.py",
+                "--env-file",
+                "${input:environmentFile}",
+                "--",
+                "${command:python.interpreterPath}",
+                "manage.py",
+                "test"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: Ruff Check",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "ruff",
+                "check",
+                "."
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: Ruff Format Check",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "ruff",
+                "format",
+                "--check",
+                "."
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: Ruff Format",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "ruff",
+                "format",
+                "."
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: Ruff Fix",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "ruff",
+                "check",
+                ".",
+                "--fix"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: Mypy",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "mypy",
+                "core/config/environment",
+                "core/config/logging",
+                "core/development/commands"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: YAML",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "yamllint",
+                ".yamllint.yaml",
+                "docker-compose.yml",
+                ".github"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: Markdown Links",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "core/development/commands/markdown_local_link_validator.py"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality: Run Local Gates",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Django: Check",
+                "Quality: Ruff Check",
+                "Quality: Ruff Format Check",
+                "Quality: Mypy",
+                "Quality: YAML",
+                "Quality: Markdown Links",
+                "Security: Audit Runtime Dependencies"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Security: Audit Runtime Dependencies",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "pip_audit",
+                "--requirement",
+                "requirements.txt"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dependencies: Install Runtime Lock",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "pip",
+                "install",
+                "--requirement",
+                "requirements.txt"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dependencies: Install Runtime And Development Locks",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "pip",
+                "install",
+                "--requirement",
+                "requirements.txt",
+                "--requirement",
+                "requirements-dev.txt"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dependencies: Compile Runtime Lock",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "piptools",
+                "compile",
+                "--output-file",
+                "requirements.txt",
+                "requirements.in"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dependencies: Compile Development Lock",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "piptools",
+                "compile",
+                "--output-file",
+                "requirements-dev.txt",
+                "requirements-dev.in"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dependencies: Sync Exact Environment",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "piptools",
+                "sync",
+                "requirements.txt",
+                "requirements-dev.txt"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dependencies: Upgrade Runtime Lock",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "piptools",
+                "compile",
+                "--upgrade",
+                "--output-file",
+                "requirements.txt",
+                "requirements.in"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Dependencies: Upgrade Development Lock",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m",
+                "piptools",
+                "compile",
+                "--upgrade",
+                "--output-file",
+                "requirements-dev.txt",
+                "requirements-dev.in"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Validate Compose",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-name",
+                "${input:composeProjectName}",
+                "--env-file",
+                "${input:composeEnvFile}",
+                "config"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Start Infrastructure",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-name",
+                "${input:composeProjectName}",
+                "--env-file",
+                "${input:composeEnvFile}",
+                "up",
+                "--detach"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Stop Infrastructure",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-name",
+                "${input:composeProjectName}",
+                "--env-file",
+                "${input:composeEnvFile}",
+                "stop"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Down (Keep Volumes)",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-name",
+                "${input:composeProjectName}",
+                "--env-file",
+                "${input:composeEnvFile}",
+                "down"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: DESTRUCTIVE Down And Delete Volumes",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-name",
+                "${input:composeProjectName}",
+                "--env-file",
+                "${input:composeEnvFile}",
+                "down",
+                "--volumes"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Show Status",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-name",
+                "${input:composeProjectName}",
+                "--env-file",
+                "${input:composeEnvFile}",
+                "ps"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Follow Logs",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-name",
+                "${input:composeProjectName}",
+                "--env-file",
+                "${input:composeEnvFile}",
+                "logs",
+                "--follow",
+                "--tail",
+                "${input:composeLogTail}"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
