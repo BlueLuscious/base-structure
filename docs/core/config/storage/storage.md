@@ -269,7 +269,13 @@ hook. When saving to storage directly instead of going through a Django
 `FileField` or `ImageField`, generate the final object name first and then pass
 that name into `save()`.
 
-If no active tenant exists during the save operation, media keeps the original relative path unchanged.
+Tenant-aware media requires an active tenant. Calling its filename-generation
+path without tenant context raises an explicit runtime error instead of writing
+an unscoped object.
+
+Project-shared media must use a separate non-tenant-aware storage alias or
+backend. It must not rely on an implicit fallback in the default tenant-owned
+media storage.
 
 ## Future Storage Adapter Wiring Process
 

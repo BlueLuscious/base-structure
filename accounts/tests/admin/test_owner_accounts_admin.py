@@ -31,7 +31,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
             is_staff=True,
             is_active=True,
         )
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.other_tenant = TenantModel.objects.create(name="Other Center", slug="other-center")
         TenantMembershipModel.objects.create(
             tenant=self.tenant,
@@ -58,7 +58,7 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
             is_staff=True,
             is_active=True,
         )
-        self.platform_member = UserModel.objects.create_user(
+        self.platform_member = UserModel.objects.create_superuser(
             username="platform-member",
             password="test-pass",
             is_staff=True,
@@ -80,12 +80,6 @@ class TestOwnerAccountsAdmin(LoggedTestCase):
             tenant=self.tenant,
             user=self.non_owner,
             role=TenantRole.OPERATOR,
-            is_active=True,
-        )
-        TenantMembershipModel.objects.create(
-            tenant=self.tenant,
-            user=self.platform_member,
-            role=TenantRole.MASTER,
             is_active=True,
         )
         self.sales_group = Group.objects.create(name="Sales")

@@ -11,7 +11,7 @@ class TestTenantGroupModelManager(LoggedTestCase):
 
     def setUp(self) -> None:
         """Create reusable tenant-group bindings for manager tests."""
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.sales_group = Group.objects.create(name="Sales")
         self.binding = TenantGroupModel.objects.create(tenant=self.tenant, group=self.sales_group)
 

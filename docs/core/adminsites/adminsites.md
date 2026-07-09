@@ -116,6 +116,10 @@ It should not become a second source of truth for site identity.
 
 The project uses `django-import-export` through Unfold's integration package for owner-admin data import and export flows.
 
+The installed integration is currently an extension point. No app-owned
+resource is implemented yet, so the repository does not expose an active
+import/export workflow.
+
 Base integration lives in project settings:
 
 - `unfold.contrib.import_export`
@@ -200,6 +204,9 @@ Characteristics:
 - active superusers only
 - full Django-style admin visibility
 - custom master sidebar navigation
+
+Master Admin authorization uses `is_superuser` and does not depend on tenant
+membership roles.
 
 ### `OwnerAdminSite`
 

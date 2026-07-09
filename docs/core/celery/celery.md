@@ -58,6 +58,9 @@ Current code-driven settings:
 
 - `CELERY_BEAT_SCHEDULE`
 
+The current schedule is empty. Beat is available as scheduler infrastructure,
+but the base does not currently run periodic business work.
+
 Current default behavior:
 
 - broker defaults to `REDIS_URL`
@@ -160,6 +163,9 @@ Current direction:
 - use Celery autodiscovery for installed app `schedules` packages
 - let app-owned schedule modules define task-specific intervals in code
 - avoid extra persistence or admin wiring until the project has a real periodic workload
+
+Running Beat with the current empty schedule is valid but does not enqueue
+periodic project tasks.
 
 Future evolution:
 

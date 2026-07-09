@@ -147,6 +147,17 @@ The base intentionally owns these optional-capability dependencies:
 - `celery` and `redis` for asynchronous execution
 - `whitenoise` for local static-file serving in supported deployment shapes
 
+`django-components` is installed and wired as a ready-to-use extension point
+for the designed future `front/` app. No reusable component tree is currently
+implemented.
+
+`django-import-export` is installed through the Unfold integration as a
+ready-to-use admin extension point. No app-owned import/export resource is
+currently implemented.
+
+These dependencies are available by design; they do not imply that placeholder
+components or resources should be added without a real owning app.
+
 `psycopg[binary]` expresses one PostgreSQL driver decision in
 `requirements.in`. The generated lock contains both `psycopg` and its binary
 implementation as resolved packages.

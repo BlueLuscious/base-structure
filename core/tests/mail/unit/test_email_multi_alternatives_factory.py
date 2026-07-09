@@ -22,7 +22,7 @@ class TestEmailMultiAlternativesFactory(LoggedSimpleTestCase):
             cc=[MailRecipientDTO(email="cc@example.com")],
             bcc=[MailRecipientDTO(email="bcc@example.com")],
             reply_to=["reply@example.com"],
-            headers={"X-App": "gea"},
+            headers={"X-App": "example"},
             attachments=[
                 MailAttachmentDTO(
                     filename="hello.txt",
@@ -42,7 +42,7 @@ class TestEmailMultiAlternativesFactory(LoggedSimpleTestCase):
         self.assertEqual(["cc@example.com"], email_message.cc)
         self.assertEqual(["bcc@example.com"], email_message.bcc)
         self.assertEqual(["reply@example.com"], email_message.reply_to)
-        self.assertEqual({"X-App": "gea"}, email_message.extra_headers)
+        self.assertEqual({"X-App": "example"}, email_message.extra_headers)
         self.assertEqual([("<p>HTML body</p>", "text/html")], email_message.alternatives)
         self.assertEqual(1, len(email_message.attachments))
         self.assertEqual("hello.txt", email_message.attachments[0][0])

@@ -12,7 +12,7 @@ class TestTenantGroupModel(LoggedTestCase):
 
     def setUp(self) -> None:
         """Create reusable tenant and auth groups for model tests."""
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.other_tenant = TenantModel.objects.create(name="Other Center", slug="other-center")
         self.sales_group = Group.objects.create(name="Sales")
 
@@ -20,7 +20,7 @@ class TestTenantGroupModel(LoggedTestCase):
         """Verify the tenant-group string representation stays admin-friendly."""
         tenant_group = TenantGroupModel.objects.create(tenant=self.tenant, group=self.sales_group)
 
-        self.assertIn("GEA Center", str(tenant_group))
+        self.assertIn("Example Business", str(tenant_group))
         self.assertIn("Sales", str(tenant_group))
 
     def test_binding_enforces_one_group_per_tenant_scope(self) -> None:

@@ -109,7 +109,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
                 "tenant_memberships": tenant_memberships,
             },
         )()
-        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+        request.tenant = TenantModel(name="Example Business", slug="example-business")
         request.tenant._state.fields_cache["branding"] = branding
         request.resolver_match = type("ResolverMatch", (), {"namespace": owner_admin_site.name})()
 
@@ -151,14 +151,14 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
     def test_owner_admin_site_metadata_prefers_the_active_tenant(self) -> None:
         """Verify the owner admin metadata uses the active tenant when one is available."""
         request = self.request_factory.get("/owner-admin/")
-        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+        request.tenant = TenantModel(name="Example Business", slug="example-business")
 
-        self.assertEqual("GEA Lubricantes", owner_admin_site.get_site_title(request))
+        self.assertEqual("Example Business", owner_admin_site.get_site_title(request))
 
     def test_owner_admin_branding_prefers_display_name_for_title_and_header(self) -> None:
         """Verify owner admin title and header prefer tenant branding display names."""
         request = self.request_factory.get("/owner-admin/")
-        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+        request.tenant = TenantModel(name="Example Business", slug="example-business")
         request.tenant._state.fields_cache["branding"] = type("Branding", (), {"display_name": "Example Company"})()
 
         self.assertEqual("Example Company", owner_admin_site.get_site_title(request))
@@ -167,7 +167,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
     def test_owner_admin_branding_builds_logo_icon_and_favicons(self) -> None:
         """Verify owner admin exposes tenant branding assets in the shapes expected by Unfold."""
         request = self.request_factory.get("/owner-admin/")
-        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+        request.tenant = TenantModel(name="Example Business", slug="example-business")
         request.tenant._state.fields_cache["branding"] = type(
             "Branding",
             (),
@@ -227,7 +227,7 @@ class TestAdminSitesUnfold(LoggedSimpleTestCase):
     def test_owner_admin_environment_uses_the_active_membership_role(self) -> None:
         """Verify the owner admin environment badge reflects the active tenant role."""
         request = self.request_factory.get("/owner-admin/")
-        request.tenant = TenantModel(name="GEA Lubricantes", slug="gea-lubricantes")
+        request.tenant = TenantModel(name="Example Business", slug="example-business")
         membership = type(
             "Membership",
             (),

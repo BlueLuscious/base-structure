@@ -67,18 +67,22 @@ class TestTenantMediaStorage(LoggedSimpleTestCase):
         super().setUpClass()
         cls.base_dir = Path(__file__).resolve().parents[4]
 
-    def test_build_tenant_media_name_keeps_names_unchanged_without_an_active_tenant(self) -> None:
-        """Verify media object names stay untouched when no tenant context exists."""
-        self.assertEqual("products/image.png", TenantMediaPathBuilder.build_tenant_media_name("products/image.png"))
+    def test_build_tenant_media_name_rejects_missing_active_tenant(self) -> None:
+        """Verify tenant-aware media cannot silently save without tenant ownership."""
+        with self.assertRaisesMessage(
+            RuntimeError,
+            "Tenant-aware media storage requires an active tenant.",
+        ):
+            TenantMediaPathBuilder.build_tenant_media_name("products/image.png")
 
     def test_build_tenant_media_name_prefixes_names_with_the_active_tenant_slug(self) -> None:
         """Verify media object names gain the active tenant folder when a tenant is present."""
-        tenant = TenantModel(name="GEA Center", slug="gea-center")
+        tenant = TenantModel(name="Example Business", slug="example-business")
         tenant_token = ActiveTenantContext.set(tenant)
 
         try:
             self.assertEqual(
-                "tenants/gea-center/products/image.png",
+                "tenants/example-business/products/image.png",
                 TenantMediaPathBuilder.build_tenant_media_name("products/image.png"),
             )
         finally:
@@ -86,7 +90,7 @@ class TestTenantMediaStorage(LoggedSimpleTestCase):
 
     def test_tenant_file_system_storage_saves_generated_names_inside_the_active_tenant_folder(self) -> None:
         """Verify local storage saves tenant-prefixed names returned by generate_filename."""
-        tenant = TenantModel(name="GEA Center", slug="gea-center")
+        tenant = TenantModel(name="Example Business", slug="example-business")
         tenant_token = ActiveTenantContext.set(tenant)
 
         try:
@@ -96,11 +100,11 @@ class TestTenantMediaStorage(LoggedSimpleTestCase):
                 stored_name = storage.save(generated_name, ContentFile(b"hello"))
 
                 self.assertEqual(
-                    "tenants/gea-center/products/image.txt",
+                    "tenants/example-business/products/image.txt",
                     Path(generated_name).as_posix(),
                 )
                 self.assertEqual(
-                    "tenants/gea-center/products/image.txt",
+                    "tenants/example-business/products/image.txt",
                     Path(stored_name).as_posix(),
                 )
                 self.assertTrue(Path(media_root, stored_name).exists())

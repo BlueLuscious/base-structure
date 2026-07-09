@@ -18,7 +18,7 @@ class TestActiveTenantMiddleware(LoggedTestCase):
     def setUp(self) -> None:
         """Create reusable users and tenants for middleware tests."""
         self.user = UserModel.objects.create_user(username="lucio", password="test-pass")
-        self.primary_tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.primary_tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.secondary_tenant = TenantModel.objects.create(name="North Center", slug="north-center")
         TenantMembershipModel.objects.create(
             tenant=self.primary_tenant,
@@ -96,7 +96,7 @@ class TestActiveTenantMiddleware(LoggedTestCase):
 
         middleware(request)
 
-        self.assertEqual(["GEA Center"], captured_tenant_names)
+        self.assertEqual(["Example Business"], captured_tenant_names)
         self.assertIsNone(ActiveTenantContext.get())
 
     def test_middleware_skips_resolution_outside_owner_admin(self) -> None:

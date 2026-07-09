@@ -42,6 +42,55 @@ Current responsibilities:
 
 This policy should stay generic and reusable across apps that need tenant membership checks.
 
+## Role And Admin Boundaries
+
+Tenant roles and Django administrative authority are related but remain
+separate checks:
+
+- `OWNER` grants tenant-management authority for owner-only surfaces
+- `OPERATOR` represents an active tenant member whose app access also depends
+  on Django permissions
+
+Master Admin access depends on `is_superuser`, not on the existence of a
+membership. Platform administrators do not need a tenant role and may enter
+`/admin/` without belonging to a tenant.
+
+Owner Admin manages `OWNER` and `OPERATOR` memberships only.
+
+### Neutral End-To-End Example
+
+Consider one `Example Business` tenant:
+
+1. A platform administrator with `is_superuser=True` enters `/admin/`.
+   Tenant membership is not required.
+2. A staff user with an active `OWNER` membership for `Example Business`
+   enters `/owner-admin/`.
+   They can manage tenant settings and may manage users or groups only when
+   the corresponding Django permissions are also assigned.
+3. A staff user with an active `OPERATOR` membership may enter the owner admin
+   shell, but cannot manage tenant settings or accounts. Future domain apps may
+   grant that operator access through active membership plus app-specific
+   Django permissions.
+
+Neither an `OWNER` nor `OPERATOR` membership grants access to `/admin/`.
+Platform authority remains exclusively represented by `is_superuser`.
+
+## Current Owner-Admin Isolation Matrix
+
+Existing owner-managed registrations apply these boundaries:
+
+| Boundary | Users | Groups | Business settings |
+| --- | --- | --- | --- |
+| Sidebar visibility | Owner role and Django view permission | Owner role and Django view permission | Owner role |
+| Queryset | Active tenant memberships with owner-visible roles | Active tenant group binding | Active tenant primary key |
+| Form choices | Active-tenant groups and membership roles | Permissions held by the acting owner | Active-tenant branding inline |
+| Object access | Active-tenant membership and Django permission | Active-tenant group binding and Django permission | Object must equal active tenant |
+| Write behavior | Membership inline is bound to active tenant | New group receives active-tenant binding | Add and delete are disabled |
+
+The matrix is enforced by the current policy, admin, form, formset, and
+sidebar tests. New owner-managed apps must establish the same boundaries for
+their own objects rather than inheriting this matrix implicitly.
+
 ## `AccountsAccessPolicy`
 
 This is the `accounts/`-specific policy now owned by `accounts/`.

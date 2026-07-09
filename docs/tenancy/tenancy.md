@@ -182,9 +182,11 @@ Current choice enum:
 
 Current values:
 
-- `master`
 - `owner`
 - `operator`
+
+Platform administration is not a tenant-membership role. `/admin/`
+authorization depends on the user's `is_superuser` state.
 
 ## Use Cases
 

@@ -13,7 +13,7 @@ class TestTenantMembershipModel(LoggedTestCase):
 
     def setUp(self) -> None:
         """Create reusable tenant and users for membership tests."""
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.user = UserModel.objects.create_user(username="lucio", password="test-pass")
 
     def test_membership_string_representation_prefers_user_tenant_and_role(self) -> None:
@@ -25,7 +25,7 @@ class TestTenantMembershipModel(LoggedTestCase):
         )
 
         self.assertIn("lucio", str(membership))
-        self.assertIn("GEA Center", str(membership))
+        self.assertIn("Example Business", str(membership))
         self.assertIn(TenantRole.OWNER, str(membership))
 
     def test_membership_enforces_unique_user_per_tenant(self) -> None:

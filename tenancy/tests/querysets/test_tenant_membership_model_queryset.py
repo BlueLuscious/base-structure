@@ -13,7 +13,7 @@ class TestTenantMembershipModelQuerySet(LoggedTestCase):
         """Create reusable memberships for queryset tests."""
         self.user = UserModel.objects.create_user(username="lucio", password="test-pass")
         self.other_user = UserModel.objects.create_user(username="sofia", password="test-pass")
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.other_tenant = TenantModel.objects.create(name="Other Center", slug="other-center")
         self.owner_membership = TenantMembershipModel.objects.create(
             tenant=self.tenant,
@@ -25,7 +25,7 @@ class TestTenantMembershipModelQuerySet(LoggedTestCase):
         self.inactive_membership = TenantMembershipModel.objects.create(
             tenant=self.other_tenant,
             user=self.other_user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=False,
         )
 
@@ -59,13 +59,13 @@ class TestTenantMembershipModelQuerySet(LoggedTestCase):
         active_tenant_membership = TenantMembershipModel.objects.create(
             tenant=self.other_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
         inactive_tenant_membership = TenantMembershipModel.objects.create(
             tenant=inactive_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
 
@@ -88,13 +88,13 @@ class TestTenantMembershipModelQuerySet(LoggedTestCase):
         active_secondary_membership = TenantMembershipModel.objects.create(
             tenant=self.other_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
         TenantMembershipModel.objects.create(
             tenant=inactive_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
 
@@ -109,14 +109,14 @@ class TestTenantMembershipModelQuerySet(LoggedTestCase):
         secondary_membership = TenantMembershipModel.objects.create(
             tenant=self.other_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
             is_primary=False,
         )
         third_membership = TenantMembershipModel.objects.create(
             tenant=third_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
             is_primary=False,
         )

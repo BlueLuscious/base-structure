@@ -24,7 +24,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
             password="test-pass",
             is_staff=True,
         )
-        self.primary_tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.primary_tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.secondary_tenant = TenantModel.objects.create(name="North Center", slug="north-center")
 
         TenantMembershipModel.objects.create(
@@ -48,7 +48,7 @@ class TestOwnerAdminSiteDropdown(LoggedTestCase):
             dropdown_items = owner_admin_site.get_site_dropdown(request)
 
         self.assertEqual(2, len(dropdown_items))
-        self.assertEqual(f"GEA Center ({_('Current')})", dropdown_items[0]["title"])
+        self.assertEqual(f"Example Business ({_('Current')})", dropdown_items[0]["title"])
         self.assertIn(str(self.primary_tenant.pk), dropdown_items[0]["link"])
         self.assertEqual("check_circle", dropdown_items[0]["icon"])
         self.assertEqual("North Center", dropdown_items[1]["title"])

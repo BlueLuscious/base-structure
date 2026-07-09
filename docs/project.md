@@ -29,6 +29,8 @@ part of the current tree. They may appear only as clearly labeled examples.
 
 - Repository setup and development workflow: `README.md`
 - Clean-clone verification procedure: `docs/clone-readiness.md`
+- New app integration: `docs/app-integration.md`
+- Capability removal: `docs/capability-removal.md`
 - Capability status by implementation stage: `docs/capability-status.md`
 - Continuous integration quality gates: `docs/github/workflows/ci.md`
 - Optional Discord repository notifications: `docs/github/workflows/discord.md`
@@ -151,6 +153,8 @@ To avoid repeating the same explanation in multiple places:
 - `docs/vscode/tasks.md` owns finite local tasks and Compose command usage
 - `docs/vscode/launch.md` owns debugger and long-running process usage
 - `docs/clone-readiness.md` owns clean-clone verification
+- `docs/app-integration.md` owns cross-project app integration
+- `docs/capability-removal.md` owns safe capability removal
 
 When one topic depends on another, link to the owning document instead of
 duplicating its full contract.

@@ -22,7 +22,7 @@ class TestOwnerDelegablePermissionResolver(LoggedTestCase):
             is_staff=True,
             is_active=True,
         )
-        tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         TenantMembershipModel.objects.create(
             tenant=tenant,
             user=owner,
@@ -60,11 +60,11 @@ class TestOwnerDelegablePermissionResolver(LoggedTestCase):
             is_staff=True,
             is_active=True,
         )
-        tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         TenantMembershipModel.objects.create(
             tenant=tenant,
             user=user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
             is_primary=True,
         )

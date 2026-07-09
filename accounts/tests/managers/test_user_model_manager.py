@@ -10,7 +10,7 @@ class TestUserModelManager(LoggedTestCase):
 
     def setUp(self) -> None:
         """Create reusable users and tenants for manager tests."""
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.user = UserModel.objects.create_user(username="lucio", password="test-pass")
         self.other_user = UserModel.objects.create_user(username="sofia", password="test-pass")
         TenantMembershipModel.objects.create(tenant=self.tenant, user=self.user)

@@ -9,7 +9,7 @@ class TestTenantBrandingModelManager(LoggedTestCase):
 
     def setUp(self) -> None:
         """Create reusable tenant branding rows for manager tests."""
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.other_tenant = TenantModel.objects.create(name="Quinoto", slug="quinoto")
         self.configured_branding = TenantBrandingModel.objects.create(
             tenant=self.tenant,

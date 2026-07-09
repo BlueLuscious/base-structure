@@ -12,7 +12,7 @@ class TestTenantMembershipModelManager(LoggedTestCase):
     def setUp(self) -> None:
         """Create reusable memberships for manager tests."""
         self.user = UserModel.objects.create_user(username="lucio", password="test-pass")
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.owner_membership = TenantMembershipModel.objects.create(
             tenant=self.tenant,
             user=self.user,
@@ -52,13 +52,13 @@ class TestTenantMembershipModelManager(LoggedTestCase):
         active_secondary_membership = TenantMembershipModel.objects.create(
             tenant=active_secondary_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
         TenantMembershipModel.objects.create(
             tenant=inactive_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
         )
 
@@ -73,7 +73,7 @@ class TestTenantMembershipModelManager(LoggedTestCase):
         secondary_membership = TenantMembershipModel.objects.create(
             tenant=other_tenant,
             user=self.user,
-            role=TenantRole.MASTER,
+            role=TenantRole.OPERATOR,
             is_active=True,
             is_primary=False,
         )

@@ -11,7 +11,7 @@ class TestTenantGroupModelQuerySet(LoggedTestCase):
 
     def setUp(self) -> None:
         """Create reusable tenant-group bindings for queryset tests."""
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.other_tenant = TenantModel.objects.create(name="Other Center", slug="other-center")
         self.inactive_tenant = TenantModel.objects.create(
             name="Inactive Center",

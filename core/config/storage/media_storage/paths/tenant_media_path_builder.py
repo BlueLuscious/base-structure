@@ -9,15 +9,18 @@ class TenantMediaPathBuilder:
     context_class = ActiveTenantContext
 
     @classmethod
-    def build_current_tenant_media_prefix(cls) -> str | None:
-        """Build the media prefix for the active tenant, when one exists.
+    def build_current_tenant_media_prefix(cls) -> str:
+        """Build the media prefix for the active tenant.
 
         Returns:
-            str | None: Tenant-specific media prefix or ``None`` when no tenant is active.
+            str: Tenant-specific media prefix.
+
+        Raises:
+            RuntimeError: When tenant-aware media is used without an active tenant.
         """
         tenant = cls.context_class.get()
         if tenant is None:
-            return None
+            raise RuntimeError("Tenant-aware media storage requires an active tenant.")
 
         tenant_key = tenant.slug.strip()
         return f"tenants/{tenant_key}"
@@ -35,7 +38,7 @@ class TenantMediaPathBuilder:
         normalized_name = name.lstrip("/")
         tenant_prefix = cls.build_current_tenant_media_prefix()
 
-        if tenant_prefix is None or normalized_name.startswith(f"{tenant_prefix}/"):
+        if normalized_name.startswith(f"{tenant_prefix}/"):
             return normalized_name
 
         return f"{tenant_prefix}/{normalized_name}"

@@ -115,6 +115,17 @@ Read:
 
 ## Extension Points
 
+### Reusable Component Runtime
+
+`django-components` is installed and wired into templates, static discovery,
+and project URLs. No `front/` app or reusable component tree currently
+consumes it.
+
+Read:
+
+- `docs/core/config/config.md`
+- `docs/front/front.md`
+
 ### Path-Based Tenant Resolution
 
 `PathTenantResolutionStrategy` exists but always returns `None` and is not part

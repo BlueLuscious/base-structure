@@ -15,7 +15,7 @@ class TestSwitchActiveTenantView(LoggedTestCase):
     def setUp(self) -> None:
         """Create reusable users and tenants for switch-view coverage."""
         self.user = UserModel.objects.create_user(username="lucio", password="test-pass")
-        self.primary_tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.primary_tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.secondary_tenant = TenantModel.objects.create(name="North Center", slug="north-center")
         self.foreign_tenant = TenantModel.objects.create(name="Foreign Center", slug="foreign-center")
 

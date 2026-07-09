@@ -28,13 +28,13 @@ class TestAccountsAccessPolicy(LoggedTestCase):
             is_active=True,
             is_staff=True,
         )
-        self.platform_member = UserModel.objects.create_user(
+        self.platform_member = UserModel.objects.create_superuser(
             username="platform-member",
             password="test-pass",
             is_active=True,
             is_staff=True,
         )
-        self.tenant = TenantModel.objects.create(name="GEA Center", slug="gea-center")
+        self.tenant = TenantModel.objects.create(name="Example Business", slug="example-business")
         self.other_tenant = TenantModel.objects.create(name="Other Center", slug="other-center")
         TenantMembershipModel.objects.create(
             tenant=self.tenant,
@@ -47,12 +47,6 @@ class TestAccountsAccessPolicy(LoggedTestCase):
             tenant=self.tenant,
             user=self.operator,
             role=TenantRole.OPERATOR,
-            is_active=True,
-        )
-        TenantMembershipModel.objects.create(
-            tenant=self.tenant,
-            user=self.platform_member,
-            role=TenantRole.MASTER,
             is_active=True,
         )
         self.group = Group.objects.create(name="Sales")
@@ -91,8 +85,8 @@ class TestAccountsAccessPolicy(LoggedTestCase):
         """Verify tenant owners may create users when the Django permission is present."""
         self.assertTrue(AccountsAccessPolicy.can_add_user(self.build_request()))
 
-    def test_can_view_user_returns_false_for_master_membership(self) -> None:
-        """Verify platform members remain hidden from owner accounts admin."""
+    def test_can_view_user_returns_false_for_superuser(self) -> None:
+        """Verify platform superusers remain hidden from owner accounts admin."""
         self.assertFalse(AccountsAccessPolicy.can_view_user(self.build_request(), self.platform_member))
 
     def test_can_change_user_returns_true_for_visible_tenant_user(self) -> None:
